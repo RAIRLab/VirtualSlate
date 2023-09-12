@@ -1,5 +1,8 @@
 [gd_scene format=2]
 
 [node name="Spatial" type="Spatial"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.14966, 0.463914, -0.0865085 )
 
 [node name="CSGBox" type="CSGBox" parent="."]
+width = 4.15876
+height = 3.53134
