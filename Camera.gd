@@ -13,4 +13,4 @@ extends Camera
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	self.rotate_x(0.000)
+	self.rotate_x(0.001)
