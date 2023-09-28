@@ -1,24 +1,26 @@
 #include <iostream>
 #include <list>
 #include <map>
-using namespace std;
+#include <set>
+
 
 
 class Node{
     public:
         int nodeID;
         // Placeholder for 3D location info as I'm not sure how Godot handles it
-        tuple <double, double, double> location;
+        std::tuple <double, double, double> location;
         // Placeholder for formula data
         int data;
-        list<Node*> neighbors;
+        // Potentially split into seperate parent/child sets?
+        std::set<Node*> neighbors;
 
         Node(){
             nodeID = 0;
-            location = make_tuple(0,0,0);
+            location = std::make_tuple(0,0,0);
             data = 0; 
         }
-        Node(int nodeID, tuple<double, double, double> location, int data){
+        Node(int nodeID, const std::tuple<double, double, double> location, int data){
             this->nodeID = nodeID;
             this->location = location;
             this->data = data;
@@ -26,73 +28,76 @@ class Node{
 };
 
 class ProofGraph{
-    int nodeCount;
-    map<int, Node> nodeMap;
+    private:
+        int nodeCount;
+        std::map<int, Node> nodeMap;
     public:
 
         // Constructor, creates empty proof graph
         ProofGraph(){
             nodeCount = 0;
+            std::map<int, Node> nodeMap;
         }
 
         void displayNodeList(){
             for (auto& tempNode : nodeMap){
-                cout << tempNode.second.nodeID << ": ";
+                std::cout << tempNode.second.nodeID << ": ";
                 for(auto& i : tempNode.second.neighbors){
-                    cout << i->nodeID << " ";
+                    std::cout << i->nodeID << " ";
                 }
-                cout << "\n";
+                std::cout << "\n";
             }
         }
 
-        void addNode(tuple<double, double, double> location, int data){
+        void addNode(const std::tuple<double, double, double> location, int data){
             Node temp = Node(this->nodeCount, location, data);
             nodeMap[nodeCount] = temp;
             nodeCount++;
             //cout << "Node Count " << nodeCount << "\n";
         }
 
-        // Needs checks for node validity
+        // Needs better check for node validity
         void addEdge(int start, int end){
-            nodeMap[start].neighbors.push_back(&(nodeMap[end]));
-            nodeMap[end].neighbors.push_back(&(nodeMap[start]));
+            if(nodeMap.find(start) == nodeMap.end() || nodeMap.find(end) == nodeMap.end()){
+                std::cout << "Nodes not found\n ";
+            }
+            else{
+                nodeMap[start].neighbors.insert(&(nodeMap[end]));
+                nodeMap[end].neighbors.insert(&(nodeMap[start]));
+            }
         }
 
         // Needs checks for node validity
         void removeNode(int deleteID){
             Node* temp = &nodeMap[deleteID];
             nodeMap.erase(deleteID);
-            for(auto&& i : temp->neighbors){
-                list<Node*>::iterator it = i->neighbors.begin();
-                while(it != i->neighbors.end()){
-                    if ((*it)->nodeID == temp->nodeID){
-                        it = i->neighbors.erase(it);
+            for(auto& i : temp->neighbors){
+                for(auto& j : i->neighbors){
+                    if(j->nodeID == temp->nodeID){
+                        i->neighbors.erase(j);
                     }
-                    else{
-                        it++;
-                    }
-
                 }
             }
-
         }
 
 };
 
 int main(){
     ProofGraph graph = ProofGraph();
-    graph.addNode(make_tuple(0,0,0), 0);
-    graph.addNode(make_tuple(0,1,1), 1);
-    graph.addNode(make_tuple(0,1,1), 2);
-    graph.addNode(make_tuple(2,1,1), 3);
+    graph.addNode(std::make_tuple(0,0,0), 0);
+    graph.addNode(std::make_tuple(0,1,1), 1);
+    graph.addNode(std::make_tuple(0,1,1), 2);
+    graph.addNode(std::make_tuple(2,1,1), 3);
     graph.displayNodeList();
-    cout << "--------\n";
+    std::cout << "--------\n";
     graph.addEdge(0,1);
     graph.addEdge(0,2);
     graph.addEdge(2,3);
+    graph.addEdge(3,0);
+    //graph.addEdge(0,5);
     graph.displayNodeList();
-    cout << "--------\n";
+    std::cout << "--------\n";
     graph.removeNode(0);
     graph.displayNodeList();
-    cout << "--------\n";
+    std::cout << "--------\n";
 }
