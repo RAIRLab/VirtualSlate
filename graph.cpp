@@ -20,7 +20,7 @@ class Node{
             location = std::make_tuple(0,0,0);
             data = 0; 
         }
-        Node(int nodeID, const std::tuple<double, double, double> location, int data){
+        Node(int nodeID, const std::tuple<double, double, double>& location, int data){
             this->nodeID = nodeID;
             this->location = location;
             this->data = data;
@@ -49,11 +49,10 @@ class ProofGraph{
             }
         }
 
-        void addNode(const std::tuple<double, double, double> location, int data){
+        void addNode(const std::tuple<double, double, double>& location, int data){
             Node temp = Node(this->nodeCount, location, data);
             nodeMap[nodeCount] = temp;
             nodeCount++;
-            //cout << "Node Count " << nodeCount << "\n";
         }
 
         // Needs better check for node validity
@@ -72,11 +71,7 @@ class ProofGraph{
             Node* temp = &nodeMap[deleteID];
             nodeMap.erase(deleteID);
             for(auto& i : temp->neighbors){
-                for(auto& j : i->neighbors){
-                    if(j->nodeID == temp->nodeID){
-                        i->neighbors.erase(j);
-                    }
-                }
+                i->neighbors.erase(temp);
             }
         }
 
