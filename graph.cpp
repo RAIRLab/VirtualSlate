@@ -2,7 +2,7 @@
 #include <list>
 #include <map>
 #include <set>
-
+#include <string>
 
 
 class Node{
@@ -39,14 +39,20 @@ class ProofGraph{
             std::map<int, Node> nodeMap;
         }
 
-        void displayNodeList(){
+        std::string getNodeRepresentation() {
+            std::string result = "";
             for (auto& tempNode : nodeMap){
-                std::cout << tempNode.second.nodeID << ": ";
+                result += std::to_string(tempNode.second.nodeID) + ": ";
                 for(auto& i : tempNode.second.neighbors){
-                    std::cout << i->nodeID << " ";
+                    result += std::to_string(i->nodeID) + " ";
                 }
-                std::cout << "\n";
+                result += "\n";
             }
+            return result;            
+        }
+
+        void displayNodeList(){
+            std::cout << getNodeRepresentation();
         }
 
         void addNode(const std::tuple<double, double, double>& location, int data){
@@ -69,14 +75,25 @@ class ProofGraph{
         // Needs checks for node validity
         void removeNode(int deleteID){
             Node* temp = &nodeMap[deleteID];
-            nodeMap.erase(deleteID);
-            for(auto& i : temp->neighbors){
-                i->neighbors.erase(temp);
+            if(nodeMap.find(deleteID) != nodeMap.end()) {
+                for(auto& i : temp->neighbors){
+                    i->neighbors.erase(temp);
+                }
+                nodeMap.erase(deleteID);
             }
+        }
+        //Needed for testing
+        int getSize() {
+            return nodeCount;
+        }
+        //Needed for testing
+        std::map<int, Node> getNodeMap() {
+            return nodeMap;
         }
 
 };
 
+/*
 int main(){
     ProofGraph graph = ProofGraph();
     graph.addNode(std::make_tuple(0,0,0), 0);
@@ -96,3 +113,4 @@ int main(){
     graph.displayNodeList();
     std::cout << "--------\n";
 }
+*/
