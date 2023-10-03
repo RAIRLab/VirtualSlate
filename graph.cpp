@@ -39,7 +39,7 @@ class ProofGraph{
             std::map<int, Node> nodeMap;
         }
 
-        std::string getNodeRepresentation() {
+        std::string representation() {
             std::string result = "";
             for (auto& tempNode : nodeMap){
                 result += std::to_string(tempNode.second.nodeID) + ": ";
@@ -52,7 +52,7 @@ class ProofGraph{
         }
 
         void displayNodeList(){
-            std::cout << getNodeRepresentation();
+            std::cout << representation();
         }
 
         void addNode(const std::tuple<double, double, double>& location, int data){

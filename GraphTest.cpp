@@ -60,6 +60,28 @@ TEST(GraphRemoveNodeWithoutEdges, BasicAssertions) {
     EXPECT_EQ(graphNodes.size(), 25);
 }
 
+TEST(GraphAddEdge, BasicAssertions) {
+    ProofGraph graph = ProofGraph();
+    for(int i = 0; i < 50; i++) {
+        graph.addNode(std::make_tuple(i, i + 1, i + 2), i);
+    }
+    for(int i = 0; i < 50; i++) {
+        if(i == 12) {
+            continue;
+        }
+        graph.addEdge(12, i);
+    }
+    auto graphNodes = graph.getNodeMap();
+    Node* twelve = &graphNodes[12];
+    for(auto& curr : graphNodes) {
+        if(&curr.second == twelve) {
+            EXPECT_EQ(curr.second.neighbors.size(), 49);
+        } else {
+            EXPECT_EQ(curr.second.neighbors.size(), 1);
+        }
+    }
+}
+
 TEST(GraphRemoveNode, BasicAssertions) {
     ProofGraph graph = ProofGraph();
     ProofGraph answer = ProofGraph();
@@ -75,7 +97,7 @@ TEST(GraphRemoveNode, BasicAssertions) {
     }
     graph.removeNode(12);
     answer.removeNode(12);
-    EXPECT_EQ(answer.getNodeRepresentation(), graph.getNodeRepresentation());
+    EXPECT_EQ(answer.representation(), graph.representation());
 }
 
 
