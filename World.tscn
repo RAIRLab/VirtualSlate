@@ -1,16 +1,31 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=6 format=3 uid="uid://dm1u7f14uqxh"]
 
-[ext_resource path="res://CSGBox.gd" type="Script" id=1]
-[ext_resource path="res://Camera.gd" type="Script" id=2]
+[ext_resource type="Script" path="res://CSGBox.gd" id="1"]
+[ext_resource type="Script" path="res://Camera.gd" id="2"]
 
-[node name="Spatial" type="Spatial"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.14966, 0.463914, -0.0865085 )
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_qturn"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
 
-[node name="CSGBox" type="CSGBox" parent="."]
-width = 4.15876
-height = 3.53134
-script = ExtResource( 1 )
+[sub_resource type="Sky" id="Sky_p4rqy"]
+sky_material = SubResource("ProceduralSkyMaterial_qturn")
 
-[node name="Camera" type="Camera" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.06996, 10.9223 )
-script = ExtResource( 2 )
+[sub_resource type="Environment" id="Environment_6hsa1"]
+background_mode = 2
+sky = SubResource("Sky_p4rqy")
+tonemap_mode = 2
+glow_enabled = true
+
+[node name="Spatial" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.14966, 0.463914, -0.0865085)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_6hsa1")
+
+[node name="CSGBox" type="CSGBox3D" parent="."]
+size = Vector3(4.15876, 3.53134, 1)
+script = ExtResource("1")
+
+[node name="Camera" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.06996, 10.9223)
+script = ExtResource("2")
