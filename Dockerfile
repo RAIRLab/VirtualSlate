@@ -1,4 +1,4 @@
-#This file builds Godot
+#This file builds Godot with our custom module backend
 
 FROM alpine
 MAINTAINER "James Oswald <jamesoswald111@gmail.com> (jamesoswald.dev)"
@@ -23,6 +23,7 @@ RUN apk --update --no-cache add \
 #Git clone godot so we can build
 RUN git clone https://github.com/godotengine/godot.git -b 4.1.1-stable --depth 1
 WORKDIR godot
+COPY module modules/proofgraph
 RUN scons platform=windows
 
   
