@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://dm1u7f14uqxh"]
+[gd_scene load_steps=7 format=3 uid="uid://dm1u7f14uqxh"]
 
 [ext_resource type="Script" path="res://CSGBox.gd" id="1"]
+[ext_resource type="Script" path="res://WorldEnvironment.gd" id="1_q4ooj"]
 [ext_resource type="Script" path="res://Camera.gd" id="2"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_qturn"]
@@ -21,6 +22,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.14966, 0.463914, -0.0865085
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_6hsa1")
+script = ExtResource("1_q4ooj")
 
 [node name="CSGBox3D" type="CSGBox3D" parent="."]
 size = Vector3(4.15876, 3.53134, 1)
