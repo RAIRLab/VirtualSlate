@@ -44,6 +44,8 @@ class ProofGraph : public Object{
         
         // Constructor, creates empty proof graph
         ProofGraph(); 
+        ~ProofGraph();
+
 
         void addNode(Vector3 location, int data);
 

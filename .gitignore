@@ -1,2 +1,6 @@
 *.exe
-godot-cpp/
+*.obj
+*.dblite
+project/bin
+# Godot 4+ specific ignores
+.godot/

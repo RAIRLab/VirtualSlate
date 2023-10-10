@@ -24,6 +24,12 @@ ProofGraph::ProofGraph(){
     HashMap<int, LogNode*> nodeMap;
 }
 
+ProofGraph::~ProofGraph(){
+    for(auto& i : nodeMap){
+        nodeMap.erase(i.key);
+    }
+}
+
 void ProofGraph::addNode(Vector3 location, int data){
     LogNode temp = LogNode::LogNode(nodeCount, location, data);
     nodeMap[nodeCount] = &(LogNode(nodeCount, location, data));
