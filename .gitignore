@@ -1,1 +1,7 @@
 *.exe
+*.obj
+*.dblite
+project/bin
+bin
+# Godot 4+ specific ignores
+.godot/
