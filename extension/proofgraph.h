@@ -1,5 +1,5 @@
 #ifndef PROOFGRAPH_H
-#define PROOFGRPAH_H
+#define PROOFGRAPH_H
 
 
 #include <iostream>

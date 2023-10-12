@@ -1,7 +1,9 @@
 *.exe
 *.obj
 *.dblite
-project/bin
-bin
+*.os
+project/bin/*
+!project/bin/ProofGraphs.gdextension
+venv
 # Godot 4+ specific ignores
 .godot/
