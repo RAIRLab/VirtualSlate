@@ -34,20 +34,31 @@ func addNewLogNode(position: Vector3, data: int, pgInstance: ProofGraph):
 	
 	
 func createGraphicEdge(start: Vector3, end: Vector3):
+	
+	#the line part
 	var linemesh = MeshInstance3D.new()
 	linemesh.mesh = CylinderMesh.new()
 	linemesh.mesh.material = ORMMaterial3D.new()
 	linemesh.mesh.material.albedo_color = Color(0.17, 0.42, 0.89 )
 	
-	var startOffset = start - Vector3(0,-2,0)
-	var endOffset = end - Vector3(0,2,0)
+	var boxOffset = Vector3(0,2,0)
+	
+	var startOffset
+	var endOffset
+	
+	if start.y > end.y:
+		startOffset = start - boxOffset
+		endOffset = end + boxOffset
+	else:
+		startOffset = start + boxOffset
+		endOffset = end - boxOffset
 	
 	var position = (start+end)/2
 	var length = (endOffset-startOffset).length()
 	
 	linemesh.global_position = position
 	linemesh.global_scale(Vector3(0.2, 0.2, length))
-	linemesh.look_at_from_position(position, endOffset, Vector3.UP)
+	linemesh.look_at_from_position(position, endOffset, Vector3.LEFT)
 	
 	self.add_child(linemesh)
 	
@@ -63,12 +74,15 @@ func addNewEdge(parent: String, child: String, pgInstance: ProofGraph):
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	var pgInstance = initializeProofGraph()
-	addNewLogNode(Vector3(0,4,0), 45, pgInstance)
-	addNewLogNode(Vector3(8,12,0), 125, pgInstance)
-	addNewLogNode(Vector3(-8,12,0), 68, pgInstance)
+	addNewLogNode(Vector3(0,-2,0), 45, pgInstance)
+	addNewLogNode(Vector3(8,6,0), 125, pgInstance)
+	addNewLogNode(Vector3(-8,6,0), 68, pgInstance)
+	addNewLogNode(Vector3(8,14,0), 135, pgInstance)
+
 	
 	addNewEdge("0", "1", pgInstance)
 	addNewEdge("0", "2", pgInstance)
+	addNewEdge("1", "3", pgInstance)
 	
 	print(pgInstance.getData(0))
 	print(pgInstance.getData(1))
