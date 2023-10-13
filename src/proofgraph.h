@@ -28,7 +28,8 @@ class LogNode : public Node3D{
         // Placeholder for formula data
         int data;
         // Potentially split into seperate parent/child sets?
-        HashSet<LogNode*> neighbors;
+        HashSet<LogNode*> logParents;
+        HashSet<LogNode*> logChildren;
 
         LogNode();
 

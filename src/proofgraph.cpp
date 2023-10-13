@@ -6,7 +6,8 @@ LogNode::LogNode(){
     nodeID = 0;
     location = Vector3(0,0,0);
     data = 0;
-    HashSet<LogNode*> neighbors;
+    HashSet<LogNode*> logParents;
+    HashSet<LogNode*> logChildren;
 }
 
 /*
@@ -69,14 +70,15 @@ void ProofGraph::addNode(LogNode* newNode){
 
 // Needs better check for node validity
 void ProofGraph::addEdge(int start, int end){
-    nodeMap[start]->neighbors.insert(nodeMap[end]);
+    nodeMap[start]->logParents.insert(nodeMap[end]);
+    nodeMap[end]->logChildren.insert(nodeMap[start]);
 }
 
 // Needs checks for node validity
 void ProofGraph::removeNode(int deleteID){
     LogNode* temp = nodeMap[deleteID];
-    for(auto& i : temp->neighbors){
-        i->neighbors.erase(temp);
+    for(auto& i : temp->logParents){
+        i->logParents.erase(temp);
     }
     nodeMap.erase(deleteID);
     nodeCount--;

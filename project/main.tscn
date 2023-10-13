@@ -2,27 +2,23 @@
 
 [ext_resource type="Script" path="res://main.gd" id="1_ni7k0"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_xahve"]
-size = Vector3(60, 2, 60)
+[sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_3ncrd"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_l4ipy"]
-albedo_color = Color(0.152941, 0.254902, 0.133333, 1)
+[sub_resource type="Sky" id="Sky_4hpyh"]
+sky_material = SubResource("PhysicalSkyMaterial_3ncrd")
 
-[sub_resource type="BoxMesh" id="BoxMesh_hgqrs"]
-material = SubResource("StandardMaterial3D_l4ipy")
-size = Vector3(60, 2, 60)
+[sub_resource type="Environment" id="Environment_s3rrf"]
+background_mode = 2
+background_energy_multiplier = 2.55
+sky = SubResource("Sky_4hpyh")
+sky_custom_fov = 90.0
+ambient_light_source = 3
+ambient_light_color = Color(0, 0.807843, 0.921569, 1)
+ambient_light_energy = 0.0
+reflected_light_source = 2
 
 [node name="main" type="Node"]
 script = ExtResource("1_ni7k0")
-
-[node name="ground" type="StaticBody3D" parent="."]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="ground"]
-shape = SubResource("BoxShape3D_xahve")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="ground"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
-mesh = SubResource("BoxMesh_hgqrs")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.360501, 0.932759, 0, -0.932759, 0.360501, 0, 33.113, 0)
@@ -31,3 +27,6 @@ transform = Transform3D(1, 0, 0, 0, 0.360501, 0.932759, 0, -0.932759, 0.360501, 
 
 [node name="Camera3D" type="Camera3D" parent="Marker3D"]
 transform = Transform3D(1, 0, 0, 0, 0.949661, 0.31328, 0, -0.31328, 0.949661, 0, 10.0979, 18.4927)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_s3rrf")
