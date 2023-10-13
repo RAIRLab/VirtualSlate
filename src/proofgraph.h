@@ -5,17 +5,21 @@
 #include <iostream>
 #include <set>
 
-#include "godot_cpp/classes/ref_counted.hpp"
+//#include "godot_cpp/classes/ref_counted.hpp"
 #include "godot_cpp/variant/vector3.hpp"
 #include "godot_cpp/classes/object.hpp"
+#include "godot_cpp/classes/node3d.hpp"
 #include "godot_cpp/templates/hash_map.hpp"
 #include "godot_cpp/templates/hash_set.hpp"
+#include "godot_cpp/classes/mesh_instance3d.hpp"
+#include "godot_cpp/classes/scene_tree.hpp"
+
 
 
 namespace godot{
 
-class LogNode : public Object{
-    GDCLASS(LogNode, Object)
+class LogNode : public Node3D{
+    GDCLASS(LogNode, Node3D)
     public:
 
         int nodeID;
@@ -29,13 +33,22 @@ class LogNode : public Object{
         LogNode();
 
         LogNode(int nodeID, Vector3 location, int data);
+
+        void setNode(int nodeID, Vector3 location, int data);
+
+        int getID();
+
+        int getData();
+
+        Vector3 getPosition();
+
     
     protected:
         static void _bind_methods();
 };
 
-class ProofGraph : public Object{
-    GDCLASS(ProofGraph, Object)
+class ProofGraph : public Node{
+    GDCLASS(ProofGraph, Node)
 
     private:
         int nodeCount;
@@ -47,7 +60,8 @@ class ProofGraph : public Object{
         ~ProofGraph();
 
 
-        void addNode(Vector3 location, int data);
+        //void addNode(Vector3 location, int data);
+        void addNode(LogNode* newNode);
 
         void addEdge(int start, int end);
 
