@@ -11,8 +11,7 @@
 #include "godot_cpp/classes/node3d.hpp"
 #include "godot_cpp/templates/hash_map.hpp"
 #include "godot_cpp/templates/hash_set.hpp"
-#include "godot_cpp/classes/mesh_instance3d.hpp"
-#include "godot_cpp/classes/scene_tree.hpp"
+#include "godot_cpp/variant/string.hpp"
 
 
 
@@ -26,7 +25,7 @@ class LogNode : public Node3D{
         // Placeholder for 3D location info as I'm not sure how Godot handles it
         Vector3 location;
         // Placeholder for formula data
-        int data;
+        String data;
         // Potentially split into seperate parent/child sets?
         HashSet<LogNode*> logParents;
         HashSet<LogNode*> logChildren;
@@ -35,11 +34,11 @@ class LogNode : public Node3D{
 
         LogNode(int nodeID, Vector3 location, int data);
 
-        void setNode(int nodeID, Vector3 location, int data);
+        void setNode(int nodeID, Vector3 location, String data);
 
         int getID();
 
-        int getData();
+        String getData();
 
         Vector3 getPosition();
 
@@ -70,7 +69,7 @@ class ProofGraph : public Node{
 
         int getNodeCount();
 
-        int getNodeData(int targetNodeID);
+        String getNodeData(int targetNodeID);
 
     protected:
         static void _bind_methods();

@@ -5,7 +5,7 @@ using namespace godot;
 LogNode::LogNode(){
     nodeID = 0;
     location = Vector3(0,0,0);
-    data = 0;
+    data = "";
     HashSet<LogNode*> logParents;
     HashSet<LogNode*> logChildren;
 }
@@ -19,7 +19,7 @@ LogNode::LogNode(int nodeID, Vector3 location, int data){
 }
 */
 
-void LogNode::setNode(int nodeID, Vector3 location, int data){
+void LogNode::setNode(int nodeID, Vector3 location, String data){
     this->nodeID = nodeID;
     this->location = location;
     this->data = data;
@@ -29,7 +29,7 @@ int LogNode::getID(){
     return nodeID;
 }
 
-int LogNode::getData(){
+String LogNode::getData(){
     return data;
 }
 
@@ -88,7 +88,7 @@ int ProofGraph::getNodeCount(){
     return nodeCount;
 }
 
-int ProofGraph::getNodeData(int targetNodeID){
+String ProofGraph::getNodeData(int targetNodeID){
     return nodeMap[targetNodeID]->data;
 }
 

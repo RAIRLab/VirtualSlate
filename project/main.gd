@@ -5,7 +5,7 @@ func initializeProofGraph():
 	self.add_child(pg)
 	return pg
 	
-func addNewLogNode(position: Vector3, data: int, pgInstance: ProofGraph):
+func addNewLogNode(position: Vector3, data: String, pgInstance: ProofGraph):
 	#Creates a new LogNode, adds it to the nodeMap, sets the values
 	var newNode = LogNode.new()
 	newNode.setNode(pgInstance.getNodeCount(), position, data)
@@ -19,29 +19,46 @@ func addNewLogNode(position: Vector3, data: int, pgInstance: ProofGraph):
 	#creates a box mesh for the lognode
 	var newMesh = MeshInstance3D.new()
 	newNode.add_child(newMesh)
+	newMesh.set_name("Box"+str(newNode.getID()))
 	newMesh.mesh = BoxMesh.new()
-	newMesh.global_scale(Vector3(10,4,4))
+	newMesh.global_scale(Vector3(10,5,2))
 	newMesh.mesh.material = StandardMaterial3D.new()
 	newMesh.mesh.material.flags_transparent = true
 	newMesh.mesh.material.albedo_color = Color(0.5, 0.75, 0.75, 0.25)
 	
-	#create a textmesh for the lognode
+	#create a textmesh for data for the lognode
 	var textM = MeshInstance3D.new()
 	newNode.add_child(textM)
+	textM.set_name("Data"+str(newNode.getID()))
 	textM.mesh = TextMesh.new()
 	textM.mesh.set_text(str(newNode.getData()))
-	textM.global_scale(Vector3(15,15,15))
+	textM.global_scale(Vector3(13,13,5))
+	textM.mesh.material = StandardMaterial3D.new()
+	textM.mesh.material.emission_enabled = true
+	textM.mesh.material.emission = Color(.8,.8,.9,.6)
+	textM.mesh.material.emission_energy_multiplier = 5.0
+	
+	#create a textmesh for ID for the lognode
+	var idM = MeshInstance3D.new()
+	newNode.add_child(idM)
+	idM.set_name("ID"+str(newNode.getID()))
+	idM.position = Vector3(-3,1.45,0)
+	idM.mesh = TextMesh.new()
+	idM.mesh.material = StandardMaterial3D.new()
+	idM.mesh.set_text("ID: "+str(newNode.getID()))
+	idM.global_scale(Vector3(8,8,5))
 	
 	
-func createGraphicEdge(start: Vector3, end: Vector3):
+func createGraphicEdge(start: Vector3, end: Vector3, startID: int, endID: int):
 	
 	#the line part
 	var linemesh = MeshInstance3D.new()
 	linemesh.mesh = CylinderMesh.new()
 	linemesh.mesh.material = ORMMaterial3D.new()
 	linemesh.mesh.material.albedo_color = Color(0.17, 0.42, 0.89 )
+	linemesh.set_name(str(startID)+str(endID))
 	
-	var boxOffset = Vector3(0,2,0)
+	var boxOffset = Vector3(0,2.5,0)
 	
 	var startOffset
 	var endOffset
@@ -68,21 +85,21 @@ func addNewEdge(parent: String, child: String, pgInstance: ProofGraph):
 	var cID = get_node("ProofGraph/"+child)
 	
 	pgInstance.addEdge(pID.getID(), cID.getID())
-	createGraphicEdge(pID.getPosition(), cID.getPosition())
+	createGraphicEdge(pID.getPosition(), cID.getPosition(), pID.getID(), cID.getID())
 	
 	
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	var pgInstance = initializeProofGraph()
-	addNewLogNode(Vector3(0,-2,0), 45, pgInstance)
-	addNewLogNode(Vector3(8,6,0), 125, pgInstance)
-	addNewLogNode(Vector3(-8,6,0), 68, pgInstance)
-	addNewLogNode(Vector3(8,14,0), 135, pgInstance)
+	addNewLogNode(Vector3(0,-3,0), "q", pgInstance)
+	addNewLogNode(Vector3(8,8,0), "p→q", pgInstance)
+	addNewLogNode(Vector3(-8,8,0), "p", pgInstance)
+
 
 	
 	addNewEdge("0", "1", pgInstance)
 	addNewEdge("0", "2", pgInstance)
-	addNewEdge("1", "3", pgInstance)
+
 	
 	print(pgInstance.getData(0))
 	print(pgInstance.getData(1))
