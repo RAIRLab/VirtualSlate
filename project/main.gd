@@ -5,10 +5,10 @@ func initializeProofGraph():
 	self.add_child(pg)
 	return pg
 	
-func addNewLogNode(position: Vector3, data: String, pgInstance: ProofGraph):
+func addNewLogNode(position: Vector3, pgInstance: ProofGraph):
 	#Creates a new LogNode, adds it to the nodeMap, sets the values
 	var newNode = LogNode.new()
-	newNode.setNode(pgInstance.getNodeCount(), position, data)
+	newNode.setNode(pgInstance.getNodeCount(), position)
 	pgInstance.addNode(newNode)
 	
 	#adds the lognode to the godot scene tree and sets global position
@@ -26,18 +26,6 @@ func addNewLogNode(position: Vector3, data: String, pgInstance: ProofGraph):
 	newMesh.mesh.material.flags_transparent = true
 	newMesh.mesh.material.albedo_color = Color(0.5, 0.75, 0.75, 0.25)
 	
-	#create a textmesh for data for the lognode
-	var textM = MeshInstance3D.new()
-	newNode.add_child(textM)
-	textM.set_name("Data"+str(newNode.getID()))
-	textM.mesh = TextMesh.new()
-	textM.mesh.set_text(str(newNode.getData()))
-	textM.global_scale(Vector3(13,13,5))
-	textM.mesh.material = StandardMaterial3D.new()
-	textM.mesh.material.emission_enabled = true
-	textM.mesh.material.emission = Color(.8,.8,.9,.6)
-	textM.mesh.material.emission_energy_multiplier = 5.0
-	
 	#create a textmesh for ID for the lognode
 	var idM = MeshInstance3D.new()
 	newNode.add_child(idM)
@@ -47,6 +35,25 @@ func addNewLogNode(position: Vector3, data: String, pgInstance: ProofGraph):
 	idM.mesh.material = StandardMaterial3D.new()
 	idM.mesh.set_text("ID: "+str(newNode.getID()))
 	idM.global_scale(Vector3(8,8,5))
+	
+	
+func addDataToNode(nodeID: int, newData: String):
+	
+	#create a textmesh for data for the lognode
+	var workingNode = get_node("ProofGraph/"+str(nodeID))
+	workingNode.addData(newData)
+	var textM = MeshInstance3D.new()
+	var oldText = get_node("ProofGraph/"+str(nodeID)+"/Data"+str(nodeID))
+	workingNode.remove_child(oldText)
+	workingNode.add_child(textM)
+	textM.set_name("Data"+str(workingNode.getID()))
+	textM.mesh = TextMesh.new()
+	textM.mesh.set_text(str(workingNode.getData()))
+	textM.global_scale(Vector3(13,13,5))
+	textM.mesh.material = StandardMaterial3D.new()
+	textM.mesh.material.emission_enabled = true
+	textM.mesh.material.emission = Color(.8,.8,.9,.6)
+	textM.mesh.material.emission_energy_multiplier = 5.0
 	
 	
 func createGraphicEdge(start: Vector3, end: Vector3, startID: int, endID: int):
@@ -69,15 +76,18 @@ func createGraphicEdge(start: Vector3, end: Vector3, startID: int, endID: int):
 	else:
 		startOffset = start + boxOffset
 		endOffset = end - boxOffset
+		
+	var workingNode = get_node("ProofGraph/"+str(startID))
+	workingNode.add_child(linemesh)
 	
-	var position = (start+end)/2
+	var location = (start+end)/2
 	var length = (endOffset-startOffset).length()
 	
-	linemesh.global_position = position
+	linemesh.global_position = location
 	linemesh.global_scale(Vector3(0.2, 0.2, length))
-	linemesh.look_at_from_position(position, endOffset, Vector3.LEFT)
+	linemesh.look_at_from_position(location, endOffset, Vector3.LEFT)
 	
-	self.add_child(linemesh)
+
 	
 	
 func addNewEdge(parent: String, child: String, pgInstance: ProofGraph):
@@ -87,23 +97,60 @@ func addNewEdge(parent: String, child: String, pgInstance: ProofGraph):
 	pgInstance.addEdge(pID.getID(), cID.getID())
 	createGraphicEdge(pID.getPosition(), cID.getPosition(), pID.getID(), cID.getID())
 	
+func removeBadEdge(parent: String, child: String, pgInstance: ProofGraph):
+	var pID = get_node("ProofGraph/"+parent)
+	var cID = get_node("ProofGraph/"+child)
+	pgInstance.removeEdge(pID.getID(), cID.getID())
+	var badEdge = get_node("ProofGraph/"+parent+"/"+parent+child)
+	badEdge.queue_free()
+	
+func removeBadNode(parent: String, pgInstance: ProofGraph):
+	var pID = get_node("ProofGraph/"+parent)
+	pgInstance.removeNode(pID.getID())
+	pID.queue_free()
+	
 	
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	await get_tree().create_timer(5).timeout 
 	var pgInstance = initializeProofGraph()
-	addNewLogNode(Vector3(0,-3,0), "q", pgInstance)
-	addNewLogNode(Vector3(8,8,0), "p→q", pgInstance)
-	addNewLogNode(Vector3(-8,8,0), "p", pgInstance)
-
-
+	addNewLogNode(Vector3(-8,12,0), pgInstance)
+	await get_tree().create_timer(2).timeout 
+	addNewLogNode(Vector3(8,6,0), pgInstance)
+	await get_tree().create_timer(2).timeout 
+	addNewLogNode(Vector3(0,-3,0), pgInstance)
+	await get_tree().create_timer(2).timeout 
 	
-	addNewEdge("0", "1", pgInstance)
+	addDataToNode(0, "p")
+	await get_tree().create_timer(2).timeout 
+	addDataToNode(1, "p→q")
+	await get_tree().create_timer(2).timeout 
+	addDataToNode(2, "q")
+	await get_tree().create_timer(2).timeout 
+	
+	addDataToNode(0, "a")
+	await get_tree().create_timer(2).timeout 
+	addDataToNode(1, "a→q")
+	await get_tree().create_timer(2).timeout
+
 	addNewEdge("0", "2", pgInstance)
-
+	await get_tree().create_timer(2).timeout 
+	addNewEdge("1", "0", pgInstance)
+	await get_tree().create_timer(4).timeout
 	
-	print(pgInstance.getData(0))
-	print(pgInstance.getData(1))
-	print(pgInstance.getData(2))
+	removeBadEdge("1", "0", pgInstance)
+	await get_tree().create_timer(2).timeout
+	addNewEdge("1", "2", pgInstance)
+	await get_tree().create_timer(4).timeout
+	
+	removeBadNode("0", pgInstance)
+	await get_tree().create_timer(2).timeout
+	removeBadNode("1", pgInstance)
+	await get_tree().create_timer(2).timeout
+	removeBadNode("2", pgInstance)
+	
+	
+	
 	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

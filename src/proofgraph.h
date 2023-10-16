@@ -31,16 +31,13 @@ class LogNode : public Node3D{
         HashSet<LogNode*> logChildren;
 
         LogNode();
-
         LogNode(int nodeID, Vector3 location, int data);
 
-        void setNode(int nodeID, Vector3 location, String data);
-
+        void setNode(int nodeID, Vector3 location);
         int getID();
-
         String getData();
-
         Vector3 getPosition();
+        void setData(String newData);
 
     
     protected:
@@ -59,16 +56,12 @@ class ProofGraph : public Node{
         ProofGraph(); 
         ~ProofGraph();
 
-
         //void addNode(Vector3 location, int data);
         void addNode(LogNode* newNode);
-
         void addEdge(int start, int end);
-
+        void removeEdge(int start, int end);
         void removeNode(int deleteID);
-
         int getNodeCount();
-
         String getNodeData(int targetNodeID);
 
     protected:
