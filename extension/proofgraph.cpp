@@ -57,13 +57,13 @@ ProofGraph::ProofGraph(){
 
 ProofGraph::~ProofGraph(){
     for(auto& i : nodeMap){
-        nodeMap.erase(i.key);
+        delete i.value;
     }
 }
 /*
 void ProofGraph::addNode(Vector3 location, int data){
-    LogNode temp = LogNode::LogNode(nodeCount, location, data);
-    nodeMap[nodeCount] = &(LogNode(nodeCount, location, data));
+    LogNode temp = LogNode(nodeCount, location, data);
+    nodeMap[nodeCount] = new LogNode(nodeCount, location, data);
     nodeCount++;
 }
 */
