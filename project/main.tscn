@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://bg6v0qeatg5pu"]
+[gd_scene load_steps=6 format=3 uid="uid://bg6v0qeatg5pu"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_ni7k0"]
 [ext_resource type="PackedScene" uid="uid://dgdb1texynduw" path="res://addons/godot-xr-tools/objects/virtual_keyboard.tscn" id="2_kwghl"]
@@ -27,7 +27,7 @@ transform = Transform3D(1, 0, 0, 0, 0.360501, 0.932759, 0, -0.932759, 0.360501, 
 [node name="VirtualKeyboard" parent="." instance=ExtResource("2_kwghl")]
 transform = Transform3D(10, 0, 0, 0, 9.06308, 4.22618, 0, -4.22618, 9.06308, 2.0094, 9.20317, -10.7399)
 
-[node name="Camera3D" type="Camera3D" parent="Marker3D"]
+[node name="Marker3D@Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.949661, 0.31328, 0, -0.31328, 0.949661, 0, 10.0979, 18.4927)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
