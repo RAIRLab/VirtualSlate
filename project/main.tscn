@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://bg6v0qeatg5pu"]
+[gd_scene load_steps=5 format=3 uid="uid://bg6v0qeatg5pu"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_ni7k0"]
+[ext_resource type="PackedScene" uid="uid://dgdb1texynduw" path="res://addons/godot-xr-tools/objects/virtual_keyboard.tscn" id="2_kwghl"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_xahve"]
 size = Vector3(60, 2, 60)
@@ -14,16 +15,18 @@ script = ExtResource("1_ni7k0")
 [node name="ground" type="StaticBody3D" parent="."]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="ground"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 shape = SubResource("BoxShape3D_xahve")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="ground"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.163973, 0)
 mesh = SubResource("BoxMesh_hgqrs")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.360501, 0.932759, 0, -0.932759, 0.360501, 0, 33.113, 0)
 
-[node name="Marker3D" type="Marker3D" parent="."]
+[node name="VirtualKeyboard" parent="." instance=ExtResource("2_kwghl")]
+transform = Transform3D(10, 0, 0, 0, 9.06308, 4.22618, 0, -4.22618, 9.06308, 2.0094, 9.20317, -10.7399)
 
-[node name="Camera3D" type="Camera3D" parent="Marker3D"]
-transform = Transform3D(1, 0, 0, 0, 0.827365, 0.561665, 0, -0.561665, 0.827365, 0, 10.9797, 18.4927)
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(0.80478, -0.333389, 0.491102, 0, 0.827365, 0.561665, -0.593573, -0.452017, 0.665847, 8.14736, 17.5689, 21.4607)

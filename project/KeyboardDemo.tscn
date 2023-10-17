@@ -1,0 +1,66 @@
+[gd_scene load_steps=8 format=3 uid="uid://de5473cq7lam2"]
+
+[ext_resource type="Material" path="res://addons/godot-xr-tools/materials/capsule.tres" id="1_bokog"]
+[ext_resource type="Script" path="res://Player.gd" id="1_lhxq0"]
+[ext_resource type="PackedScene" uid="uid://lauwp8okd1vh" path="res://addons/godot-xr-tools/objects/keyboard/virtual_keyboard_2d.tscn" id="3_nkxnd"]
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_abm7u"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_pnqyn"]
+material = ExtResource("1_bokog")
+size = Vector2(20, 20)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_nde0h"]
+
+[sub_resource type="GDScript" id="GDScript_xmrkm"]
+script/source = "extends LineEdit
+
+var inputstr = \"\"
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	pass
+"
+
+[node name="KeyboardDemo" type="Node3D"]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("WorldBoundaryShape3D_abm7u")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D"]
+mesh = SubResource("PlaneMesh_pnqyn")
+
+[node name="Player" type="CharacterBody3D" parent="."]
+script = ExtResource("1_lhxq0")
+
+[node name="Body" type="CollisionShape3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_nde0h")
+
+[node name="Head" type="Node3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+
+[node name="Camera3D" type="Camera3D" parent="Player/Head"]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="VirtualKeyboard2D" parent="CanvasLayer" instance=ExtResource("3_nkxnd")]
+visible = false
+offset = Vector2(300, 300)
+scale = Vector2(1.5, 1.5)
+transform = Transform2D(1.5, 0, 0, 1.5, 300, 300)
+
+[node name="LineEdit" type="LineEdit" parent="."]
+offset_left = 279.0
+offset_top = 65.0
+offset_right = 914.0
+offset_bottom = 257.0
+virtual_keyboard_enabled = false
+script = SubResource("GDScript_xmrkm")
