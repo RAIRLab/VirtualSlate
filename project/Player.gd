@@ -3,11 +3,39 @@ extends CharacterBody3D
 
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
+const DOUBLETAP_DELAY = 0.25
+var doubletap_time = DOUBLETAP_DELAY
+var last_keycode = 0
+var is_flying = false  # Track the flying state
+var fly_speed = 10  # Adjust the flying speed as needed
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 @onready var neck := $Neck
 @onready var camera := $Neck/Camera3D
+
+func _process(delta):
+	doubletap_time -= delta
+
+func _input(event):
+	if event is InputEventKey and event.is_pressed():
+		if event.keycode == KEY_SPACE:
+			if last_keycode == event.keycode and doubletap_time >= 0:
+				toggle_flying()
+			last_keycode = event.keycode
+			doubletap_time = DOUBLETAP_DELAY
+		else:
+			last_keycode = 0
+		
+func toggle_flying():
+	is_flying = !is_flying
+	if is_flying:
+		print("Flying enabled")
+		gravity = 0  # Set gravity to 0 or disable it
+		# You can also change other properties here, like enabling free movement
+	else:
+		print("Flying disabled")
+		gravity = ProjectSettings.get_setting("physics/3d/default_gravity")  # Reset gravity to normal
 
 func _unhandled_input(event: ) -> void:
 	if event is InputEventMouseButton:
