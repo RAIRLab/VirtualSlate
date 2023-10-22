@@ -1,4 +1,8 @@
 extends CharacterBody3D
+@onready var head = $Head
+@onready var raycast3d = $Head/Camera3D/RayCast3D
+@onready var virtual_keyboard_2d = $"../CanvasLayer/VirtualKeyboard2D"
+@onready var line_edit = $"../LineEdit"
 
 
 const SPEED = 5.0
@@ -53,6 +57,23 @@ func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity.y -= gravity * delta
 
+
+func _ready():
+	line_edit.hide()
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+
+	if Input.is_action_just_pressed("Keyboard"):
+		if virtual_keyboard_2d.visible == false:
+			virtual_keyboard_2d.show()
+			line_edit.show()
+			line_edit.grab_focus()
+			Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED)			
+	if Input.is_action_just_pressed("Enter"):
+		virtual_keyboard_2d.hide()
+		line_edit.hide()
+		print(line_edit.text)
+		line_edit.clear()
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	# Handle Jump.
 	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
