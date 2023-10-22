@@ -1,8 +1,6 @@
 extends CharacterBody3D
-@onready var head = $Head
-@onready var raycast3d = $Head/Camera3D/RayCast3D
-@onready var virtual_keyboard_2d = $"../CanvasLayer/VirtualKeyboard2D"
 @onready var line_edit = $"../LineEdit"
+@onready var virtual_keyboard_2d = $"../CanvasLayer/VirtualKeyboard2D"
 
 
 const SPEED = 5.0
@@ -30,7 +28,7 @@ func _input(event):
 			doubletap_time = DOUBLETAP_DELAY
 		else:
 			last_keycode = 0
-		
+
 func toggle_flying():
 	is_flying = !is_flying
 	if is_flying:
@@ -52,16 +50,13 @@ func _unhandled_input(event: ) -> void:
 			camera.rotate_x(-event.relative.y * 0.001)
 			camera.rotation.x = clamp(camera.rotation.x,deg_to_rad(-30), deg_to_rad(60))
 
-func _physics_process(delta: float) -> void:
-	# Add the gravity.
+func _ready():
+	#Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	line_edit.hide()
+
+func _physics_process(delta):
 	if not is_on_floor():
 		velocity.y -= gravity * delta
-
-
-func _ready():
-	line_edit.hide()
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-
 	if Input.is_action_just_pressed("Keyboard"):
 		if virtual_keyboard_2d.visible == false:
 			virtual_keyboard_2d.show()
