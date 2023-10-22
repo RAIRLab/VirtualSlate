@@ -1,0 +1,36 @@
+[gd_scene load_steps=3 format=3 uid="uid://dms3o6pcg0ff1"]
+
+[ext_resource type="PackedScene" uid="uid://lauwp8okd1vh" path="res://addons/godot-xr-tools/objects/keyboard/virtual_keyboard_2d.tscn" id="3_nkxnd"]
+
+[sub_resource type="GDScript" id="GDScript_xmrkm"]
+script/source = "extends LineEdit
+
+var inputstr = \"\"
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	pass
+"
+
+[node name="KeyboardDemo" type="Node3D"]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="VirtualKeyboard2D" parent="CanvasLayer" instance=ExtResource("3_nkxnd")]
+visible = false
+offset = Vector2(300, 300)
+scale = Vector2(1.5, 1.5)
+transform = Transform2D(1.5, 0, 0, 1.5, 300, 300)
+
+[node name="LineEdit" type="LineEdit" parent="."]
+offset_left = 279.0
+offset_top = 65.0
+offset_right = 914.0
+offset_bottom = 257.0
+virtual_keyboard_enabled = false
+script = SubResource("GDScript_xmrkm")
