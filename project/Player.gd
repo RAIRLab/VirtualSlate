@@ -4,40 +4,12 @@ extends CharacterBody3D
 
 
 const SPEED = 5.0
-const JUMP_VELOCITY = 4.5
-const DOUBLETAP_DELAY = 0.25
-var doubletap_time = DOUBLETAP_DELAY
-var last_keycode = 0
-var is_flying = false  # Track the flying state
-var fly_speed = 10  # Adjust the flying speed as needed
+const JUMP_VELOCITY = 3
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 @onready var neck := $Neck
 @onready var camera := $Neck/Camera3D
-
-func _process(delta):
-	doubletap_time -= delta
-
-func _input(event):
-	if event is InputEventKey and event.is_pressed():
-		if event.keycode == KEY_SPACE:
-			if last_keycode == event.keycode and doubletap_time >= 0:
-				toggle_flying()
-			last_keycode = event.keycode
-			doubletap_time = DOUBLETAP_DELAY
-		else:
-			last_keycode = 0
-
-func toggle_flying():
-	is_flying = !is_flying
-	if is_flying:
-		print("Flying enabled")
-		gravity = 0  # Set gravity to 0 or disable it
-		# You can also change other properties here, like enabling free movement
-	else:
-		print("Flying disabled")
-		gravity = ProjectSettings.get_setting("physics/3d/default_gravity")  # Reset gravity to normal
 
 func _unhandled_input(event: ) -> void:
 	if event is InputEventMouseButton:
@@ -55,24 +27,27 @@ func _ready():
 	line_edit.hide()
 
 func _physics_process(delta):
-	if not is_on_floor():
-		velocity.y -= gravity * delta
 	if Input.is_action_just_pressed("Keyboard"):
 		if virtual_keyboard_2d.visible == false:
 			virtual_keyboard_2d.show()
 			line_edit.show()
 			line_edit.grab_focus()
-			Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED)			
+			Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED)            
 	if Input.is_action_just_pressed("Enter"):
 		virtual_keyboard_2d.hide()
 		line_edit.hide()
 		print(line_edit.text)
 		line_edit.clear()
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-
 	# Handle Jump.
-	if Input.is_action_just_pressed("Jump") and is_on_floor():
+	if Input.is_action_pressed("Up"):
 		velocity.y = JUMP_VELOCITY
+	if Input.is_action_just_released("Up"):
+		velocity.y = 0
+	if Input.is_action_pressed("Down"):
+		velocity.y = -JUMP_VELOCITY
+	if Input.is_action_just_released("Down"):
+		velocity.y = 0
 
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
