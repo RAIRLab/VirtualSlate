@@ -1,0 +1,91 @@
+[gd_scene load_steps=8 format=3 uid="uid://be4diqu4dmroe"]
+
+[ext_resource type="Script" path="res://Scripts/Player.gd" id="1_qb6au"]
+[ext_resource type="Texture2D" uid="uid://dx5rucnx6edo8" path="res://Textures/crosshair.png" id="2_230xu"]
+[ext_resource type="PackedScene" uid="uid://lauwp8okd1vh" path="res://addons/godot-xr-tools/objects/keyboard/virtual_keyboard_2d.tscn" id="2_gk6q7"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_4icp1"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_e6j2o"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_70qy0"]
+
+[sub_resource type="GDScript" id="GDScript_t520x"]
+script/source = "extends LineEdit
+
+var inputstr = \"\"
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+"
+
+[node name="PlayerCharacter" type="Node3D"]
+
+[node name="CharacterBody3D" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0695, 0)
+script = ExtResource("1_qb6au")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D"]
+mesh = SubResource("CapsuleMesh_4icp1")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
+shape = SubResource("CapsuleShape3D_e6j2o")
+
+[node name="Neck" type="Node3D" parent="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.623038, 0)
+
+[node name="Camera3D" type="Camera3D" parent="CharacterBody3D/Neck"]
+
+[node name="Crosshair" type="GridContainer" parent="CharacterBody3D/Neck/Camera3D"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="CharacterBody3D/Neck/Camera3D/Crosshair"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("2_230xu")
+
+[node name="Mode" type="GridContainer" parent="CharacterBody3D/Neck/Camera3D"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -17.5
+offset_top = -98.0
+offset_right = 17.5
+offset_bottom = -60.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Label" type="Label" parent="CharacterBody3D/Neck/Camera3D/Mode"]
+layout_mode = 2
+label_settings = SubResource("LabelSettings_70qy0")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="VirtualKeyboard2D" parent="CanvasLayer" instance=ExtResource("2_gk6q7")]
+visible = false
+offset = Vector2(300, 300)
+scale = Vector2(1.5, 1.5)
+transform = Transform2D(1.5, 0, 0, 1.5, 300, 300)
+
+[node name="LineEdit" type="LineEdit" parent="."]
+offset_left = 265.0
+offset_top = 77.0
+offset_right = 900.0
+offset_bottom = 269.0
+virtual_keyboard_enabled = false
+script = SubResource("GDScript_t520x")
