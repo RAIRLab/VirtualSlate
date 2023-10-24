@@ -1,5 +1,5 @@
 #ifndef PROOFGRAPH_H
-#define PROOFGRAPH_H
+#define PROOFGRPAH_H
 
 
 #include <iostream>
@@ -12,8 +12,16 @@
 #include "godot_cpp/templates/hash_map.hpp"
 #include "godot_cpp/templates/hash_set.hpp"
 #include "godot_cpp/variant/string.hpp"
-
-
+#include "godot_cpp/classes/mesh_instance3d.hpp"
+#include "godot_cpp/classes/mesh.hpp"
+#include "godot_cpp/classes/box_mesh.hpp"
+#include "godot_cpp/classes/text_mesh.hpp"
+#include "godot_cpp/classes/standard_material3d.hpp"
+#include "godot_cpp/variant/color.hpp"
+#include "godot_cpp/classes/cylinder_mesh.hpp"
+#include "godot_cpp/classes/box_shape3d.hpp"
+#include "godot_cpp/classes/collision_shape3d.hpp"
+#include "godot_cpp/classes/static_body3d.hpp"
 
 namespace godot{
 
@@ -21,22 +29,19 @@ class LogNode : public Node3D{
     GDCLASS(LogNode, Node3D)
     public:
 
+        // Position field inherited from Node3D i.e. global_position
         int nodeID;
-        // Placeholder for 3D location info as I'm not sure how Godot handles it
-        Vector3 location;
-        // Placeholder for formula data
         String data;
-        // Potentially split into seperate parent/child sets?
         HashSet<LogNode*> logParents;
         HashSet<LogNode*> logChildren;
 
+        // Godot does not play nicely with parameterized constructors
+        // Constructor requires default constructor then setID method
         LogNode();
-        LogNode(int nodeID, Vector3 location, int data);
 
-        void setNode(int nodeID, Vector3 location);
+        void setID(int nodeID);
         int getID();
         String getData();
-        Vector3 getPosition();
         void setData(String newData);
 
     
@@ -57,16 +62,15 @@ class ProofGraph : public Node{
         ~ProofGraph();
 
         //void addNode(Vector3 location, int data);
-        void addNode(LogNode* newNode);
-        void addEdge(int start, int end);
-        void removeEdge(int start, int end);
-        void removeNode(int deleteID);
+        void addNode(Vector3 position);
+        void addEdge(LogNode* start, LogNode* end);
+        void removeEdge(LogNode* start, LogNode* end);
+        void removeNode(LogNode* badNode);
         int getNodeCount();
         String getNodeData(int targetNodeID);
 
     protected:
         static void _bind_methods();
-
 };
 
 }
