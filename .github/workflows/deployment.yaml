@@ -41,7 +41,7 @@ jobs:
       run: cd VirtualSlate
       - name: Make Game
       run: godot --path project --headless --export-debug "Windows Desktop"
-      - name: Get .exe
+      - name: Upload .exe
       uses: actions/upload-artifact@v3
       with:
         name: VirtualSlate-x64
