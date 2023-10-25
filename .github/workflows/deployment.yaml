@@ -4,46 +4,44 @@ on:
   pull_request: {}
 
 jobs:
-  Build-Extension:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Updates Packages
-        run: sudo apt-get update
-      - name: Install Scons
-        run: sudo apt-get -y install scons gcc-mingw-w64
-      - name: Install Compiler
-        run: yes | sudo apt-get install g++-mingw-w64-x86-64
-      - name: Get Repo
-        run: git clone --recurse-submodules https://github.com/James-Oswald/VirtualSlate.git
-      - name: Build Extension
-        run: cd VirtualSlate && scons platform=windows
-      - name: Upload Extension
-        uses: actions/upload-artifact@v3
-        with:
-          name: VirtualSlateBuildFiles
-          path: VirtualSlate
+#  Build-Extension:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Updates Packages
+#        run: sudo apt-get update
+#      - name: Install Scons
+#        run: sudo apt-get -y install scons gcc-mingw-w64
+#      - name: Install Compiler
+#        run: yes | sudo apt-get install g++-mingw-w64-x86-64
+#      - name: Get Repo
+#        run: git clone --recurse-submodules https://github.com/James-Oswald/VirtualSlate.git
+#      - name: Build Extension
+#        run: cd VirtualSlate && scons platform=windows
+#      - name: Upload Extension
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: VirtualSlateBuildFiles
+#          path: VirtualSlate
   Build-Game:
     runs-on: windows-latest
-    needs: Build-Extension
+#    needs: Build-Extension
     steps:
-      - name: Set Perms
-        run: Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
-      - name: Get Package Manager
-        run: irm get.scoop.sh | iex
+      - name: Get Scoop Package Manager
+        uses: MinoruSekine/setup-scoop@v1  
+      - name: Setup Scoop
+        run: scoop bucket add extras
       - name: Download Godot
-        run: scoop install godot
+        run: scoop install extras/godot
       - name: Retreive Build
         uses: actions/download-artifact@v3
         with:
           name: VirtualSlateBuildFiles
-      - name: Change Directory
-        run: cd VirtualSlate
       - name: Make Game
-        run: godot --path project --headless --export-debug "Windows Desktop"
+        run: godot --path VirtualSlateBuildFiles/project --headless --export-debug "Windows Desktop"
       - name: Upload .exe
         uses: actions/upload-artifact@v3
         with:
           name: VirtualSlate-x64
-          path: project/project.exe
+          path: VirtualSlateBuildFiles/project/project.exe
 
 
