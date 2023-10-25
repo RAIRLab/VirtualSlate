@@ -8,11 +8,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Updates Packages
-        run: apt-get update
+        run: sudo apt-get update
       - name: Install Scons
-        run: apt-get -y install scons gcc-mingw-w64
+        run: sudo apt-get -y install scons gcc-mingw-w64
       - name: Install Compiler
-        run: yes | apt-get install g++-mingw-w64-x86-64
+        run: yes | sudo apt-get install g++-mingw-w64-x86-64
       - name: Get Repo
         run: git clone --recurse-submodules https://github.com/James-Oswald/VirtualSlate.git
       - name: Arrive at Repo
