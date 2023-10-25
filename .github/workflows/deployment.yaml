@@ -15,10 +15,8 @@ jobs:
         run: yes | sudo apt-get install g++-mingw-w64-x86-64
       - name: Get Repo
         run: git clone --recurse-submodules https://github.com/James-Oswald/VirtualSlate.git
-      - name: Arrive at Repo
-        run: cd VirtualSlate
-      - name: build Extension
-        run: scons platform=windows
+      - name: Build Extension
+        run: cd VirtualSlate && scons platform=windows
       - name: Upload Extension
         uses: actions/upload-artifact@v3
         with:
@@ -26,6 +24,7 @@ jobs:
           path: VirtualSlate
   Build-Game:
     runs-on: windows-latest
+    needs: Build-Extension
     steps:
       - name: Set Perms
         run: Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
