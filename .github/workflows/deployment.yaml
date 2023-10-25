@@ -27,7 +27,8 @@ jobs:
 #    needs: Build-Extension
     steps:
       - name: Get Scoop Package Manager
-        uses: MinoruSekine/setup-scoop@v1  
+        run: (New-Object System.Net.WebClient).DownloadFile('https://get.scoop.sh', 'scoop.ps1') 
+          ./scoop.ps1 -RunAsAdmin 
       - name: Setup Scoop
         run: scoop bucket add extras
       - name: Download Godot
