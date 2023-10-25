@@ -28,23 +28,23 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Set Perms
-      run: Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+        run: Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
       - name: Get Package Manager
-      run: irm get.scoop.sh | iex
+        run: irm get.scoop.sh | iex
       - name: Download Godot
-      run: scoop install godot
+        run: scoop install godot
       - name: Retreive Build
-      uses: actions/download-artifact@v3
-      with:
-        name: VirtualSlateBuildFiles
+        uses: actions/download-artifact@v3
+        with:
+          name: VirtualSlateBuildFiles
       - name: Change Directory
-      run: cd VirtualSlate
+        run: cd VirtualSlate
       - name: Make Game
-      run: godot --path project --headless --export-debug "Windows Desktop"
+        run: godot --path project --headless --export-debug "Windows Desktop"
       - name: Upload .exe
-      uses: actions/upload-artifact@v3
-      with:
-        name: VirtualSlate-x64
-        path: project/project.exe
+        uses: actions/upload-artifact@v3
+        with:
+          name: VirtualSlate-x64
+          path: project/project.exe
 
 
