@@ -30,7 +30,7 @@ jobs:
 #        run: (New-Object System.Net.WebClient).DownloadFile('https://get.scoop.sh', 'scoop.ps1') 
 #      - name: Install Scoop
 #        run: ./scoop.ps1 -RunAsAdmin '
-      - name: Admin
+      - name: Set Admin
         run: Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
       - name: Install Scoop
         run: irm get.scoop.sh | iex
