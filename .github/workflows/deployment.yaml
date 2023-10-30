@@ -26,10 +26,14 @@ jobs:
     runs-on: windows-latest
 #    needs: Build-Extension
     steps:
-      - name: Get Scoop Package Manager
-        run: (New-Object System.Net.WebClient).DownloadFile('https://get.scoop.sh', 'scoop.ps1') 
+#      - name: Get Scoop Package Manager
+#        run: (New-Object System.Net.WebClient).DownloadFile('https://get.scoop.sh', 'scoop.ps1') 
+#      - name: Install Scoop
+#        run: ./scoop.ps1 -RunAsAdmin '
+      - name: Admin
+        run: Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
       - name: Install Scoop
-        run: ./scoop.ps1 -RunAsAdmin 
+        run: irm get.scoop.sh | iex
       - name: Setup Scoop
         run: scoop bucket add extras
       - name: Download Godot
