@@ -15,7 +15,7 @@ jobs:
      - name: Get Repo
        run: git clone --recurse-submodules --depth 1 https://github.com/James-Oswald/VirtualSlate.git
      - name: Build Extension
-       run: platform=windows
+       run: scons platform=windows
        working-directory: VirtualSlate
      - name: Build
        id: build
