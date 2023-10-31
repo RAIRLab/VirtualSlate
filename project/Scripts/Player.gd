@@ -19,6 +19,7 @@ var selectGate = 0
 #Colors
 const regularColor = Color(0.5, 0.75, 0.75, 0.25)
 const selectColor = Color(0.75, 0.75, 0.5, 0.25)
+const newColor = Color(0.75, 0.75, 0.75, 0.05)
 
 var head
 var pointerPG
@@ -56,6 +57,8 @@ func unselectAll():
 		pNode.get_child(0).get_material_override().albedo_color = regularColor
 	selectArray.clear()
 	selectionCount = 0
+	
+		
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 @onready var neck := $Neck
@@ -102,6 +105,7 @@ func _physics_process(delta):
 	if Input.is_action_just_released("Down"):
 		velocity.y = 0
 
+	# X-Y axis movement
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
 	if virtual_keyboard_2d.visible == false:
@@ -114,7 +118,8 @@ func _physics_process(delta):
 			velocity.x = move_toward(velocity.x, 0, SPEED)
 			velocity.z = move_toward(velocity.z, 0, SPEED)
 		move_and_slide()
-		
+	
+	# Changing modes	
 	if Input.is_action_just_pressed("Change_Mode"):
 		if playerMode < 4:
 			playerMode = playerMode+1
@@ -122,34 +127,47 @@ func _physics_process(delta):
 			playerMode = 0
 			
 		match playerMode:
-			0:
+			modeTypes.CREATE_NODE:
 				selectGate = 0
-			1:
+			modeTypes.INPUT_DATA:
 				selectGate = 2
-			2: 
+			modeTypes.CONNECT: 
 				selectGate = 3
-			3:
+			modeTypes.DELETE_EDGE:
 				selectGate = 3
-			4:
+			modeTypes.DELETE_NODE:
 				selectGate = 2
 		$Neck/Camera3D/Mode/Label.text = modeTypes.keys()[playerMode]
 		unselectAll()
 			
+	# Selecting nodes
 	if Input.is_action_just_pressed("Interact"):
 		rayTraceSelect()
 		
+	# Mode based actions on nodes
 	match playerMode:
 		modeTypes.DELETE_EDGE:
 			if Input.is_action_just_pressed("Confirm"):
-					if selectionCount == 2:
-						head = get_node("/root/main")
-						pointerPG = head.pg
+				if selectionCount == 2:
+					head = get_node("/root/main")
+					pointerPG = head.pg
+					if selectArray[1].isChild(selectArray[0]):
+						pointerPG.removeEdge(selectArray[1], selectArray[0])
+					else:
 						pointerPG.removeEdge(selectArray[0], selectArray[1])
-						unselectAll()
+					unselectAll()
 		modeTypes.CONNECT:
 			if Input.is_action_just_pressed("Confirm"):
-					if selectionCount == 2:
-						head = get_node("/root/main")
-						pointerPG = head.pg
-						pointerPG.addEdge(selectArray[0], selectArray[1])
-						unselectAll()
+				if selectionCount == 2:
+					head = get_node("/root/main")
+					pointerPG = head.pg
+					pointerPG.addEdge(selectArray[0], selectArray[1])
+					unselectAll()
+		modeTypes.DELETE_NODE:
+			if Input.is_action_just_pressed("Confirm"):
+				if selectionCount == 1:
+					head = get_node("/root/main")
+					pointerPG = head.pg
+					pointerPG.removeNode(selectArray[0])
+					unselectAll()
+				

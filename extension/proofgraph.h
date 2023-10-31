@@ -43,6 +43,7 @@ class LogNode : public Node3D{
         int getID();
         String getData();
         void setData(String newData);
+        bool isChild(LogNode* potentialChild);
 
     
     protected:

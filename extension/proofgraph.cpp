@@ -40,11 +40,21 @@ void LogNode::setData(String newData){
 
 }
 
+bool LogNode::isChild(LogNode* potentialChild){
+    if (logChildren.find(potentialChild) != logChildren.end()) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
 void LogNode::_bind_methods(){
     ClassDB::bind_method(D_METHOD("setID", "ID"), &LogNode::setID);
     ClassDB::bind_method(D_METHOD("getID"), &LogNode::getID);
     ClassDB::bind_method(D_METHOD("getData"), &LogNode::getData);
     ClassDB::bind_method(D_METHOD("setData", "data"), &LogNode::setData);
+    ClassDB::bind_method(D_METHOD("isChild", "potentialChild"), &LogNode::isChild);
 }
 
 ProofGraph::ProofGraph(){
@@ -143,27 +153,37 @@ void ProofGraph::addEdge(LogNode* start, LogNode* end){
 }
 
 void ProofGraph::removeEdge(LogNode* start, LogNode* end){
-    //Logic
-    nodeMap[start->getID()]->logChildren.erase(nodeMap[end->getID()]);
-    nodeMap[end->getID()]->logParents.erase(nodeMap[start->getID()]);
 
-    //Meshes
-    Node* badEdge = get_node_internal(String::num_int64(start->getID()) + "/" +String::num_int64(start->getID())+String::num_int64(end->getID()));
-    start->remove_child(badEdge);
-    badEdge->queue_free();
+    if (nodeMap[start->getID()]->logChildren.find(nodeMap[end->getID()]) != nodeMap[start->getID()]->logChildren.end() ){
+        //Logic
+        nodeMap[start->getID()]->logChildren.erase(nodeMap[end->getID()]);
+        nodeMap[end->getID()]->logParents.erase(nodeMap[start->getID()]);
+
+        //Meshes
+        Node* badEdge = get_node_internal(String::num_int64(start->getID()) + "/" +String::num_int64(start->getID())+String::num_int64(end->getID()));
+        start->remove_child(badEdge);
+        badEdge->queue_free();
+    }
+
 }
 
 // Needs checks for node validity
 void ProofGraph::removeNode(LogNode* badNode){
+    // Logic remove pointers of parents to badNode
     for(LogNode* i : badNode->logParents){
-        // Logic for children sets of parent node
-        i->logChildren.erase(badNode);
+            i->logChildren.erase(badNode);
         // Meshes
-        Node* badEdge = get_node_internal(String::num_int64(i->getID()) + "/" + String::num_int64(i->getID()) + String::num_int64(badNode->getID()));
-        Node* parentToBad =  get_node_internal(String::num_int64(i->getID()));
+        Node* badEdge = get_node_or_null(String::num_int64(i->getID()) + "/" + String::num_int64(i->getID()) + String::num_int64(badNode->getID()));
+        Node* parentToBad =  get_node_or_null(String::num_int64(i->getID()));
         parentToBad->remove_child(badEdge);
         badEdge->queue_free();
     }
+
+    // Logic remove pointers of children to badNode
+    for (LogNode* i : badNode->logChildren){
+        i->logParents.erase(badNode);
+    }
+
     nodeMap.erase(badNode->getID());
     nodeCount--;
 
