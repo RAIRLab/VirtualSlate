@@ -2,49 +2,32 @@ name: Build VirtualSlate
 on:
   push: {}
   pull_request: {}
-
 jobs:
-#    Build-Extension:
- #   runs-on: ubuntu-latest
-  #  steps:
-  #   - name: Updates Packages
-  #     run: sudo apt-get update
-  #   - name: Install Scons
-  #    run: sudo apt-get -y install scons gcc-mingw-w64
-  #    - name: Install Compiler
-  #      run: yes | sudo apt-get install g++-mingw-w64-x86-64
-  #    - name: Get Repo
-  #      run: git clone --recurse-submodules https://github.com/James-Oswald/VirtualSlate.git
-  #    - name: Build Extension
-  #      run: cd VirtualSlate && scons platform=windows
-  #    - name: Upload Extension
-  #      uses: actions/upload-artifact@v3
-  #      with:
-  #        name: VirtualSlateBuildFiles
-  #        path: VirtualSlate
-  Build-Game:
+  Build-Extension:
     runs-on: ubuntu-latest
-    #needs: Build-Extension
-    strategy:
-          matrix:
-            platform: [windows]
     steps:
-      - name: Retreive Build
-        uses: actions/download-artifact@v3
-        with:
-          name: VirtualSlateBuildFiles
-      - name: Build
-        id: build
-        uses: manleydev/build-godot-action@v1.4.1
-        with:
+     - name: Updates Packages
+       run: sudo apt-get update
+     - name: Install Scons
+       run: sudo apt-get -y install scons gcc-mingw-w64
+     - name: Install Compiler
+       run: yes | sudo apt-get install g++-mingw-w64-x86-64
+     - name: Get Repo
+       run: git clone --recurse-submodules https://github.com/James-Oswald/VirtualSlate.git
+     - name: Build Extension
+       run: cd VirtualSlate && scons platform=windows
+     - name: Build
+       id: build
+       uses: manleydev/build-godot-action@v1.4.1
+       with:
           name: VirtualSlate
-          preset: ${{ matrix.platform }}
+          preset: win64
           debugMode: "false"
-          projectDir: "VirtualSlate/VirtualSlate/project"
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: Client - ${{ matrix.platform }}
+          projectDir: "VirtualSlate/project"
+     - name: Upload Artifact
+       uses: actions/upload-artifact@v3
+       with:
+          name: Client - win64
           path: ${{ github.workspace }}/${{ steps.build.outputs.build }}
 
 
