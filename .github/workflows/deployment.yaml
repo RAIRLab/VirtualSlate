@@ -26,14 +26,10 @@ jobs:
     runs-on: windows-latest
 #    needs: Build-Extension
     steps:
-#      - name: Get Scoop Package Manager
-#        run: (New-Object System.Net.WebClient).DownloadFile('https://get.scoop.sh', 'scoop.ps1') 
-#      - name: Install Scoop
-#        run: ./scoop.ps1 -RunAsAdmin '
-      - name: Setup Shell
-        run: oh-my-posh init pwsh | Invoke-Expression
+      - name: Get Scoop Package Manager
+        run: (New-Object System.Net.WebClient).DownloadFile('https://get.scoop.sh', 'scoop.ps1') 
       - name: Install Scoop
-        run: iex "& {$(irm get.scoop.sh)} -RunAsAdmin"
+        run: ./scoop.ps1 
       - name: Setup Scoop
         run: scoop bucket add extras
       - name: Download Godot
