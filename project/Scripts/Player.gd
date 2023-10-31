@@ -63,7 +63,8 @@ func unselectAll():
 
 func _unhandled_input(event: ) -> void:
 	if event is InputEventMouseButton:
-		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+		if virtual_keyboard_2d.visible == false:
+			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	elif event.is_action_pressed("ui_cancel"):
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
@@ -146,7 +147,7 @@ func _physics_process(delta):
 					virtual_keyboard_2d.show()
 					line_edit.show()
 					line_edit.grab_focus()
-					Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED)  
+					Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)  
 				if virtual_keyboard_2d.visible == true and Input.is_action_just_pressed("Enter"):
 					virtual_keyboard_2d.hide()
 					line_edit.hide()
