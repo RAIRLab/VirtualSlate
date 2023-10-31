@@ -13,9 +13,10 @@ jobs:
      - name: Install Compiler
        run: yes | sudo apt-get install g++-mingw-w64-x86-64
      - name: Get Repo
-       run: git clone --recurse-submodules https://github.com/James-Oswald/VirtualSlate.git
+       run: git clone --recurse-submodules --depth 1 https://github.com/James-Oswald/VirtualSlate.git
      - name: Build Extension
-       run: cd VirtualSlate && scons platform=windows
+       run: platform=windows
+       working-directory: VirtualSlate
      - name: Build
        id: build
        uses: manleydev/build-godot-action@v1.4.1
