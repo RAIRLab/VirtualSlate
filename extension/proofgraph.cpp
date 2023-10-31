@@ -115,21 +115,7 @@ void ProofGraph::addNode(Vector3 position){
     physBody->set_scale(Vector3(10,5,2));
 }
 
-
-void ProofGraph::addEdge(LogNode* start, LogNode* end){
-    //Logic
-    nodeMap[start->getID()]->logChildren.insert(nodeMap[end->getID()]);
-    nodeMap[end->getID()]->logParents.insert(nodeMap[start->getID()]);
-
-    //Meshes
-    MeshInstance3D* lineMesh = memnew(MeshInstance3D);
-    BoxMesh* shape = memnew(BoxMesh);
-    lineMesh->set_mesh(shape);
-    lineMesh->set_name(String::num_int64(start->getID())+ String::num_int64(end->getID()));
-
-    start->add_child(lineMesh);
-
-    // Offset so line doesn't go into the box mesh
+void ProofGraph::edgeSetter(LogNode* start, LogNode* end, MeshInstance3D* workingEdge){
     Vector3 boxOffset = Vector3(0,2.5,0);
     Vector3 sPos = start->get_global_position();
     Vector3 ePos = end->get_global_position();
@@ -147,10 +133,32 @@ void ProofGraph::addEdge(LogNode* start, LogNode* end){
     Vector3 location = (sPos+ePos)/2;
     double lineLength = (startOffset-endOffset).length();
 
-    lineMesh->set_scale(Vector3(0.3,0.3,lineLength));
-    
+    workingEdge->set_scale(Vector3(0.3,0.3,lineLength));
     // Sets both global position and facing direction
-    lineMesh->look_at_from_position(location, endOffset, Vector3(0,1,0), true);
+    workingEdge->look_at_from_position(location, endOffset, Vector3(0,1,0), true);
+}
+
+
+void ProofGraph::addEdge(LogNode* start, LogNode* end){
+
+    if (nodeMap[start->getID()]->logChildren.find(nodeMap[end->getID()]) != nodeMap[start->getID()]->logChildren.end() 
+        || nodeMap[end->getID()]->logParents.find(nodeMap[start->getID()]) != nodeMap[end->getID()]->logParents.end()){
+    }
+    else {
+    //Logic
+    nodeMap[start->getID()]->logChildren.insert(nodeMap[end->getID()]);
+    nodeMap[end->getID()]->logParents.insert(nodeMap[start->getID()]);
+
+    //Meshes
+    MeshInstance3D* lineMesh = memnew(MeshInstance3D);
+    BoxMesh* shape = memnew(BoxMesh);
+    lineMesh->set_mesh(shape);
+    lineMesh->set_name(String::num_int64(start->getID())+ String::num_int64(end->getID()));
+
+    start->add_child(lineMesh);
+
+    edgeSetter(start, end, lineMesh);
+    }
 }
 
 void ProofGraph::removeEdge(LogNode* start, LogNode* end){
@@ -212,54 +220,23 @@ void ProofGraph::updateEdges(LogNode* updateNode){
         MeshInstance3D* castedCurrentEdge = (MeshInstance3D*) currentEdge;
         LogNode* castedParentToUpdate = (LogNode*) parentToUpdate;
 
-        Vector3 boxOffset = Vector3(0,2.5,0);
-        Vector3 sPos = castedParentToUpdate->get_global_position();
-        Vector3 ePos = updateNode->get_global_position();
-        Vector3 startOffset = Vector3(0,0,0);
-        Vector3 endOffset = Vector3(0,0,0);
-        if (sPos.y > ePos.y){
-            startOffset = sPos - boxOffset;
-            endOffset = ePos + boxOffset;
-        }
-        else{
-            startOffset = sPos + boxOffset;
-            endOffset = ePos -boxOffset;
-        }
-        Vector3 location = (sPos+ePos)/2;
-        double lineLength = (startOffset-endOffset).length();
-
-        castedCurrentEdge->set_scale(Vector3(0.3,0.3,lineLength));
-        // Sets both global position and facing direction
-        castedCurrentEdge->look_at_from_position(location, endOffset, Vector3(0,1,0), true);
-
+        edgeSetter(castedParentToUpdate, updateNode, castedCurrentEdge);
     }
 
     for (LogNode* i : updateNode->logChildren){
         Node* currentEdge = get_node_or_null(String::num_int64(updateNode->getID()) + "/" + String::num_int64(updateNode->getID()) + String::num_int64(i->getID()));
         Node* childToUpdate =  get_node_or_null(String::num_int64(i->getID()));
         MeshInstance3D* castedCurrentEdge = (MeshInstance3D*) currentEdge;
-        LogNode* castedchildToUpdate = (LogNode*) childToUpdate;
+        LogNode* castedChildToUpdate = (LogNode*) childToUpdate;
 
-        Vector3 boxOffset = Vector3(0,2.5,0);
-        Vector3 sPos = updateNode->get_global_position();
-        Vector3 ePos = castedchildToUpdate->get_global_position();
-        Vector3 startOffset = Vector3(0,0,0);
-        Vector3 endOffset = Vector3(0,0,0);
-        if (sPos.y > ePos.y){
-            startOffset = sPos - boxOffset;
-            endOffset = ePos + boxOffset;
-        }
-        else{
-            startOffset = sPos + boxOffset;
-            endOffset = ePos -boxOffset;
-        }
-        Vector3 location = (sPos+ePos)/2;
-        double lineLength = (startOffset-endOffset).length();
+        edgeSetter(updateNode, castedChildToUpdate, castedCurrentEdge);
+    }
+}
 
-        castedCurrentEdge->set_scale(Vector3(0.3,0.3,lineLength));
-        // Sets both global position and facing direction
-        castedCurrentEdge->look_at_from_position(location, endOffset, Vector3(0,1,0), true);
- 
+void ProofGraph::boxLookAtPlayer(){
+    Node3D* playerNode = (Node3D*) get_parent()->get_node_or_null("PlayerCharacter/CharacterBody3D/Neck/Camera3D");
+    for (KeyValue<int, LogNode*> i : nodeMap){
+        i.value->look_at(playerNode->get_global_position(), Vector3(0,-1,0));
     }
 }
 
@@ -271,4 +248,5 @@ void ProofGraph::_bind_methods(){
     ClassDB::bind_method(D_METHOD("getNodeCount"), &ProofGraph::getNodeCount);
     ClassDB::bind_method(D_METHOD("getData", "nodeID"), &ProofGraph::getNodeData);
     ClassDB::bind_method(D_METHOD("updateEdges"), &ProofGraph::updateEdges);
+    ClassDB::bind_method(D_METHOD("boxLookAtPlayer"), &ProofGraph::boxLookAtPlayer);
 }

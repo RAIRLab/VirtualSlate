@@ -3,20 +3,27 @@
 [ext_resource type="Script" path="res://Scripts/main.gd" id="1_geprs"]
 [ext_resource type="PackedScene" uid="uid://be4diqu4dmroe" path="res://Scenes/PlayerCharacter.tscn" id="2_6lbmr"]
 
-[sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_3ncrd"]
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_wdr4g"]
+sky_horizon_color = Color(0.494118, 0.501961, 0.517647, 1)
+ground_horizon_color = Color(0.184314, 0.188235, 0.196078, 1)
 
-[sub_resource type="Sky" id="Sky_4hpyh"]
-sky_material = SubResource("PhysicalSkyMaterial_3ncrd")
+[sub_resource type="Sky" id="Sky_52hme"]
+sky_material = SubResource("ProceduralSkyMaterial_wdr4g")
 
 [sub_resource type="Environment" id="Environment_s3rrf"]
 background_mode = 2
-background_energy_multiplier = 2.55
-sky = SubResource("Sky_4hpyh")
+background_energy_multiplier = 3.5
+sky = SubResource("Sky_52hme")
 sky_custom_fov = 90.0
 ambient_light_source = 3
 ambient_light_color = Color(0, 0.807843, 0.921569, 1)
-ambient_light_energy = 0.0
 reflected_light_source = 2
+fog_sky_affect = 0.0
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.01
+volumetric_fog_emission_energy = 0.0
+volumetric_fog_gi_inject = 0.34
+volumetric_fog_anisotropy = 0.9
 
 [node name="main" type="Node"]
 script = ExtResource("1_geprs")

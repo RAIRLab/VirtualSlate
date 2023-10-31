@@ -71,6 +71,8 @@ class ProofGraph : public Node{
         int getNodeCount();
         String getNodeData(int targetNodeID);
         void updateEdges(LogNode* updateNode);
+        void edgeSetter(LogNode* start, LogNode* end, MeshInstance3D* workingEdge);
+        void boxLookAtPlayer();
 
     protected:
         static void _bind_methods();

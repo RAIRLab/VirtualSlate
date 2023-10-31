@@ -13,8 +13,8 @@ const RAY_LENGTH = 1000
 
 #Mode variables
 enum modeTypes {CREATE_NODE, INPUT_DATA, CONNECT, DELETE_EDGE, DELETE_NODE, MOVE_NODE}
-var playerMode = modeTypes.CREATE_NODE
-var selectGate = 0
+var playerMode = modeTypes.MOVE_NODE
+var selectGate = 2
 
 #Colors
 const regularColor = Color(0.5, 0.75, 0.75, 0.25)

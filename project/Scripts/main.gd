@@ -26,6 +26,8 @@ func _ready():
 	pg.addEdge(get_node("ProofGraph/1"), get_node("ProofGraph/2"))
 	
 	
+	
+	
 
 
 	
@@ -33,5 +35,5 @@ func _ready():
 	
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta):
+func _physics_process(_delta):
 	pass
