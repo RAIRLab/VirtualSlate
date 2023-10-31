@@ -12,7 +12,7 @@ var selectArray: Array[LogNode]
 const RAY_LENGTH = 1000
 
 #Mode variables
-enum modeTypes {CREATE_NODE, INPUT_DATA, CONNECT, DELETE_EDGE, DELETE_NODE}
+enum modeTypes {CREATE_NODE, INPUT_DATA, CONNECT, DELETE_EDGE, DELETE_NODE, MOVE_NODE}
 var playerMode = modeTypes.CREATE_NODE
 var selectGate = 0
 
@@ -21,6 +21,19 @@ const regularColor = Color(0.5, 0.75, 0.75, 0.25)
 const selectColor = Color(0.75, 0.75, 0.5, 0.25)
 const newColor = Color(0.75, 0.75, 0.75, 0.05)
 
+#Create Node flags
+var newMeshExists = false
+var newMeshPointer
+var newMeshOffset = 10
+const offsetMax = 50
+const offsetMin = 10
+
+#Move node vars
+var distanceToNode
+var moveFlag = false
+
+
+# For contacting pg variable in main.gd
 var head
 var pointerPG
 
@@ -57,8 +70,28 @@ func unselectAll():
 		pNode.get_child(0).get_material_override().albedo_color = regularColor
 	selectArray.clear()
 	selectionCount = 0
+	moveFlag = false
 	
-		
+func newNodeLocationMesh():
+	var cam = $Neck/Camera3D
+	var lookDirection = cam.get_global_transform().basis.z
+	print(lookDirection)
+	head = get_node("/root/main")
+	var tempMesh = MeshInstance3D.new()
+	var box = BoxMesh.new()
+	var skin = StandardMaterial3D.new()
+	tempMesh.mesh = box
+	tempMesh.set_name("tempMesh")
+	head.add_child(tempMesh)
+	tempMesh.global_scale(Vector3(10,5,2))
+	tempMesh.global_position = cam.global_position - 10*lookDirection
+	newMeshExists = true
+	newMeshPointer = tempMesh
+	
+func clearNewNodeLocationMesh():
+	newMeshPointer.queue_free()
+	newMeshExists = false
+	
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 @onready var neck := $Neck
@@ -121,7 +154,7 @@ func _physics_process(delta):
 	
 	# Changing modes	
 	if Input.is_action_just_pressed("Change_Mode"):
-		if playerMode < 4:
+		if playerMode < 5:
 			playerMode = playerMode+1
 		else:
 			playerMode = 0
@@ -129,24 +162,30 @@ func _physics_process(delta):
 		match playerMode:
 			modeTypes.CREATE_NODE:
 				selectGate = 0
+				moveFlag = false
 			modeTypes.INPUT_DATA:
 				selectGate = 2
+				clearNewNodeLocationMesh();
 			modeTypes.CONNECT: 
 				selectGate = 3
 			modeTypes.DELETE_EDGE:
 				selectGate = 3
 			modeTypes.DELETE_NODE:
 				selectGate = 2
+			modeTypes.MOVE_NODE:
+				selectGate = 2
 		$Neck/Camera3D/Mode/Label.text = modeTypes.keys()[playerMode]
+		
 		unselectAll()
 			
 	# Selecting nodes
-	if Input.is_action_just_pressed("Interact"):
-		rayTraceSelect()
+
 		
 	# Mode based actions on nodes
 	match playerMode:
 		modeTypes.DELETE_EDGE:
+			if Input.is_action_just_pressed("Interact"):
+				rayTraceSelect()
 			if Input.is_action_just_pressed("Confirm"):
 				if selectionCount == 2:
 					head = get_node("/root/main")
@@ -157,6 +196,8 @@ func _physics_process(delta):
 						pointerPG.removeEdge(selectArray[0], selectArray[1])
 					unselectAll()
 		modeTypes.CONNECT:
+			if Input.is_action_just_pressed("Interact"):
+				rayTraceSelect()
 			if Input.is_action_just_pressed("Confirm"):
 				if selectionCount == 2:
 					head = get_node("/root/main")
@@ -164,10 +205,55 @@ func _physics_process(delta):
 					pointerPG.addEdge(selectArray[0], selectArray[1])
 					unselectAll()
 		modeTypes.DELETE_NODE:
+			if Input.is_action_just_pressed("Interact"):
+				rayTraceSelect()
 			if Input.is_action_just_pressed("Confirm"):
 				if selectionCount == 1:
 					head = get_node("/root/main")
 					pointerPG = head.pg
 					pointerPG.removeNode(selectArray[0])
 					unselectAll()
+		modeTypes.CREATE_NODE:
+			if newMeshExists == false:
+				newNodeLocationMesh()
+			var cam = $Neck/Camera3D
+			var lookDirection = cam.get_global_transform().basis.z
+			var offsetPosition = cam.global_position - newMeshOffset*lookDirection
+			newMeshPointer.global_position = offsetPosition
+			
+			if Input.is_action_just_pressed("Interact"):
+				rayTraceSelect()
+			
+			if Input.is_action_just_pressed("offsetPlus"):
+				if newMeshOffset < offsetMax:
+					newMeshOffset += 1
+			if Input.is_action_just_pressed("offsetMinus"):
+				if newMeshOffset > offsetMin:
+					newMeshOffset -= 1
+			if Input.is_action_just_pressed("Confirm"):
+				clearNewNodeLocationMesh()
+				head = get_node("/root/main")
+				pointerPG = head.pg
+				pointerPG.addNode(offsetPosition)
 				
+		modeTypes.MOVE_NODE:
+			var cam = $Neck/Camera3D
+			var lookDirection = cam.get_global_transform().basis.z
+			head = get_node("/root/main")
+			pointerPG = head.pg
+			if Input.is_action_just_pressed("Interact"):
+				rayTraceSelect()
+				if selectionCount != 0:
+					var blockPOS = selectArray[0].global_position
+					distanceToNode = (blockPOS - cam.global_position).length()
+			if selectionCount == 1:
+				var offsetPosition = cam.global_position - distanceToNode*lookDirection
+				selectArray[0].global_position = offsetPosition
+				if Input.is_action_just_pressed("offsetPlus"):
+					if distanceToNode < offsetMax:
+						distanceToNode += 1
+				if Input.is_action_just_pressed("offsetMinus"):
+					if distanceToNode > offsetMin:
+						distanceToNode -= 1
+				pointerPG.updateEdges(selectArray[0])
+

@@ -55,6 +55,7 @@ class ProofGraph : public Node{
 
     private:
         int nodeCount;
+        int nodeIDCount;
         HashMap<int, LogNode*> nodeMap;
     public:
         
@@ -69,6 +70,7 @@ class ProofGraph : public Node{
         void removeNode(LogNode* badNode);
         int getNodeCount();
         String getNodeData(int targetNodeID);
+        void updateEdges(LogNode* updateNode);
 
     protected:
         static void _bind_methods();
