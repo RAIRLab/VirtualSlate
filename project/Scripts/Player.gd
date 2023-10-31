@@ -78,20 +78,7 @@ func _ready():
 	$Neck/Camera3D/Mode/Label.text = modeTypes.keys()[playerMode]
 
 
-func _physics_process(delta):
-	if Input.is_action_just_pressed("Keyboard"):
-		if virtual_keyboard_2d.visible == false:
-			virtual_keyboard_2d.show()
-			line_edit.show()
-			line_edit.grab_focus()
-			Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED)            
-	if Input.is_action_just_pressed("Enter"):
-		virtual_keyboard_2d.hide()
-		line_edit.hide()
-		print(line_edit.text)
-		line_edit.clear()
-		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-		
+func _physics_process(delta):		
 	# Vertical Movement
 	if Input.is_action_pressed("Up"):
 		velocity.y = JUMP_VELOCITY
@@ -134,9 +121,9 @@ func _physics_process(delta):
 				selectGate = 2
 		$Neck/Camera3D/Mode/Label.text = modeTypes.keys()[playerMode]
 		unselectAll()
-			
-	if Input.is_action_just_pressed("Interact"):
-		rayTraceSelect()
+	if virtual_keyboard_2d.visible == false:	
+		if Input.is_action_just_pressed("Interact"):
+			rayTraceSelect()
 		
 	match playerMode:
 		modeTypes.DELETE_EDGE:
@@ -153,3 +140,24 @@ func _physics_process(delta):
 						pointerPG = head.pg
 						pointerPG.addEdge(selectArray[0], selectArray[1])
 						unselectAll()
+		modeTypes.INPUT_DATA:
+			if selectionCount == 1:
+				if selectionCount == 1 and virtual_keyboard_2d.visible == false:
+					virtual_keyboard_2d.show()
+					line_edit.show()
+					line_edit.grab_focus()
+					Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED)  
+				if virtual_keyboard_2d.visible == true and Input.is_action_just_pressed("Enter"):
+					virtual_keyboard_2d.hide()
+					line_edit.hide()
+					var curr = selectArray[0]
+					curr.setData(line_edit.text)
+					line_edit.clear()
+					Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)	
+					unselectAll()			
+	if virtual_keyboard_2d.visible == true and Input.is_action_just_pressed("Change_Mode"):
+		virtual_keyboard_2d.hide()
+		line_edit.hide()
+		line_edit.clear()
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+		unselectAll()
