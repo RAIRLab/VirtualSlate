@@ -23,27 +23,28 @@ jobs:
 #          name: VirtualSlateBuildFiles
 #          path: VirtualSlate
   Build-Game:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 #    needs: Build-Extension
+    strategy:
+          matrix:
+            platform: [windows]
     steps:
-      - name: Get Scoop Package Manager
-        run: (New-Object System.Net.WebClient).DownloadFile('https://get.scoop.sh', 'scoop.ps1') 
-      - name: Install Scoop
-        run: ./scoop.ps1 
-      - name: Setup Scoop
-        run: scoop bucket add extras
-      - name: Download Godot
-        run: scoop install extras/godot
       - name: Retreive Build
         uses: actions/download-artifact@v3
         with:
           name: VirtualSlateBuildFiles
-      - name: Make Game
-        run: godot --path VirtualSlateBuildFiles/project --headless --export-debug "Windows Desktop"
-      - name: Upload .exe
-        uses: actions/upload-artifact@v3
+      - name: Build
+        id: build
+        uses: manleydev/build-godot-action@v1.4.1
         with:
-          name: VirtualSlate-x64
-          path: VirtualSlateBuildFiles/project/project.exe
+          name: VirtualSlate
+          preset: ${{ matrix.platform }}
+          debugMode: "false"
+          projectDir: "VirtualSlate/project"
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: Client - ${{ matrix.platform }}
+          path: ${{ github.workspace }}/${{ steps.build.outputs.build }}
 
 
