@@ -1,7 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://bg6v0qeatg5pu"]
+[gd_scene load_steps=5 format=3 uid="uid://bg6v0qeatg5pu"]
 
 [ext_resource type="Script" path="res://Scripts/main.gd" id="1_geprs"]
-[ext_resource type="PackedScene" uid="uid://be4diqu4dmroe" path="res://Scenes/PlayerCharacter.tscn" id="2_6lbmr"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_wdr4g"]
 sky_horizon_color = Color(0.494118, 0.501961, 0.517647, 1)
@@ -33,6 +32,3 @@ transform = Transform3D(1, 0, 0, 0, 0.360501, 0.932759, 0, -0.932759, 0.360501, 
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_s3rrf")
-
-[node name="PlayerCharacter" parent="." instance=ExtResource("2_6lbmr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5.58612)

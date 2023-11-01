@@ -51,22 +51,22 @@ func _on_disjunction_elimination_pressed():
 
 func _on_conditional_introductionon_pressed():
 	if selectionCount == 1:
-		selectArray[0].setJustification("ifI", "⇒I")
+		selectArray[0].setJustification("ifI", "→I")
 
 
 func _on_conditional_elimination_pressed():
 	if selectionCount == 1:
-		selectArray[0].setJustification("ifE", "⇒E")
+		selectArray[0].setJustification("ifE", "→E")
 
 
 func _on_biconditional_introduction_pressed():
 	if selectionCount == 1:
-		selectArray[0].setJustification("iffI", "⇔I")
+		selectArray[0].setJustification("iffI", "↔I")
 
 
 func _on_biconditional_elimination_pressed():
 	if selectionCount == 1:
-		selectArray[0].setJustification("iffE", "⇔E")
+		selectArray[0].setJustification("iffE", "↔E")
 
 
 func _on_universal_introduction_pressed():

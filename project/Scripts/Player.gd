@@ -2,6 +2,10 @@ extends CharacterBody3D
 @onready var line_edit = $"../LineEdit"
 @onready var virtual_keyboard_2d = $"../CanvasLayer/VirtualKeyboard2D"
 @onready var justification_menu = $"../JustificationMenu"
+@onready var neck := $Neck
+@onready var camera := $Neck/Camera3D
+@onready var head = get_node("/root/main")
+@onready var pointerPG = head.pg
 
 #Movement variables
 const SPEED = 15.0
@@ -21,38 +25,34 @@ var selectFlag = true
 #Colors
 const regularColor = Color(0.5, 0.75, 0.75, 0.25)
 const selectColor = Color(0.75, 0.75, 0.5, 0.25)
-const newColor = Color(0.75, 0.75, 0.75, 0.05)
+const newColor = Color(0.25, 0.25, 0.25, 0.75)
 
 #Create Node flags
 var newMeshExists = false
 var newMeshPointer
-var newMeshOffset = 10
+var newMeshOffset = 15
 const offsetMax = 50
 const offsetMin = 10
 
 #Move node vars
 var distanceToNode
-var moveFlag = false
 
-
-# For contacting pg variable in main.gd
-var head
-var pointerPG
+#Input variables
+var inputFlag = false
 
 func rayTraceSelect():
 	if selectionCount >= selectGate:
 		return
-	
+		
 	var space_state = get_world_3d().direct_space_state
 	var cam = $Neck/Camera3D
 	var mousepos = get_viewport().get_mouse_position()
-				
 	var origin = cam.project_ray_origin(mousepos)
 	var end = origin + cam.project_ray_normal(mousepos) * RAY_LENGTH
 	var query = PhysicsRayQueryParameters3D.create(origin, end)
 	query.collide_with_bodies = true
 	query.exclude = [self]
-				
+
 	var results = space_state.intersect_ray(query)
 	var nodeSelect = results.get("collider")
 	if nodeSelect != null:
@@ -66,25 +66,26 @@ func rayTraceSelect():
 				selectArray.append(pNode)
 				selectionCount += 1
 				pNode.get_child(0).get_material_override().albedo_color = selectColor
-		
+
 func unselectAll():
 	for pNode in selectArray:
 		pNode.get_child(0).get_material_override().albedo_color = regularColor
 	selectArray.clear()
 	selectionCount = 0
-	moveFlag = false
 	
 func newNodeLocationMesh():
 	var cam = $Neck/Camera3D
 	var lookDirection = cam.get_global_transform().basis.z
-	print(lookDirection)
 	head = get_node("/root/main")
 	var tempMesh = MeshInstance3D.new()
-	var box = BoxMesh.new()
-	var skin = StandardMaterial3D.new()
-	tempMesh.mesh = box
 	tempMesh.set_name("tempMesh")
 	head.add_child(tempMesh)
+	var box = BoxMesh.new()
+	tempMesh.mesh = box
+	var skin = StandardMaterial3D.new()
+	tempMesh.set_surface_override_material(0,skin)
+	skin.albedo_color = newColor
+	skin.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	tempMesh.global_scale(Vector3(10,5,2))
 	tempMesh.global_position = cam.global_position - 10*lookDirection
 	newMeshExists = true
@@ -94,15 +95,11 @@ func clearNewNodeLocationMesh():
 	newMeshPointer.queue_free()
 	newMeshExists = false
 	
-
-# Get the gravity from the project settings to be synced with RigidBody nodes.
-@onready var neck := $Neck
-@onready var camera := $Neck/Camera3D
-
 func _unhandled_input(event: ) -> void:
 	if event is InputEventMouseButton:
-		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	elif event.is_action_pressed("ui_cancel"):
+		if virtual_keyboard_2d.visible == false:
+			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	if event.is_action_pressed("ui_cancel"):
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	if Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
 		if event is InputEventMouseMotion:
@@ -111,42 +108,28 @@ func _unhandled_input(event: ) -> void:
 			camera.rotation.x = clamp(camera.rotation.x,deg_to_rad(-30), deg_to_rad(60))
 
 func _ready():
-	#Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	line_edit.hide()
 	justification_menu.hide()
 	$Neck/Camera3D/Mode/Label.text = modeTypes.keys()[playerMode]
 
+func _physics_process(_delta):
 
-func _physics_process(delta):
-	if Input.is_action_just_pressed("Keyboard"):
-		if virtual_keyboard_2d.visible == false:
-			justification_menu.show()
-			virtual_keyboard_2d.show()
-			line_edit.show()
-			line_edit.grab_focus()
-			Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED)            
-	if Input.is_action_just_pressed("Enter"):
-		justification_menu.hide()
-		virtual_keyboard_2d.hide()
-		line_edit.hide()
-		print(line_edit.text)
-		line_edit.clear()
-		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-		
-	# Vertical Movement
-	if Input.is_action_pressed("Up"):
-		velocity.y = JUMP_VELOCITY
-	if Input.is_action_just_released("Up"):
-		velocity.y = 0
-	if Input.is_action_pressed("Down"):
-		velocity.y = -JUMP_VELOCITY
-	if Input.is_action_just_released("Down"):
-		velocity.y = 0
+	#disallow all node selection/movement inputs when inputing data
+	if inputFlag == false:
+		# Vertical Movement
+		if Input.is_action_pressed("Up"):
+			velocity.y = JUMP_VELOCITY
+		if Input.is_action_just_released("Up"):
+			velocity.y = 0
+		if Input.is_action_pressed("Down"):
+			velocity.y = -JUMP_VELOCITY
+		if Input.is_action_just_released("Down"):
+			velocity.y = 0
 
-	# X-Y axis movement
-	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
-	if virtual_keyboard_2d.visible == false:
+		# X-Y axis movement
+		# Get the input direction and handle the movement/deceleration.
+		# As good practice, you should replace UI actions with custom gameplay actions.
 		var input_dir := Input.get_vector("Left", "Right", "Forward", "Backward")
 		var direction = (neck.transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 		if direction:
@@ -157,43 +140,39 @@ func _physics_process(delta):
 			velocity.z = move_toward(velocity.z, 0, SPEED)
 		move_and_slide()
 	
-	# Changing modes	
-	if Input.is_action_just_pressed("Change_Mode"):
-		if playerMode < 5:
-			playerMode = playerMode+1
-		else:
-			playerMode = 0
+		# Changing modes (maybe replace with radial wheel)	
+		if Input.is_action_just_pressed("Change_Mode"):
+			if playerMode < 5:
+				playerMode = playerMode+1
+			else:
+				playerMode = 0
+				
+			match playerMode:
+				modeTypes.CREATE_NODE:
+					selectGate = 0
+				modeTypes.INPUT_DATA:
+					selectGate = 2
+					clearNewNodeLocationMesh();
+				modeTypes.CONNECT: 
+					selectGate = 3
+				modeTypes.DELETE_EDGE:
+					selectGate = 3
+				modeTypes.DELETE_NODE:
+					selectGate = 2
+				modeTypes.MOVE_NODE:
+					selectGate = 2
+			$Neck/Camera3D/Mode/Label.text = modeTypes.keys()[playerMode]
+			unselectAll()
 			
-		match playerMode:
-			modeTypes.CREATE_NODE:
-				selectGate = 0
-				moveFlag = false
-			modeTypes.INPUT_DATA:
-				selectGate = 2
-				clearNewNodeLocationMesh();
-			modeTypes.CONNECT: 
-				selectGate = 3
-			modeTypes.DELETE_EDGE:
-				selectGate = 3
-			modeTypes.DELETE_NODE:
-				selectGate = 2
-			modeTypes.MOVE_NODE:
-				selectGate = 2
-		$Neck/Camera3D/Mode/Label.text = modeTypes.keys()[playerMode]
-		
-		unselectAll()
-			
-	# Selecting nodes
-	if Input.is_action_just_pressed("Interact") and selectFlag == true:
-		rayTraceSelect()
+		# Selecting nodes
+		if Input.is_action_just_pressed("Interact"):
+			rayTraceSelect()
 		
 	# Mode based actions on nodes
 	match playerMode:
 		modeTypes.DELETE_EDGE:
 			if Input.is_action_just_pressed("Confirm"):
 				if selectionCount == 2:
-					head = get_node("/root/main")
-					pointerPG = head.pg
 					if selectArray[1].isChild(selectArray[0]):
 						pointerPG.removeEdge(selectArray[1], selectArray[0])
 					else:
@@ -202,15 +181,11 @@ func _physics_process(delta):
 		modeTypes.CONNECT:
 			if Input.is_action_just_pressed("Confirm"):
 				if selectionCount == 2:
-					head = get_node("/root/main")
-					pointerPG = head.pg
 					pointerPG.addEdge(selectArray[0], selectArray[1])
 					unselectAll()
 		modeTypes.DELETE_NODE:
 			if Input.is_action_just_pressed("Confirm"):
 				if selectionCount == 1:
-					head = get_node("/root/main")
-					pointerPG = head.pg
 					pointerPG.removeNode(selectArray[0])
 					unselectAll()
 		modeTypes.CREATE_NODE:
@@ -232,13 +207,10 @@ func _physics_process(delta):
 				head = get_node("/root/main")
 				pointerPG = head.pg
 				pointerPG.addNode(offsetPosition)
-				
 		modeTypes.MOVE_NODE:
 			var cam = $Neck/Camera3D
 			var lookDirection = cam.get_global_transform().basis.z
-			head = get_node("/root/main")
-			pointerPG = head.pg
-			if Input.is_action_just_pressed("Interact") and selectFlag == true:
+			if Input.is_action_just_pressed("Interact") and inputFlag == false:
 				if selectionCount != 0:
 					var blockPOS = selectArray[0].global_position
 					distanceToNode = (blockPOS - cam.global_position).length()
@@ -252,15 +224,21 @@ func _physics_process(delta):
 					if distanceToNode > offsetMin:
 						distanceToNode -= 1
 				pointerPG.updateEdges(selectArray[0])
-				
 		modeTypes.INPUT_DATA:
 			if selectionCount == 1:
-				selectFlag = false
+				inputFlag = true
 				Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED)
 				justification_menu.show()
-			if Input.is_action_just_pressed("Enter"):
-				selectFlag = true
-				Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-				unselectAll()
+				virtual_keyboard_2d.show()
+				line_edit.show()
+				#line_edit.grab_focus()
+			if Input.is_action_just_pressed("EnterInput"):
+				selectArray[0].setData(line_edit.text)
+				line_edit.clear()
+				line_edit.hide()
+				virtual_keyboard_2d.hide()
 				justification_menu.hide()
+				inputFlag = false
+				unselectAll()
+				Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 

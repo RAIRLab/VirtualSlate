@@ -49,8 +49,13 @@ void LogNode::setData(String newData){
     newText->set_mesh(letters);
     letters->TextMesh::set_text(newData);
     newText->global_scale(Vector3(12,12,5));
-    newText->set_position(Vector3(0,.75,0));
+    newText->set_position(Vector3(0,.4,0));
 
+    if (newData.length() > 9){
+        MeshInstance3D* oldBox = (MeshInstance3D*) get_node_or_null("box");
+        //Each additional letter adds more than 1 scale unit 
+        oldBox->set_scale(Vector3(10+(newData.length()-10)*1.15,5,2));
+    }
 }
 
 bool LogNode::isChild(LogNode* potentialChild){
@@ -110,11 +115,9 @@ void LogNode::setJustification(String code, String symbol){
     newText->set_position(Vector3(0,3.85,0));
 
     MeshInstance3D* oldBox = (MeshInstance3D*) get_node_or_null("justBox");
-    oldBox->set_scale(Vector3(symbol.length()+1,2.25,2));
+    oldBox->set_scale(Vector3(symbol.length()*1.15+1,2.25,2));
 
 }
-
-
 
 void LogNode::_bind_methods(){
     ClassDB::bind_method(D_METHOD("setID", "ID"), &LogNode::setID);
@@ -158,7 +161,7 @@ void ProofGraph::addNode(Vector3 position){
     newNode->add_child(box);
     box->set_mesh(shape);
     box->set_material_override(skin);
-    box->global_scale(Vector3(10,5,2));
+    box->set_scale(Vector3(10,5,2));
     skin->set_transparency(BaseMaterial3D::TRANSPARENCY_ALPHA);
     skin->set_albedo(Color(0.5, 0.75, 0.75, 0.25));
 
@@ -170,7 +173,7 @@ void ProofGraph::addNode(Vector3 position){
     idText->set_mesh(numbers);
     numbers->TextMesh::set_text("ID: " + String::num_int64(newNode->getID()));
     idText->set_position(Vector3(-3.25, 1.9, 0));
-    idText->global_scale(Vector3(8,8,5));
+    idText->set_scale(Vector3(8,8,5));
 
     //Physics collider for ray casts
 
