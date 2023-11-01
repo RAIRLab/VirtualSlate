@@ -3,8 +3,8 @@ extends CharacterBody3D
 @onready var virtual_keyboard_2d = $"../CanvasLayer/VirtualKeyboard2D"
 
 #Movement variables
-const SPEED = 10.0
-const JUMP_VELOCITY = 10
+const SPEED = 15.0
+const JUMP_VELOCITY = 15
 
 #Selection variables
 var selectionCount = 0

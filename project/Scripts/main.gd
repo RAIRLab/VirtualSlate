@@ -25,6 +25,8 @@ func _ready():
 	pg.addEdge(get_node("ProofGraph/0"), get_node("ProofGraph/2"))
 	pg.addEdge(get_node("ProofGraph/1"), get_node("ProofGraph/2"))
 	
+	print(get_node("ProofGraph/2").getParentRep())
+	
 	
 	
 	

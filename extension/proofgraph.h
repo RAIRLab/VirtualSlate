@@ -13,15 +13,6 @@
 #include "godot_cpp/templates/hash_set.hpp"
 #include "godot_cpp/variant/string.hpp"
 #include "godot_cpp/classes/mesh_instance3d.hpp"
-#include "godot_cpp/classes/mesh.hpp"
-#include "godot_cpp/classes/box_mesh.hpp"
-#include "godot_cpp/classes/text_mesh.hpp"
-#include "godot_cpp/classes/standard_material3d.hpp"
-#include "godot_cpp/variant/color.hpp"
-#include "godot_cpp/classes/cylinder_mesh.hpp"
-#include "godot_cpp/classes/box_shape3d.hpp"
-#include "godot_cpp/classes/collision_shape3d.hpp"
-#include "godot_cpp/classes/static_body3d.hpp"
 
 namespace godot{
 
@@ -32,6 +23,7 @@ class LogNode : public Node3D{
         // Position field inherited from Node3D i.e. global_position
         int nodeID;
         String data;
+        String justification;
         HashSet<LogNode*> logParents;
         HashSet<LogNode*> logChildren;
 
@@ -44,6 +36,8 @@ class LogNode : public Node3D{
         String getData();
         void setData(String newData);
         bool isChild(LogNode* potentialChild);
+        String getParentRep();
+        void setParentRep();
 
     
     protected:
