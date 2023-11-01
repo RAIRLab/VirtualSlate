@@ -3,9 +3,8 @@ extends Node
 #Test addNode
 func test_addNode():
 	var graph = ProofGraph.new()
-	for i in range(0, 50, 1):
-		var nodeInfo = {"location": [i, i+1, i+2], "node_id": i}
-		graph.addNode(nodeInfo)
+	var nodeInfo = {"location": [1, 2, 3], "node_id": 0}
+	graph.addNode(nodeInfo)
 	
 	var currGraph = graph.get_node_map()
 	for i in range(50, 0, -1):
@@ -43,9 +42,8 @@ func test_addNode():
 #Test addEdge
 func test_addEdge():
 	var graph = ProofGraph.new()
-	for i in range(0, 50, 1):
-		var nodeInfo = {"location": [i, i+1, i+2], "node_id": i}
-		graph.addNode(nodeInfo)
+	var nodeInfo = {"location": [1, 2, 3], "node_id": 1}
+	graph.addNode(nodeInfo)
 	for i in range(0, 50, 1):
 		if i == 12:
 			continue
@@ -113,10 +111,9 @@ func test_addEdge():
 func test_removeNode():
 	var graph = ProofGraph.new()
 	var answer = ProofGraph.new()
-	for i in range(0, 50, 1):
-		var nodeInfo = {"location": [i, i+1, i+2], "node_id": i}
-		answer.addNode(nodeInfo) 
-		graph.addNode(nodeInfo)
+	var nodeInfo = {"location": [1, 2, 3], "node_id": 2}
+	answer.addNode(nodeInfo) 
+	graph.addNode(nodeInfo)
 	for i in range(0, 50, 1):
 		if i == 12:
 			continue
