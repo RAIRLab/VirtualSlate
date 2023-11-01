@@ -38,6 +38,7 @@ class LogNode : public Node3D{
         bool isChild(LogNode* potentialChild);
         String getParentRep();
         void setParentRep();
+        void setJustification(String code, String symbol);
 
     
     protected:

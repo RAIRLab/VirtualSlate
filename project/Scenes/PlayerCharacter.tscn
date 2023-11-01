@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://be4diqu4dmroe"]
+[gd_scene load_steps=9 format=3 uid="uid://be4diqu4dmroe"]
 
 [ext_resource type="Script" path="res://Scripts/Player.gd" id="1_qb6au"]
 [ext_resource type="Texture2D" uid="uid://dx5rucnx6edo8" path="res://Textures/crosshair.png" id="2_230xu"]
 [ext_resource type="PackedScene" uid="uid://lauwp8okd1vh" path="res://addons/godot-xr-tools/objects/keyboard/virtual_keyboard_2d.tscn" id="2_gk6q7"]
+[ext_resource type="Script" path="res://Scripts/JustificationMenu.gd" id="4_xoyrl"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_4icp1"]
 
@@ -89,3 +90,96 @@ offset_right = 900.0
 offset_bottom = 269.0
 virtual_keyboard_enabled = false
 script = SubResource("GDScript_t520x")
+
+[node name="JustificationMenu" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("4_xoyrl")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="JustificationMenu"]
+layout_mode = 0
+offset_left = 905.0
+offset_top = 45.0
+offset_right = 1151.0
+offset_bottom = 529.0
+
+[node name="Assumption" type="Button" parent="JustificationMenu/VBoxContainer"]
+layout_mode = 2
+text = "Assumption"
+
+[node name="Negation Introduction" type="Button" parent="JustificationMenu/VBoxContainer"]
+layout_mode = 2
+text = "Negation Introduction"
+
+[node name="Negation Elimination" type="Button" parent="JustificationMenu/VBoxContainer"]
+layout_mode = 2
+text = "Negation Elimination"
+
+[node name="Conjunction Introduction" type="Button" parent="JustificationMenu/VBoxContainer"]
+layout_mode = 2
+text = "Conjunction Introduction"
+
+[node name="Conjunction Elimination" type="Button" parent="JustificationMenu/VBoxContainer"]
+layout_mode = 2
+text = "Conjunction Elimination"
+
+[node name="Disjunction Introduction" type="Button" parent="JustificationMenu/VBoxContainer"]
+layout_mode = 2
+text = "Disjunction Introduction
+"
+
+[node name="Disjunction Elimination" type="Button" parent="JustificationMenu/VBoxContainer"]
+layout_mode = 2
+text = "Disjunction Elimination"
+
+[node name="Conditional Introductionon" type="Button" parent="JustificationMenu/VBoxContainer"]
+layout_mode = 2
+text = "Conditional Introduction"
+
+[node name="Conditional Elimination" type="Button" parent="JustificationMenu/VBoxContainer"]
+layout_mode = 2
+text = "Conditional Elimination"
+
+[node name="Biconditional Introduction" type="Button" parent="JustificationMenu/VBoxContainer"]
+layout_mode = 2
+text = "Biconditional Introduction
+"
+
+[node name="Biconditional Elimination" type="Button" parent="JustificationMenu/VBoxContainer"]
+layout_mode = 2
+text = "Biconditional Elimination"
+
+[node name="Universal Introduction" type="Button" parent="JustificationMenu/VBoxContainer"]
+layout_mode = 2
+text = "Universal Introduction"
+
+[node name="Universal Elimination" type="Button" parent="JustificationMenu/VBoxContainer"]
+layout_mode = 2
+text = "Universal Elimination"
+
+[node name="Existential Introduction" type="Button" parent="JustificationMenu/VBoxContainer"]
+layout_mode = 2
+text = "Existential Introduction"
+
+[node name="Existential Elimination" type="Button" parent="JustificationMenu/VBoxContainer"]
+layout_mode = 2
+text = "Existential Elimination
+"
+
+[connection signal="pressed" from="JustificationMenu/VBoxContainer/Assumption" to="JustificationMenu" method="_on_assumption_pressed"]
+[connection signal="pressed" from="JustificationMenu/VBoxContainer/Negation Introduction" to="JustificationMenu" method="_on_negation_introduction_pressed"]
+[connection signal="pressed" from="JustificationMenu/VBoxContainer/Negation Elimination" to="JustificationMenu" method="_on_negation_elimination_pressed"]
+[connection signal="pressed" from="JustificationMenu/VBoxContainer/Conjunction Introduction" to="JustificationMenu" method="_on_conjunction_introduction_pressed"]
+[connection signal="pressed" from="JustificationMenu/VBoxContainer/Conjunction Elimination" to="JustificationMenu" method="_on_conjunction_elimination_pressed"]
+[connection signal="pressed" from="JustificationMenu/VBoxContainer/Disjunction Introduction" to="JustificationMenu" method="_on_disjunction_introduction_pressed"]
+[connection signal="pressed" from="JustificationMenu/VBoxContainer/Disjunction Elimination" to="JustificationMenu" method="_on_disjunction_elimination_pressed"]
+[connection signal="pressed" from="JustificationMenu/VBoxContainer/Conditional Introductionon" to="JustificationMenu" method="_on_conditional_introductionon_pressed"]
+[connection signal="pressed" from="JustificationMenu/VBoxContainer/Conditional Elimination" to="JustificationMenu" method="_on_conditional_elimination_pressed"]
+[connection signal="pressed" from="JustificationMenu/VBoxContainer/Biconditional Introduction" to="JustificationMenu" method="_on_biconditional_introduction_pressed"]
+[connection signal="pressed" from="JustificationMenu/VBoxContainer/Biconditional Elimination" to="JustificationMenu" method="_on_biconditional_elimination_pressed"]
+[connection signal="pressed" from="JustificationMenu/VBoxContainer/Universal Introduction" to="JustificationMenu" method="_on_universal_introduction_pressed"]
+[connection signal="pressed" from="JustificationMenu/VBoxContainer/Universal Elimination" to="JustificationMenu" method="_on_universal_elimination_pressed"]
+[connection signal="pressed" from="JustificationMenu/VBoxContainer/Existential Introduction" to="JustificationMenu" method="_on_existential_introduction_pressed"]
+[connection signal="pressed" from="JustificationMenu/VBoxContainer/Existential Elimination" to="JustificationMenu" method="_on_existential_elimination_pressed"]

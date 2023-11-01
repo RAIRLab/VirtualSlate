@@ -14,9 +14,9 @@ func _ready():
 	pg.addNode(Vector3(-8,12,0))
 	pg.addNode(Vector3(8,6,0))
 	pg.addNode(Vector3(0,-3,0))
-	get_node("ProofGraph/0").setData("pvq")
-	get_node("ProofGraph/1").setData("qvp")
-	get_node("ProofGraph/2").setData("p")
+	get_node("ProofGraph/0").setData("p")
+	get_node("ProofGraph/1").setData("p→q")
+	get_node("ProofGraph/2").setData("q")
 	
 	print(pg.getData(0))
 	print(pg.getData(1))
@@ -26,7 +26,6 @@ func _ready():
 	pg.addEdge(get_node("ProofGraph/1"), get_node("ProofGraph/2"))
 	
 	print(get_node("ProofGraph/2").getParentRep())
-	
 	
 	
 	

@@ -1,20 +1,22 @@
 extends CharacterBody3D
 @onready var line_edit = $"../LineEdit"
 @onready var virtual_keyboard_2d = $"../CanvasLayer/VirtualKeyboard2D"
+@onready var justification_menu = $"../JustificationMenu"
 
 #Movement variables
 const SPEED = 15.0
 const JUMP_VELOCITY = 15
 
 #Selection variables
-var selectionCount = 0
-var selectArray: Array[LogNode]
+@export var selectionCount = 0
+@export var selectArray: Array[LogNode]
 const RAY_LENGTH = 1000
 
 #Mode variables
 enum modeTypes {CREATE_NODE, INPUT_DATA, CONNECT, DELETE_EDGE, DELETE_NODE, MOVE_NODE}
 var playerMode = modeTypes.MOVE_NODE
 var selectGate = 2
+var selectFlag = true
 
 #Colors
 const regularColor = Color(0.5, 0.75, 0.75, 0.25)
@@ -111,17 +113,20 @@ func _unhandled_input(event: ) -> void:
 func _ready():
 	#Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	line_edit.hide()
+	justification_menu.hide()
 	$Neck/Camera3D/Mode/Label.text = modeTypes.keys()[playerMode]
 
 
 func _physics_process(delta):
 	if Input.is_action_just_pressed("Keyboard"):
 		if virtual_keyboard_2d.visible == false:
+			justification_menu.show()
 			virtual_keyboard_2d.show()
 			line_edit.show()
 			line_edit.grab_focus()
 			Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED)            
 	if Input.is_action_just_pressed("Enter"):
+		justification_menu.hide()
 		virtual_keyboard_2d.hide()
 		line_edit.hide()
 		print(line_edit.text)
@@ -179,13 +184,12 @@ func _physics_process(delta):
 		unselectAll()
 			
 	# Selecting nodes
-
+	if Input.is_action_just_pressed("Interact") and selectFlag == true:
+		rayTraceSelect()
 		
 	# Mode based actions on nodes
 	match playerMode:
 		modeTypes.DELETE_EDGE:
-			if Input.is_action_just_pressed("Interact"):
-				rayTraceSelect()
 			if Input.is_action_just_pressed("Confirm"):
 				if selectionCount == 2:
 					head = get_node("/root/main")
@@ -196,8 +200,6 @@ func _physics_process(delta):
 						pointerPG.removeEdge(selectArray[0], selectArray[1])
 					unselectAll()
 		modeTypes.CONNECT:
-			if Input.is_action_just_pressed("Interact"):
-				rayTraceSelect()
 			if Input.is_action_just_pressed("Confirm"):
 				if selectionCount == 2:
 					head = get_node("/root/main")
@@ -205,8 +207,6 @@ func _physics_process(delta):
 					pointerPG.addEdge(selectArray[0], selectArray[1])
 					unselectAll()
 		modeTypes.DELETE_NODE:
-			if Input.is_action_just_pressed("Interact"):
-				rayTraceSelect()
 			if Input.is_action_just_pressed("Confirm"):
 				if selectionCount == 1:
 					head = get_node("/root/main")
@@ -220,9 +220,6 @@ func _physics_process(delta):
 			var lookDirection = cam.get_global_transform().basis.z
 			var offsetPosition = cam.global_position - newMeshOffset*lookDirection
 			newMeshPointer.global_position = offsetPosition
-			
-			if Input.is_action_just_pressed("Interact"):
-				rayTraceSelect()
 			
 			if Input.is_action_just_pressed("offsetPlus"):
 				if newMeshOffset < offsetMax:
@@ -241,8 +238,7 @@ func _physics_process(delta):
 			var lookDirection = cam.get_global_transform().basis.z
 			head = get_node("/root/main")
 			pointerPG = head.pg
-			if Input.is_action_just_pressed("Interact"):
-				rayTraceSelect()
+			if Input.is_action_just_pressed("Interact") and selectFlag == true:
 				if selectionCount != 0:
 					var blockPOS = selectArray[0].global_position
 					distanceToNode = (blockPOS - cam.global_position).length()
@@ -256,4 +252,15 @@ func _physics_process(delta):
 					if distanceToNode > offsetMin:
 						distanceToNode -= 1
 				pointerPG.updateEdges(selectArray[0])
+				
+		modeTypes.INPUT_DATA:
+			if selectionCount == 1:
+				selectFlag = false
+				Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED)
+				justification_menu.show()
+			if Input.is_action_just_pressed("Enter"):
+				selectFlag = true
+				Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+				unselectAll()
+				justification_menu.hide()
 

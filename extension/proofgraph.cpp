@@ -68,7 +68,7 @@ String LogNode::getParentRep(){
         value = value + String::num_uint64(i->getID());
         value = value + ",";
     }
-    if (value.length() < 1){
+    if (value.length() > 1){
         value = value.left(value.length() - 1);
     }
     value = value + ")";
@@ -89,8 +89,32 @@ void LogNode::setParentRep(){
     letters->TextMesh::set_text(this->getParentRep());
     newText->global_scale(Vector3(8,8,5));
     newText->set_position(Vector3(0,-1.5,0));
+}
+
+void LogNode::setJustification(String code, String symbol){
+    this->justification = code;
+
+    Node* oldText = get_node_or_null("Justification");
+    if(oldText != NULL){
+        remove_child(oldText);
+        oldText->queue_free();
+    }
+    // Creation of a new text mesh
+    MeshInstance3D* newText = memnew(MeshInstance3D);
+    newText->set_name("Justification");
+    add_child(newText);
+    TextMesh* letters = memnew(TextMesh);
+    newText->set_mesh(letters);
+    letters->TextMesh::set_text(symbol);
+    newText->global_scale(Vector3(12,12,5));
+    newText->set_position(Vector3(0,3.85,0));
+
+    MeshInstance3D* oldBox = (MeshInstance3D*) get_node_or_null("justBox");
+    oldBox->set_scale(Vector3(symbol.length()+1,2.25,2));
 
 }
+
+
 
 void LogNode::_bind_methods(){
     ClassDB::bind_method(D_METHOD("setID", "ID"), &LogNode::setID);
@@ -99,6 +123,7 @@ void LogNode::_bind_methods(){
     ClassDB::bind_method(D_METHOD("setData", "data"), &LogNode::setData);
     ClassDB::bind_method(D_METHOD("isChild", "potentialChild"), &LogNode::isChild);
     ClassDB::bind_method(D_METHOD("getParentRep"), &LogNode::getParentRep);
+    ClassDB::bind_method(D_METHOD("setJustification", "consise", "verbose"), &LogNode::setJustification);
 }
 
 ProofGraph::ProofGraph(){
@@ -166,7 +191,7 @@ void ProofGraph::addNode(Vector3 position){
     newNode->add_child(justBox);
     justBox->set_mesh(justShape);
     justBox->set_material_override(justSkin);
-    justBox->global_scale(Vector3(5,2.5,2));
+    justBox->set_scale(Vector3(3,2.25,2));
     justSkin->set_transparency(BaseMaterial3D::TRANSPARENCY_ALPHA);
     justSkin->set_albedo(Color(0.5, 0.75, 0.75, 0.25));
     justBox->set_position(Vector3(0,3.75,0));
