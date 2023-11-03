@@ -10,6 +10,8 @@ enum KeyboardMode {
 	ALTERNATE		## Alternate keys mode
 }
 
+var selectArray
+var selectionCount
 
 # Shift button down
 var _shift_down := false
@@ -51,6 +53,7 @@ func on_key_pressed(scan_code_text: String, unicode: int, shift: bool):
 		_shift_down = false
 		_update_visible()
 
+
 func on_shift_toggle(button_pressed):
 	# Update toggle keys
 	$Background/Standard/ToggleCaps.set_pressed_no_signal(false)
@@ -79,6 +82,9 @@ func on_alt_toggle(button_pressed):
 	_alt_down = button_pressed
 	_update_visible()
 
+func _on_confirm_pressed():
+	Input.action_press("EnterInput")
+
 # Update switching the visible case keys
 func _update_visible():
 	# Evaluate the new mode
@@ -99,3 +105,111 @@ func _update_visible():
 	$Background/LowerCase.visible = _mode == KeyboardMode.LOWER_CASE
 	$Background/UpperCase.visible = _mode == KeyboardMode.UPPER_CASE
 	$Background/Alternate.visible = _mode == KeyboardMode.ALTERNATE
+
+
+func _on_assumption_pressed():
+	selectArray = $"../../CharacterBody3D".selectArray
+	selectionCount = $"../../CharacterBody3D".selectionCount
+	if selectionCount == 1:
+		selectArray[0].setJustification("assume", "Assume")
+
+
+func _on_negation_introduction_pressed():
+	selectArray = $"../../CharacterBody3D".selectArray
+	selectionCount = $"../../CharacterBody3D".selectionCount
+	if selectionCount == 1:
+		selectArray[0].setJustification("notI", "¬I")
+
+
+func _on_negation_elimination_pressed():
+	selectArray = $"../../CharacterBody3D".selectArray
+	selectionCount = $"../../CharacterBody3D".selectionCount
+	if selectionCount == 1:
+		selectArray[0].setJustification("notE", "¬E")
+
+
+func _on_conjunction_introduction_pressed():
+	selectArray = $"../../CharacterBody3D".selectArray
+	selectionCount = $"../../CharacterBody3D".selectionCount
+	if selectionCount == 1:
+		selectArray[0].setJustification("andI", "∧I")
+
+
+func _on_conjunction_elimination_pressed():
+	selectArray = $"../../CharacterBody3D".selectArray
+	selectionCount = $"../../CharacterBody3D".selectionCount
+	if selectionCount == 1:
+		selectArray[0].setJustification("andE", "∧E")
+
+
+func _on_disjunction_introduction_pressed():
+	selectArray = $"../../CharacterBody3D".selectArray
+	selectionCount = $"../../CharacterBody3D".selectionCount
+	if selectionCount == 1:
+		selectArray[0].setJustification("orI", "∨I")
+
+
+func _on_disjunction_elimination_pressed():
+	selectArray = $"../../CharacterBody3D".selectArray
+	selectionCount = $"../../CharacterBody3D".selectionCount
+	if selectionCount == 1:
+		selectArray[0].setJustification("orE", "∨E")
+
+
+func _on_conditional_introduction_pressed():
+	selectArray = $"../../CharacterBody3D".selectArray
+	selectionCount = $"../../CharacterBody3D".selectionCount
+	if selectionCount == 1:
+		selectArray[0].setJustification("ifI", "→I")
+
+
+func _on_conditional_elimination_pressed():
+	selectArray = $"../../CharacterBody3D".selectArray
+	selectionCount = $"../../CharacterBody3D".selectionCount
+	if selectionCount == 1:
+		selectArray[0].setJustification("ifE", "→E")
+
+
+func _on_biconditional_introduction_pressed():
+	selectArray = $"../../CharacterBody3D".selectArray
+	selectionCount = $"../../CharacterBody3D".selectionCount
+	if selectionCount == 1:
+		selectArray[0].setJustification("iffI", "↔I")
+
+
+func _on_biconditional_elimination_pressed():
+	selectArray = $"../../CharacterBody3D".selectArray
+	selectionCount = $"../../CharacterBody3D".selectionCount
+	if selectionCount == 1:
+		selectArray[0].setJustification("iffE", "↔E")
+
+
+func _on_universal_introduction_pressed():
+	selectArray = $"../../CharacterBody3D".selectArray
+	selectionCount = $"../../CharacterBody3D".selectionCount
+	if selectionCount == 1:
+		selectArray[0].setJustification("forallI", "∀I")
+
+
+func _on_universal_elimination_pressed():
+	selectArray = $"../../CharacterBody3D".selectArray
+	selectionCount = $"../../CharacterBody3D".selectionCount
+	if selectionCount == 1:
+		selectArray[0].setJustification("forallE", "∀E")
+
+
+func _on_existential_introduction_pressed():
+	selectArray = $"../../CharacterBody3D".selectArray
+	selectionCount = $"../../CharacterBody3D".selectionCount
+	if selectionCount == 1:
+		selectArray[0].setJustification("existsI", "∃I")
+
+
+func _on_existential_elimination_pressed():
+	selectArray = $"../../CharacterBody3D".selectArray
+	selectionCount = $"../../CharacterBody3D".selectionCount
+	if selectionCount == 1:
+		selectArray[0].setJustification("existsE", "∃E")
+
+func _on_clear_pressed():
+	$"../../LineEdit".clear()

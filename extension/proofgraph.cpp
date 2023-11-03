@@ -1,3 +1,8 @@
+#include <iostream>
+#include <stack>
+#include <string>
+#include <list>
+
 #include "proofgraph.h"
 
 #include "godot_cpp/classes/mesh.hpp"
@@ -48,6 +53,13 @@ void LogNode::setData(String newData){
     TextMesh* letters = memnew(TextMesh);
     newText->set_mesh(letters);
     letters->TextMesh::set_text(newData);
+    StandardMaterial3D* skin = memnew(StandardMaterial3D);
+    //skin->set_emission(Color(1,1,1,1));
+    //skin->set_emission_energy_multiplier(8);
+    //skin->set_emission_operator(BaseMaterial3D::EMISSION_OP_MULTIPLY);
+    //skin->set_emission_intensity(2);
+    newText->set_material_overlay(skin);
+
     newText->global_scale(Vector3(12,12,5));
     newText->set_position(Vector3(0,.4,0));
 
@@ -75,8 +87,11 @@ String LogNode::getParentRep(){
     }
     if (value.length() > 1){
         value = value.left(value.length() - 1);
+        value = value + ")";
     }
-    value = value + ")";
+    else {
+        value = "";
+    }
     return value;
 }
 
@@ -116,8 +131,8 @@ void LogNode::setJustification(String code, String symbol){
 
     MeshInstance3D* oldBox = (MeshInstance3D*) get_node_or_null("justBox");
     oldBox->set_scale(Vector3(symbol.length()*1.15+1,2.25,2));
-
 }
+
 
 void LogNode::_bind_methods(){
     ClassDB::bind_method(D_METHOD("setID", "ID"), &LogNode::setID);
@@ -276,9 +291,10 @@ void ProofGraph::removeNode(LogNode* badNode){
         badEdge->queue_free();
     }
 
-    // Logic remove pointers of children to badNode
+    // Logic remove pointers of children to badNode, updates parent rep
     for (LogNode* i : badNode->logChildren){
         i->logParents.erase(badNode);
+        i->setParentRep();
     }
 
     nodeMap.erase(badNode->getID());

@@ -2,9 +2,6 @@
 #define PROOFGRPAH_H
 
 
-#include <iostream>
-#include <set>
-
 //#include "godot_cpp/classes/ref_counted.hpp"
 #include "godot_cpp/variant/vector3.hpp"
 #include "godot_cpp/classes/object.hpp"

@@ -1,24 +1,24 @@
-[gd_scene load_steps=5 format=3 uid="uid://bg6v0qeatg5pu"]
+[gd_scene load_steps=6 format=3 uid="uid://bg6v0qeatg5pu"]
 
 [ext_resource type="Script" path="res://Scripts/main.gd" id="1_geprs"]
+[ext_resource type="Texture2D" uid="uid://j7g6v181jnum" path="res://Textures/skybox.jpg" id="2_fe00h"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_wdr4g"]
-sky_horizon_color = Color(0.494118, 0.501961, 0.517647, 1)
-ground_horizon_color = Color(0.184314, 0.188235, 0.196078, 1)
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_k2hox"]
+panorama = ExtResource("2_fe00h")
 
-[sub_resource type="Sky" id="Sky_52hme"]
-sky_material = SubResource("ProceduralSkyMaterial_wdr4g")
+[sub_resource type="Sky" id="Sky_nthfv"]
+sky_material = SubResource("PanoramaSkyMaterial_k2hox")
 
 [sub_resource type="Environment" id="Environment_s3rrf"]
 background_mode = 2
-background_energy_multiplier = 3.5
-sky = SubResource("Sky_52hme")
+sky = SubResource("Sky_nthfv")
 sky_custom_fov = 90.0
+sky_rotation = Vector3(-0.349066, 2.61799, 0)
 ambient_light_source = 3
-ambient_light_color = Color(0, 0.807843, 0.921569, 1)
-reflected_light_source = 2
+ambient_light_color = Color(1, 1, 1, 1)
+tonemap_mode = 1
+ssao_enabled = true
 fog_sky_affect = 0.0
-volumetric_fog_enabled = true
 volumetric_fog_density = 0.01
 volumetric_fog_emission_energy = 0.0
 volumetric_fog_gi_inject = 0.34
@@ -27,8 +27,17 @@ volumetric_fog_anisotropy = 0.9
 [node name="main" type="Node"]
 script = ExtResource("1_geprs")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.360501, 0.932759, 0, -0.932759, 0.360501, 0, 33.113, 0)
+[node name="ForwardLight" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.360501, 0.932759, 0, -0.932759, 0.360501, -262.079, 504.49, 0)
+light_energy = 4.0
+light_indirect_energy = 4.0
+sky_mode = 1
+
+[node name="BackLight" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.360501, 0.932759, 0, -0.932759, 0.360501, 0, 0, -497.414)
+light_energy = 10.0
+omni_range = 4096.0
+omni_attenuation = 0.267944
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_s3rrf")

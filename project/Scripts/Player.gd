@@ -1,15 +1,16 @@
 extends CharacterBody3D
 @onready var line_edit = $"../LineEdit"
 @onready var virtual_keyboard_2d = $"../CanvasLayer/VirtualKeyboard2D"
-@onready var justification_menu = $"../JustificationMenu"
 @onready var neck := $Neck
 @onready var camera := $Neck/Camera3D
 @onready var head = get_node("/root/main")
 @onready var pointerPG = head.pg
 
 #Movement variables
-const SPEED = 15.0
-const JUMP_VELOCITY = 15
+var SPEED = 15.0
+var JUMP_VELOCITY = 15.0
+const TURN_SPEED = 0.03
+
 
 #Selection variables
 @export var selectionCount = 0
@@ -20,7 +21,6 @@ const RAY_LENGTH = 1000
 enum modeTypes {CREATE_NODE, INPUT_DATA, CONNECT, DELETE_EDGE, DELETE_NODE, MOVE_NODE}
 var playerMode = modeTypes.MOVE_NODE
 var selectGate = 2
-var selectFlag = true
 
 #Colors
 const regularColor = Color(0.5, 0.75, 0.75, 0.25)
@@ -105,12 +105,11 @@ func _unhandled_input(event: ) -> void:
 		if event is InputEventMouseMotion:
 			neck.rotate_y(-event.relative.x * 0.001)
 			camera.rotate_x(-event.relative.y * 0.001)
-			camera.rotation.x = clamp(camera.rotation.x,deg_to_rad(-30), deg_to_rad(60))
+			camera.rotation.x = clamp(camera.rotation.x,deg_to_rad(-45), deg_to_rad(60))
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	line_edit.hide()
-	justification_menu.hide()
 	$Neck/Camera3D/Mode/Label.text = modeTypes.keys()[playerMode]
 
 func _physics_process(_delta):
@@ -167,6 +166,16 @@ func _physics_process(_delta):
 		# Selecting nodes
 		if Input.is_action_just_pressed("Interact"):
 			rayTraceSelect()
+			
+		if Input.is_action_pressed("Sprint"):
+			SPEED = 30
+			JUMP_VELOCITY = 30
+		
+		if Input.is_action_just_released("Sprint"):
+			SPEED = 15
+			JUMP_VELOCITY = 15
+			
+		
 		
 	# Mode based actions on nodes
 	match playerMode:
@@ -223,22 +232,25 @@ func _physics_process(_delta):
 				if Input.is_action_just_pressed("offsetMinus"):
 					if distanceToNode > offsetMin:
 						distanceToNode -= 1
+				if Input.is_action_pressed("RotateLeft") and inputFlag == false:
+					selectArray[0].rotate_y(-TURN_SPEED)
+				if Input.is_action_pressed("RotateRight") and inputFlag == false:
+					selectArray[0].rotate_y(TURN_SPEED)
 				pointerPG.updateEdges(selectArray[0])
 		modeTypes.INPUT_DATA:
 			if selectionCount == 1:
 				inputFlag = true
 				Input.set_mouse_mode(Input.MOUSE_MODE_CONFINED)
-				justification_menu.show()
 				virtual_keyboard_2d.show()
 				line_edit.show()
 				#line_edit.grab_focus()
-			if Input.is_action_just_pressed("EnterInput"):
+			if Input.is_action_just_pressed("EnterInput") and inputFlag == true:
 				selectArray[0].setData(line_edit.text)
 				line_edit.clear()
 				line_edit.hide()
 				virtual_keyboard_2d.hide()
-				justification_menu.hide()
 				inputFlag = false
+				print(selectArray[0].getData())
 				unselectAll()
 				Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
