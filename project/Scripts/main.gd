@@ -1,37 +1,35 @@
 extends Node
+
+@export var pg: ProofGraph
+
 func initializeProofGraph():
-	var pg = ProofGraph.new()
+	pg = ProofGraph.new()
 	pg.set_name("ProofGraph")
 	self.add_child(pg)
 	return pg
 	
-@export var pg: ProofGraph
-
-	
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pg = initializeProofGraph()
-	pg.addNode(Vector3(-8,12,0))
-	pg.addNode(Vector3(8,6,0))
-	pg.addNode(Vector3(0,-3,0))
-	get_node("ProofGraph/0").setData("pvq")
-	get_node("ProofGraph/1").setData("qvp")
-	get_node("ProofGraph/2").setData("p")
+	pg.addNode(Vector3(-8,12,-25))
+	#pg.addNode(Vector3(8,6,-25))
+	#pg.addNode(Vector3(0,-3,-25))
+	get_node("ProofGraph/0").setData("Welcome")
+	#get_node("ProofGraph/1").setData("p→q")
+	#get_node("ProofGraph/2").setData("q")
 	
-	print(pg.getData(0))
-	print(pg.getData(1))
-	print(pg.getData(2))
+	#pg.addEdge(get_node("ProofGraph/0"), get_node("ProofGraph/2"))
+	#pg.addEdge(get_node("ProofGraph/1"), get_node("ProofGraph/2"))
 	
-	pg.addEdge(get_node("ProofGraph/0"), get_node("ProofGraph/2"))
-	pg.addEdge(get_node("ProofGraph/1"), get_node("ProofGraph/2"))
-	
-	
-
-
+	#get_node("ProofGraph/0").setJustification("assume", "Assume")
+	#get_node("ProofGraph/1").setJustification("assume", "Assume")
+	#get_node("ProofGraph/2").setJustification("ifE", "→E")
 	
 	
-	
+	#Loading standard 3D player character
+	var standard3D = load("res://Scenes/PlayerCharacter.tscn").instantiate()
+	self.add_child(standard3D)
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta):
+func _physics_process(_delta):
 	pass

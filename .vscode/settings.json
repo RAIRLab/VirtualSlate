@@ -5,6 +5,8 @@
     ],
     "files.associations": {
         "tuple": "cpp",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "stack": "cpp",
+        "set": "cpp"
     }
 }

@@ -2,9 +2,6 @@
 #define PROOFGRPAH_H
 
 
-#include <iostream>
-#include <set>
-
 //#include "godot_cpp/classes/ref_counted.hpp"
 #include "godot_cpp/variant/vector3.hpp"
 #include "godot_cpp/classes/object.hpp"
@@ -13,15 +10,6 @@
 #include "godot_cpp/templates/hash_set.hpp"
 #include "godot_cpp/variant/string.hpp"
 #include "godot_cpp/classes/mesh_instance3d.hpp"
-#include "godot_cpp/classes/mesh.hpp"
-#include "godot_cpp/classes/box_mesh.hpp"
-#include "godot_cpp/classes/text_mesh.hpp"
-#include "godot_cpp/classes/standard_material3d.hpp"
-#include "godot_cpp/variant/color.hpp"
-#include "godot_cpp/classes/cylinder_mesh.hpp"
-#include "godot_cpp/classes/box_shape3d.hpp"
-#include "godot_cpp/classes/collision_shape3d.hpp"
-#include "godot_cpp/classes/static_body3d.hpp"
 
 namespace godot{
 
@@ -32,6 +20,7 @@ class LogNode : public Node3D{
         // Position field inherited from Node3D i.e. global_position
         int nodeID;
         String data;
+        String justification;
         HashSet<LogNode*> logParents;
         HashSet<LogNode*> logChildren;
 
@@ -43,6 +32,10 @@ class LogNode : public Node3D{
         int getID();
         String getData();
         void setData(String newData);
+        bool isChild(LogNode* potentialChild);
+        String getParentRep();
+        void setParentRep();
+        void setJustification(String code, String symbol);
 
     
     protected:
@@ -54,6 +47,7 @@ class ProofGraph : public Node{
 
     private:
         int nodeCount;
+        int nodeIDCount;
         HashMap<int, LogNode*> nodeMap;
     public:
         
@@ -68,6 +62,9 @@ class ProofGraph : public Node{
         void removeNode(LogNode* badNode);
         int getNodeCount();
         String getNodeData(int targetNodeID);
+        void updateEdges(LogNode* updateNode);
+        void edgeSetter(LogNode* start, LogNode* end, MeshInstance3D* workingEdge);
+        void boxLookAtPlayer();
 
     protected:
         static void _bind_methods();
