@@ -23,7 +23,7 @@ jobs:
        uses: manleydev/build-godot-action@v1.5.0
        with:
           name: VirtualSlate
-          preset: win64
+          preset: "Windows Desktop"
           debugMode: "false"
           projectDir: "project"
      - name: Upload Artifact
