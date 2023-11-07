@@ -31,7 +31,7 @@ func test_addNode():
 	graph.addNode(Vector3(4, 7.5, 0))
 	assert(graph.get_size() == 6)
 	
-	#test addNode at  massive locations
+	#test addNode at massive locations
 	graph.addNode(Vector3(200, 200, 0))
 	assert(graph.get_size() == 7)
 	graph.addNode(Vector3(200, 8, 0))
@@ -201,6 +201,74 @@ func test_removeNodeWithoutEdges():
 		else:
 			assert(graphNodes.find(i) == graphNodes.end() == true)
 		assert(graphNodes.size() == 25)
+	#test removeNodeWithoutEdges at negative locations
+	graph.addNode(Vector3(-20, 20, 0))
+	graph.addNode(Vector3(-20, -10, 0))
+	graph.addNode(Vector3(20, -20, 0))
+	graph.addNode(Vector3(-30, -30, 0))
+	get_node("ProofGraph/0").setData("t")
+	get_node("ProofGraph/1").setData("u")
+	get_node("ProofGraph/2").setData("v")
+	get_node("ProofGraph/3").setData("w")
+	assert(graph.get_size() == 4)
+	
+	graph.addEdge(get_node("ProofGraph/0"), get_node("ProofGraph/1"))
+	assert(get_node("ProofGraph/0").logChildren.get_size() == 1)
+	assert(get_node("ProofGraph/1").logParents.get_size() == 1)
+	graph.addEdge(get_node("ProofGraph/1"), get_node("ProofGraph/2"))
+	assert(get_node("ProofGraph/1").logChildren.get_size() == 1)
+	assert(get_node("ProofGraph/2").logParents.get_size() == 1)
+	
+	for i in range(graph.get_size()):
+		if get_node("ProofGraph/i").logChildren.get_size() == 0:
+			if get_node("ProofGraph/i").logParents.get_size() == 0:
+				graph.removeNode(get_node("ProofGraph/i"))
+	
+	#test removeNodeWithoutEdges at floating point locations
+	graph.addNode(Vector3(40.5, 40.5, 0))
+	graph.addNode(Vector3(30.5, 30.5, 0))
+	graph.addNode(Vector3(-40.5, 40.5, 0))
+	graph.addNode(Vector3(-40.5, -40.5, 0))
+	get_node("ProofGraph/4").setData("g")
+	get_node("ProofGraph/5").setData("h")
+	get_node("ProofGraph/6").setData("i")
+	get_node("ProofGraph/7").setData("j")
+	assert(graph.get_size() == 4)
+	
+	graph.addEdge(get_node("ProofGraph/4"), get_node("ProofGraph/5"))
+	assert(get_node("ProofGraph/4").logChildren.get_size() == 1)
+	assert(get_node("ProofGraph/5").logParents.get_size() == 1)
+	graph.addEdge(get_node("ProofGraph/5"), get_node("ProofGraph/6"))
+	assert(get_node("ProofGraph/5").logChildren.get_size() == 1)
+	assert(get_node("ProofGraph/6").logParents.get_size() == 1)
+	
+	for i in range(graph.get_size()):
+		if get_node("ProofGraph/i").logChildren.get_size() == 0:
+			if get_node("ProofGraph/i").logParents.get_size() == 0:
+				graph.removeNode(get_node("ProofGraph/i"))
+	
+	#test removeNodeWithoutEdges at massive locations
+	graph.addNode(Vector3(410.5, 410.5, 0))
+	graph.addNode(Vector3(300.5, 300.5, 0))
+	graph.addNode(Vector3(-400.5, 400.5, 0))
+	graph.addNode(Vector3(-400.5, -400.5, 0))
+	get_node("ProofGraph/8").setData("l")
+	get_node("ProofGraph/9").setData("m")
+	get_node("ProofGraph/10").setData("n")
+	get_node("ProofGraph/11").setData("o")
+	assert(graph.get_size() == 4)
+	
+	graph.addEdge(get_node("ProofGraph/8"), get_node("ProofGraph/9"))
+	assert(get_node("ProofGraph/8").logChildren.get_size() == 1)
+	assert(get_node("ProofGraph/9").logParents.get_size() == 1)
+	graph.addEdge(get_node("ProofGraph/9"), get_node("ProofGraph/10"))
+	assert(get_node("ProofGraph/9").logChildren.get_size() == 1)
+	assert(get_node("ProofGraph/10").logParents.get_size() == 1)
+	
+	for i in range(graph.get_size()):
+		if get_node("ProofGraph/i").logChildren.get_size() == 0:
+			if get_node("ProofGraph/i").logParents.get_size() == 0:
+				graph.removeNode(get_node("ProofGraph/i"))
 
 func run_tests():
 	test_addNode()
