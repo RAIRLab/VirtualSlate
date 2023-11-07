@@ -25,7 +25,7 @@ jobs:
           name: VirtualSlate
           preset: win64
           debugMode: "false"
-          projectDir: "VirtualSlate/project"
+          projectDir: "project"
      - name: Upload Artifact
        uses: actions/upload-artifact@v3
        with:
