@@ -17,7 +17,7 @@ jobs:
        with:
          submodules: recursive
      - name: Build Extension
-       run: scons platform=linux
+       run: scons platform=windows
      - name: Build
        id: build
        uses: manleydev/build-godot-action@v1.5.0
