@@ -27,8 +27,8 @@ func _ready():
 	
 	
 	#Loading standard 3D player character
-	var standard3D = load("res://Scenes/PlayerCharacter.tscn").instantiate()
-	self.add_child(standard3D)
+	var mainMenu = load("res://Scenes/main_menu.tscn").instantiate()
+	self.add_child(mainMenu)
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(_delta):
