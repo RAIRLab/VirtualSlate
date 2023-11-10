@@ -22,7 +22,7 @@ jobs:
        uses: actions/upload-artifact@v3
        with:
           with: VirtualSlateBuildFiles
-          path: VirtualSlate/
+          path: ./
   Build-Game:
     runs-on: windows-latest
     needs: Build-Extension
