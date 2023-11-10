@@ -21,7 +21,7 @@ jobs:
      - name: Upload Artifact
        uses: actions/upload-artifact@v3
        with:
-          with: VirtualSlateBuildFiles
+          name: VirtualSlateBuildFiles
           path: ./
   Build-Game:
     runs-on: windows-latest
