@@ -37,6 +37,8 @@ jobs:
         run: Expand-Archive godotbuilder.zip -DestinationPath ./
       - name: Make Game
         run: ./Godot_v4.1.2-stable_win64.exe --path project --headless --export-release "Windows Desktop"
+      - name: Looking for game
+        run: ls
       - name: Upload .exe
         uses: actions/upload-artifact@v3
         with:
