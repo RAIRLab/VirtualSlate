@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://cd0a77sysrjf7"]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="LineEdit" type="LineEdit" parent="."]
+offset_right = 541.0
+offset_bottom = 117.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_selected_color = Color(1, 1, 1, 1)
+theme_override_colors/caret_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 45
+placeholder_text = "apples are tasty"
+alignment = 1

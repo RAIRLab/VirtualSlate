@@ -114,5 +114,6 @@ Sprint={
 
 [xr]
 
-openxr/form_factor=1
+openxr/enabled=true
+openxr/form_factor=0
 shaders/enabled=true
