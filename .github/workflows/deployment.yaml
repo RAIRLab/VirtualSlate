@@ -36,7 +36,7 @@ jobs:
       - name: Unizp Enginer
         run: Expand-Archive godotbuilder.zip -DestinationPath ./
       - name: Make Game
-        run: ./Godot_v4.1.2-stable_win64_console.exe --path project --headless --export-debug "Windows Desktop"
+        run: ls; ./Godot_v4.1.2-stable_win64_console.exe --path project --headless --export-debug "Windows Desktop"
       - name: Looking for game
         run: cd project; ls
       - name: Upload .exe
