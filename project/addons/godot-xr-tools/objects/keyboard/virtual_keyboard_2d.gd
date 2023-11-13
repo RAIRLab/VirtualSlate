@@ -2,6 +2,7 @@
 class_name XRToolsVirtualKeyboard2D
 extends CanvasLayer
 
+@onready var player = $"../../../../../../"
 
 ## Enumeration of keyboard view modes
 enum KeyboardMode {
@@ -108,108 +109,108 @@ func _update_visible():
 
 
 func _on_assumption_pressed():
-	selectArray = $"../../CharacterBody3D".selectArray
-	selectionCount = $"../../CharacterBody3D".selectionCount
+	selectArray = player.selectArray
+	selectionCount = player.selectionCount
 	if selectionCount == 1:
 		selectArray[0].setJustification("assume", "Assume")
 
 
 func _on_negation_introduction_pressed():
-	selectArray = $"../../CharacterBody3D".selectArray
-	selectionCount = $"../../CharacterBody3D".selectionCount
+	selectArray = player.selectArray
+	selectionCount = player.selectionCount
 	if selectionCount == 1:
 		selectArray[0].setJustification("notI", "¬I")
 
 
 func _on_negation_elimination_pressed():
-	selectArray = $"../../CharacterBody3D".selectArray
-	selectionCount = $"../../CharacterBody3D".selectionCount
+	selectArray = player.selectArray
+	selectionCount = player.selectionCount
 	if selectionCount == 1:
 		selectArray[0].setJustification("notE", "¬E")
 
 
 func _on_conjunction_introduction_pressed():
-	selectArray = $"../../CharacterBody3D".selectArray
-	selectionCount = $"../../CharacterBody3D".selectionCount
+	selectArray = player.selectArray
+	selectionCount = player.selectionCount
 	if selectionCount == 1:
 		selectArray[0].setJustification("andI", "∧I")
 
 
 func _on_conjunction_elimination_pressed():
-	selectArray = $"../../CharacterBody3D".selectArray
-	selectionCount = $"../../CharacterBody3D".selectionCount
+	selectArray = player.selectArray
+	selectionCount = player.selectionCount
 	if selectionCount == 1:
 		selectArray[0].setJustification("andE", "∧E")
 
 
 func _on_disjunction_introduction_pressed():
-	selectArray = $"../../CharacterBody3D".selectArray
-	selectionCount = $"../../CharacterBody3D".selectionCount
+	selectArray = player.selectArray
+	selectionCount = player.selectionCount
 	if selectionCount == 1:
 		selectArray[0].setJustification("orI", "∨I")
 
 
 func _on_disjunction_elimination_pressed():
-	selectArray = $"../../CharacterBody3D".selectArray
-	selectionCount = $"../../CharacterBody3D".selectionCount
+	selectArray = player.selectArray
+	selectionCount = player.selectionCount
 	if selectionCount == 1:
 		selectArray[0].setJustification("orE", "∨E")
 
 
 func _on_conditional_introduction_pressed():
-	selectArray = $"../../CharacterBody3D".selectArray
-	selectionCount = $"../../CharacterBody3D".selectionCount
+	selectArray = player.selectArray
+	selectionCount = player.selectionCount
 	if selectionCount == 1:
 		selectArray[0].setJustification("ifI", "→I")
 
 
 func _on_conditional_elimination_pressed():
-	selectArray = $"../../CharacterBody3D".selectArray
-	selectionCount = $"../../CharacterBody3D".selectionCount
+	selectArray = player.selectArray
+	selectionCount = player.selectionCount
 	if selectionCount == 1:
 		selectArray[0].setJustification("ifE", "→E")
 
 
 func _on_biconditional_introduction_pressed():
-	selectArray = $"../../CharacterBody3D".selectArray
-	selectionCount = $"../../CharacterBody3D".selectionCount
+	selectArray = player.selectArray
+	selectionCount = player.selectionCount
 	if selectionCount == 1:
 		selectArray[0].setJustification("iffI", "↔I")
 
 
 func _on_biconditional_elimination_pressed():
-	selectArray = $"../../CharacterBody3D".selectArray
-	selectionCount = $"../../CharacterBody3D".selectionCount
+	selectArray = player.selectArray
+	selectionCount = player.selectionCount
 	if selectionCount == 1:
 		selectArray[0].setJustification("iffE", "↔E")
 
 
 func _on_universal_introduction_pressed():
-	selectArray = $"../../CharacterBody3D".selectArray
-	selectionCount = $"../../CharacterBody3D".selectionCount
+	selectArray = player.selectArray
+	selectionCount = player.selectionCount
 	if selectionCount == 1:
 		selectArray[0].setJustification("forallI", "∀I")
 
 
 func _on_universal_elimination_pressed():
-	selectArray = $"../../CharacterBody3D".selectArray
-	selectionCount = $"../../CharacterBody3D".selectionCount
+	selectArray = player.selectArray
+	selectionCount = player.selectionCount
 	if selectionCount == 1:
 		selectArray[0].setJustification("forallE", "∀E")
 
 
 func _on_existential_introduction_pressed():
-	selectArray = $"../../CharacterBody3D".selectArray
-	selectionCount = $"../../CharacterBody3D".selectionCount
+	selectArray = player.selectArray
+	selectionCount = player.selectionCount
 	if selectionCount == 1:
 		selectArray[0].setJustification("existsI", "∃I")
 
 
 func _on_existential_elimination_pressed():
-	selectArray = $"../../CharacterBody3D".selectArray
-	selectionCount = $"../../CharacterBody3D".selectionCount
+	selectArray = player.selectArray
+	selectionCount = player.selectionCount
 	if selectionCount == 1:
 		selectArray[0].setJustification("existsE", "∃E")
 
 func _on_clear_pressed():
-	$"../../LineEdit".clear()
+	print($"../")

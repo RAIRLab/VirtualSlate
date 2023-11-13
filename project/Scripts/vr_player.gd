@@ -7,6 +7,9 @@ extends Node3D
 @onready var head = $"../"
 @onready var pointerPG = head.pg
 @onready var keyboard = $"XROrigin3D/Left/Keyboard"
+@onready var nodeRay = $"XROrigin3D/Right/rHand/RayCast3D"
+@onready var keyRay = $"XROrigin3D/Right/rHand/keyRay"
+@onready var lineEdit = $"XROrigin3D/Left/Keyboard/Text/".get_child(0).get_child(0).get_child(0)
 
 #Movement variables
 var SPEED = 15.0
@@ -121,8 +124,16 @@ func _physics_process(_delta):
 		modeTypes.INPUT_DATA:
 			if inputFlag == true:
 				keyboard.show()
+				nodeRay.hide()
+				keyRay.show()
+				if Input.is_action_just_pressed("EnterInput"):
+					selectArray[0].setData(lineEdit.text)
+					unselectAll()
+					inputFlag = false
 			else:
 				keyboard.hide()
+				nodeRay.show()
+				keyRay.hide()
 
 func _on_right_button_pressed(rname):
 	if rname == "trigger_click" and inputFlag == false:
