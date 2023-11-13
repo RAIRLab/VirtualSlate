@@ -10,9 +10,9 @@ for windows users, as the alternate, VisualStudio is rough .
 #### Setup
 We begin by installing the project on WSL, this is where we will do all of our C++ code editing. 
 In the directory you wish to clone the repository into run git clone. 
-It is important to use `--recuse-submodules` when cloning to ensure all submodules fully populated. 
+It is important to use `--recurse-submodules` when cloning to ensure all submodules fully populated. 
 ```shell
-git clone --recuse-submodules https://github.com/James-Oswald/VirtualSlate.git
+git clone --recurse-submodules https://github.com/James-Oswald/VirtualSlate.git
 ```
 Next we will install our dependencies, the scons buildsystem and mingw to cross compile the extension for windows.  
 ```shell

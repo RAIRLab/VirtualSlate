@@ -9,6 +9,7 @@
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_e6j2o"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_70qy0"]
+font_size = 30
 
 [sub_resource type="GDScript" id="GDScript_t520x"]
 script/source = "extends LineEdit
@@ -52,21 +53,22 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="TextureRect" type="TextureRect" parent="CharacterBody3D/Neck/Camera3D/Crosshair"]
+self_modulate = Color(0, 0, 0, 1)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 texture = ExtResource("2_230xu")
 
 [node name="Mode" type="GridContainer" parent="CharacterBody3D/Neck/Camera3D"]
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -17.5
-offset_top = -98.0
-offset_right = 17.5
-offset_bottom = -60.0
+anchors_preset = -1
+anchor_left = 0.89
+anchor_top = 0.91
+anchor_right = 0.89
+anchor_bottom = 0.91
+offset_left = -915.28
+offset_top = -50.68
+offset_right = -869.28
+offset_bottom = -8.67999
 grow_horizontal = 2
 grow_vertical = 0
 
@@ -83,9 +85,11 @@ scale = Vector2(1.5, 1.5)
 transform = Transform2D(1.5, 0, 0, 1.5, 300, 300)
 
 [node name="LineEdit" type="LineEdit" parent="."]
+visible = false
 offset_left = 265.0
 offset_top = 77.0
 offset_right = 900.0
 offset_bottom = 269.0
 virtual_keyboard_enabled = false
+selecting_enabled = false
 script = SubResource("GDScript_t520x")
