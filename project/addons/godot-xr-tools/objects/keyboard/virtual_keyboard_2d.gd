@@ -2,7 +2,7 @@
 class_name XRToolsVirtualKeyboard2D
 extends CanvasLayer
 
-@onready var player = $"../../../../../../"
+@onready var player = $"../../../../../../../"
 
 ## Enumeration of keyboard view modes
 enum KeyboardMode {
@@ -212,5 +212,3 @@ func _on_existential_elimination_pressed():
 	if selectionCount == 1:
 		selectArray[0].setJustification("existsE", "∃E")
 
-func _on_clear_pressed():
-	print($"../")

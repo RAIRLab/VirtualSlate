@@ -214,6 +214,7 @@ text = "Existential Elimination
 "
 
 [node name="Clear" type="Button" parent="Background/Standard"]
+visible = false
 layout_mode = 0
 offset_left = 3.0
 offset_top = 118.0
@@ -915,4 +916,3 @@ unicode = 63
 [connection signal="pressed" from="Background/Standard/VBoxContainer/Universal Elimination" to="." method="_on_universal_elimination_pressed"]
 [connection signal="pressed" from="Background/Standard/VBoxContainer/Existential Introduction" to="." method="_on_existential_introduction_pressed"]
 [connection signal="pressed" from="Background/Standard/VBoxContainer/Existential Elimination" to="." method="_on_existential_elimination_pressed"]
-[connection signal="pressed" from="Background/Standard/Clear" to="." method="_on_clear_pressed"]

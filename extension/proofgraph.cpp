@@ -23,7 +23,6 @@ LogNode::LogNode(){
     justification = "";
     HashSet<LogNode*> logParents;
     HashSet<LogNode*> logChildren;
-    
 }
 
 void LogNode::setID(int nodeID){
@@ -54,19 +53,17 @@ void LogNode::setData(String newData){
     newText->set_mesh(letters);
     letters->TextMesh::set_text(newData);
     StandardMaterial3D* skin = memnew(StandardMaterial3D);
-    //skin->set_emission(Color(1,1,1,1));
-    //skin->set_emission_energy_multiplier(8);
-    //skin->set_emission_operator(BaseMaterial3D::EMISSION_OP_MULTIPLY);
-    //skin->set_emission_intensity(2);
     newText->set_material_overlay(skin);
 
-    newText->global_scale(Vector3(12,12,5));
-    newText->set_position(Vector3(0,.4,0));
+    newText->global_scale(Vector3(1.2,1.2,.5));
+    newText->set_position(Vector3(0,.04,0));
 
+    MeshInstance3D* oldBox = (MeshInstance3D*) get_node_or_null("box");
     if (newData.length() > 9){
-        MeshInstance3D* oldBox = (MeshInstance3D*) get_node_or_null("box");
-        //Each additional letter adds more than 1 scale unit 
-        oldBox->set_scale(Vector3(10+(newData.length()-10)*1.15,5,2));
+        oldBox->set_scale(Vector3(1+(newData.length()-10)*.135,.5,.2));
+    }
+    else {
+        oldBox->set_scale(Vector3(1.0,.5,.2));
     }
 }
 
@@ -107,8 +104,8 @@ void LogNode::setParentRep(){
     TextMesh* letters = memnew(TextMesh);
     newText->set_mesh(letters);
     letters->TextMesh::set_text(this->getParentRep());
-    newText->global_scale(Vector3(8,8,5));
-    newText->set_position(Vector3(0,-1.5,0));
+    newText->global_scale(Vector3(.8,.8,.5));
+    newText->set_position(Vector3(0,-.15,0));
 }
 
 void LogNode::setJustification(String code, String symbol){
@@ -126,11 +123,11 @@ void LogNode::setJustification(String code, String symbol){
     TextMesh* letters = memnew(TextMesh);
     newText->set_mesh(letters);
     letters->TextMesh::set_text(symbol);
-    newText->global_scale(Vector3(12,12,5));
-    newText->set_position(Vector3(0,3.85,0));
+    newText->global_scale(Vector3(1.2,1.2,.5));
+    newText->set_position(Vector3(0,.385,0));
 
     MeshInstance3D* oldBox = (MeshInstance3D*) get_node_or_null("justBox");
-    oldBox->set_scale(Vector3(symbol.length()*1.15+1,2.25,2));
+    oldBox->set_scale(Vector3((symbol.length()*.115)+.1,.225,.2));
 }
 
 
@@ -176,7 +173,7 @@ void ProofGraph::addNode(Vector3 position){
     newNode->add_child(box);
     box->set_mesh(shape);
     box->set_material_override(skin);
-    box->set_scale(Vector3(10,5,2));
+    box->set_scale(Vector3(1.0,.5,.2));
     skin->set_transparency(BaseMaterial3D::TRANSPARENCY_ALPHA);
     skin->set_albedo(Color(0.5, 0.75, 0.75, 0.25));
 
@@ -187,8 +184,8 @@ void ProofGraph::addNode(Vector3 position){
     TextMesh* numbers = memnew(TextMesh);
     idText->set_mesh(numbers);
     numbers->TextMesh::set_text("ID: " + String::num_int64(newNode->getID()));
-    idText->set_position(Vector3(-3.25, 1.9, 0));
-    idText->set_scale(Vector3(8,8,5));
+    idText->set_position(Vector3(-.325, .19, 0));
+    idText->set_scale(Vector3(.8,.8,.5));
 
     //Physics collider for ray casts
 
@@ -199,7 +196,7 @@ void ProofGraph::addNode(Vector3 position){
     newNode->add_child(nodeCollider);
     nodeCollider->add_child(physBody);
     physBody->set_shape(physBox);
-    physBody->set_scale(Vector3(10,5,2));
+    physBody->set_scale(Vector3(1.0,.5,.2));
 
     //Create box mesh for justification
     MeshInstance3D* justBox = memnew(MeshInstance3D);
@@ -209,17 +206,17 @@ void ProofGraph::addNode(Vector3 position){
     newNode->add_child(justBox);
     justBox->set_mesh(justShape);
     justBox->set_material_override(justSkin);
-    justBox->set_scale(Vector3(3,2.25,2));
+    justBox->set_scale(Vector3(.3,.225,.2));
     justSkin->set_transparency(BaseMaterial3D::TRANSPARENCY_ALPHA);
     justSkin->set_albedo(Color(0.5, 0.75, 0.75, 0.25));
-    justBox->set_position(Vector3(0,3.75,0));
+    justBox->set_position(Vector3(0,.375,.0));
 }
 
 void ProofGraph::edgeSetter(LogNode* start, LogNode* end, MeshInstance3D* workingEdge){
-    Vector3 topBoxOffset = Vector3(0,1.25,0);
-    Vector3 bottomBoxOffset = Vector3(0,2.5,0);
+    Vector3 topBoxOffset = Vector3(0,.125,0);
+    Vector3 bottomBoxOffset = Vector3(0,.25,0);
     Vector3 sPos = start->get_global_position();
-    Vector3 ePos = end->get_global_position() + Vector3(0,3.75,0);
+    Vector3 ePos = end->get_global_position() + Vector3(0,.375,0);
     Vector3 startOffset = Vector3(0,0,0);
     Vector3 endOffset = Vector3(0,0,0);
     if (sPos.y > ePos.y){
@@ -234,7 +231,7 @@ void ProofGraph::edgeSetter(LogNode* start, LogNode* end, MeshInstance3D* workin
     Vector3 location = (startOffset+endOffset)/2;
     double lineLength = (startOffset-endOffset).length();
 
-    workingEdge->set_scale(Vector3(0.3,0.3,lineLength));
+    workingEdge->set_scale(Vector3(0.03,0.03,lineLength));
     // Sets both global position and facing direction
     workingEdge->look_at_from_position(location, endOffset, Vector3(0,1,0), true);
 }
@@ -276,7 +273,6 @@ void ProofGraph::removeEdge(LogNode* start, LogNode* end){
         badEdge->queue_free();
         end->setParentRep();
     }
-
 }
 
 // Needs checks for node validity

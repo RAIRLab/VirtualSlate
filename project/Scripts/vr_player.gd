@@ -2,20 +2,19 @@ extends Node3D
 
 #@onready var line_edit = $"../LineEdit"
 #@onready var virtual_keyboard_2d = $"../CanvasLayer/VirtualKeyboard2D"
-@onready var ray = $"XROrigin3D/Right/rHand/RayCast3D"
-@onready var rightHand = $"XROrigin3D/Right"
+@onready var ray = $"CharacterBody3D/XROrigin3D/Right/rHand/RayCast3D"
+@onready var rightHand = $"CharacterBody3D/XROrigin3D/Right"
 @onready var head = $"../"
 @onready var pointerPG = head.pg
-@onready var keyboard = $"XROrigin3D/Left/Keyboard"
-@onready var nodeRay = $"XROrigin3D/Right/rHand/RayCast3D"
-@onready var keyRay = $"XROrigin3D/Right/rHand/keyRay"
-@onready var lineEdit = $"XROrigin3D/Left/Keyboard/Text/".get_child(0).get_child(0).get_child(0)
+@onready var keyboard = $"CharacterBody3D/XROrigin3D/Left/Keyboard"
+@onready var nodeRay = $"CharacterBody3D/XROrigin3D/Right/rHand/RayCast3D"
+@onready var keyRay = $"CharacterBody3D/XROrigin3D/Right/rHand/keyRay"
+@onready var lineEdit = $"CharacterBody3D/XROrigin3D/Left/Keyboard/Text/".get_child(0).get_child(0).get_child(0)
 
 #Movement variables
-var SPEED = 15.0
-var JUMP_VELOCITY = 15.0
+var SPEED = 1.0
+var JUMP_VELOCITY = 1.0
 const TURN_SPEED = 0.03
-
 
 #Selection variables
 @export var selectionCount = 0
@@ -35,7 +34,7 @@ const newColor = Color(0.25, 0.25, 0.25, 0.75)
 #Create Node flags
 var newMeshExists = false
 var newMeshPointer
-var newMeshOffset = 15
+var newMeshOffset = 10
 const offsetMax = 50
 const offsetMin = 10
 
@@ -85,8 +84,8 @@ func newNodeLocationMesh():
 	tempMesh.set_surface_override_material(0,skin)
 	skin.albedo_color = newColor
 	skin.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-	tempMesh.global_scale(Vector3(10,5,2))
-	tempMesh.global_position = rightHand.global_position - 10*lookDirection
+	tempMesh.global_scale(Vector3(1.0,.5,.2))
+	tempMesh.global_position = rightHand.global_position - 5*lookDirection
 	newMeshExists = true
 	newMeshPointer = tempMesh
 
@@ -96,12 +95,15 @@ func clearNewNodeLocationMesh():
 	
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	$"XROrigin3D/Left/lHand/ModeText".mesh.text = modeTypes.keys()[playerMode]
+	$"CharacterBody3D/XROrigin3D/Left/lHand/ModeText".mesh.text = modeTypes.keys()[playerMode]
 	keyboard.hide()
+	keyRay.enabled = false
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(_delta):
+	
+
 	match playerMode:
 		modeTypes.CONNECT:
 			pass
@@ -125,15 +127,16 @@ func _physics_process(_delta):
 			if inputFlag == true:
 				keyboard.show()
 				nodeRay.hide()
-				keyRay.show()
+				keyRay.enabled = true
 				if Input.is_action_just_pressed("EnterInput"):
 					selectArray[0].setData(lineEdit.text)
 					unselectAll()
+					lineEdit.clear()
 					inputFlag = false
 			else:
 				keyboard.hide()
 				nodeRay.show()
-				keyRay.hide()
+				keyRay.enabled = false
 
 func _on_right_button_pressed(rname):
 	if rname == "trigger_click" and inputFlag == false:
@@ -208,7 +211,7 @@ func _on_left_button_pressed(lname):
 				selectGate = 2
 			modeTypes.MOVE_NODE:
 				selectGate = 2
-		$"XROrigin3D/Left/lHand/ModeText".mesh.text = modeTypes.keys()[playerMode]
+		$"CharacterBody3D/XROrigin3D/Left/lHand/ModeText".mesh.text = modeTypes.keys()[playerMode]
 		unselectAll()
 	
 func _on_right_input_vector_2_changed(rjname, value):

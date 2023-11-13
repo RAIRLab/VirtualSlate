@@ -239,8 +239,7 @@ func _physics_process(delta: float):
 	up_player_plane = Plane(up_player_vector, 0.0)
 
 	# Determine environmental gravity
-	var gravity_state := PhysicsServer3D.body_get_direct_state(get_rid())
-	gravity = gravity_state.total_gravity
+	gravity = Vector3(0,0,0)
 
 	# Update the kinematic body to be under the camera
 	_update_body_under_camera()
@@ -252,14 +251,14 @@ func _physics_process(delta: float):
 			p.physics_pre_movement(delta, self)
 
 	# Determine the gravity "up" direction and plane
-	if gravity.is_equal_approx(Vector3.ZERO):
+	#if gravity.is_equal_approx(Vector3.ZERO):
 		# Gravity too weak - use player
-		up_gravity_vector = up_player_vector
-		up_gravity_plane = up_player_plane
-	else:
+	#	up_gravity_vector = up_player_vector
+	#	up_gravity_plane = up_player_plane
+	#else:
 		# Use gravity direction
-		up_gravity_vector = -gravity.normalized()
-		up_gravity_plane = Plane(up_gravity_vector, 0.0)
+	#	up_gravity_vector = -gravity.normalized()
+	#	up_gravity_plane = Plane(up_gravity_vector, 0.0)
 
 	# Update the ground information
 	_update_ground_information(delta)
@@ -284,21 +283,21 @@ func _physics_process(delta: float):
 
 	# If no controller has performed an exclusive-update then apply gravity and
 	# perform any ground-control
-	if !exclusive:
-		if on_ground and ground_physics.stop_on_slope and ground_angle < ground_physics.move_max_slope:
+	#if !exclusive:
+	#	if on_ground and ground_physics.stop_on_slope and ground_angle < ground_physics.move_max_slope:
 			# Apply gravity towards slope to prevent sliding
-			velocity += -ground_vector * gravity.length() * delta
-		else:
+	#		velocity += -ground_vector * gravity.length() * delta
+	#	else:
 			# Apply gravity
-			velocity += gravity * delta
-		_apply_velocity_and_control(delta)
+	#		velocity += gravity * delta
+	#	_apply_velocity_and_control(delta)
 
 	# Apply the player-body movement to the XR origin
 	var movement := global_transform.origin - position_before_movement
 	origin_node.global_transform.origin += movement
 
 	# Orient the player towards (potentially modified) gravity
-	slew_up(-gravity.normalized(), 5.0 * delta)
+	#slew_up(-gravity.normalized(), 5.0 * delta)
 
 
 ## Request a jump

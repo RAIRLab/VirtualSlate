@@ -1,16 +1,29 @@
-[gd_scene load_steps=14 format=3 uid="uid://bsqsl2sg40kes"]
+[gd_scene load_steps=18 format=3 uid="uid://bsqsl2sg40kes"]
 
 [ext_resource type="Script" path="res://Scripts/vr_player.gd" id="1_lugxl"]
+[ext_resource type="Script" path="res://Scripts/vrmovement.gd" id="2_0ke33"]
 [ext_resource type="PackedScene" uid="uid://cqhw276realc" path="res://addons/godot-xr-tools/functions/function_pointer.tscn" id="2_42m2a"]
 [ext_resource type="PackedScene" uid="uid://clujaf3u776a3" path="res://addons/godot-xr-tools/objects/viewport_2d_in_3d.tscn" id="2_88kpy"]
 [ext_resource type="PackedScene" uid="uid://lauwp8okd1vh" path="res://addons/godot-xr-tools/objects/keyboard/virtual_keyboard_2d.tscn" id="3_nc4pw"]
 [ext_resource type="PackedScene" uid="uid://cd0a77sysrjf7" path="res://Scenes/textbox.tscn" id="4_cmjq8"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ah1ml"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_xc2q5"]
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_le24m"]
 top_radius = 0.01
 bottom_radius = 0.01
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_1wq6r"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h2bms"]
+albedo_color = Color(0.0352941, 0.54902, 0.698039, 1)
+albedo_texture = SubResource("NoiseTexture2D_1wq6r")
+emission_enabled = true
+emission = Color(0, 0.901961, 0.952941, 1)
+emission_energy_multiplier = 2.0
+emission_operator = 1
 
 [sub_resource type="SphereMesh" id="SphereMesh_pe45r"]
 
@@ -21,14 +34,14 @@ text = "Test"
 resource_local_to_scene = true
 size = Vector2(0.5, 0.1)
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_e03uw"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_7oher"]
 viewport_path = NodePath("Viewport")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hg5ic"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ud3la"]
 transparency = 1
 cull_mode = 2
 shading_mode = 0
-albedo_texture = SubResource("ViewportTexture_e03uw")
+albedo_texture = SubResource("ViewportTexture_7oher")
 texture_filter = 1
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ucoqh"]
@@ -39,72 +52,82 @@ size = Vector3(0.5, 0.1, 0.02)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.000833228, 0, 0)
 script = ExtResource("1_lugxl")
 
-[node name="XROrigin3D" type="XROrigin3D" parent="."]
+[node name="CharacterBody3D" type="CharacterBody3D" parent="."]
+script = ExtResource("2_0ke33")
 
-[node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
+transform = Transform3D(0.01, 0, 0, 0, 0.01, 0, 0, 0, 0.01, 0, 0, 0)
+shape = SubResource("CapsuleShape3D_ah1ml")
 
-[node name="Right" type="XRController3D" parent="XROrigin3D"]
+[node name="XROrigin3D" type="XROrigin3D" parent="CharacterBody3D"]
+
+[node name="Right" type="XRController3D" parent="CharacterBody3D/XROrigin3D"]
 tracker = &"right_hand"
 
-[node name="rHand" type="MeshInstance3D" parent="XROrigin3D/Right"]
+[node name="rHand" type="MeshInstance3D" parent="CharacterBody3D/XROrigin3D/Right"]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
 mesh = SubResource("SphereMesh_xc2q5")
 
-[node name="RayCast3D" type="RayCast3D" parent="XROrigin3D/Right/rHand"]
+[node name="RayCast3D" type="RayCast3D" parent="CharacterBody3D/XROrigin3D/Right/rHand"]
 transform = Transform3D(10, 0, 0, 0, -3.27835e-05, -10, 0, 750, -4.37114e-07, 0, 0, -0.262443)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="XROrigin3D/Right/rHand/RayCast3D"]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D/XROrigin3D/Right/rHand/RayCast3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 1.54099e-13)
 mesh = SubResource("CylinderMesh_le24m")
+surface_material_override/0 = SubResource("StandardMaterial3D_h2bms")
 
-[node name="keyRay" parent="XROrigin3D/Right/rHand" instance=ExtResource("2_42m2a")]
-visible = false
+[node name="keyRay" parent="CharacterBody3D/XROrigin3D/Right/rHand" instance=ExtResource("2_42m2a")]
 collision_mask = 2097152
 
-[node name="Left" type="XRController3D" parent="XROrigin3D"]
+[node name="Left" type="XRController3D" parent="CharacterBody3D/XROrigin3D"]
 tracker = &"left_hand"
 
-[node name="lHand" type="MeshInstance3D" parent="XROrigin3D/Left"]
+[node name="lHand" type="MeshInstance3D" parent="CharacterBody3D/XROrigin3D/Left"]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
 mesh = SubResource("SphereMesh_pe45r")
 
-[node name="ModeText" type="MeshInstance3D" parent="XROrigin3D/Left/lHand"]
+[node name="ModeText" type="MeshInstance3D" parent="CharacterBody3D/XROrigin3D/Left/lHand"]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 1.2, 0, 0)
 mesh = SubResource("TextMesh_g1jrr")
 
-[node name="Keyboard" type="Node3D" parent="XROrigin3D/Left"]
+[node name="Keyboard" type="Node3D" parent="CharacterBody3D/XROrigin3D/Left"]
 
-[node name="VirtualKeyboard" parent="XROrigin3D/Left/Keyboard" instance=ExtResource("2_88kpy")]
+[node name="VirtualKeyboard" parent="CharacterBody3D/XROrigin3D/Left/Keyboard" instance=ExtResource("2_88kpy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
 screen_size = Vector2(1, 1)
 viewport_size = Vector2(600, 500)
 scene = ExtResource("3_nc4pw")
 collision_layer = 2097154
 
-[node name="Text" parent="XROrigin3D/Left/Keyboard" instance=ExtResource("2_88kpy")]
+[node name="Text" parent="CharacterBody3D/XROrigin3D/Left/Keyboard" instance=ExtResource("2_88kpy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.170474, 0.228016, -0.468246)
 screen_size = Vector2(0.5, 0.1)
 viewport_size = Vector2(500, 125)
 scene = ExtResource("4_cmjq8")
 collision_layer = 2097154
 
-[node name="Viewport" parent="XROrigin3D/Left/Keyboard/Text" index="0"]
+[node name="Viewport" parent="CharacterBody3D/XROrigin3D/Left/Keyboard/Text" index="0"]
 size = Vector2i(500, 125)
 
-[node name="Screen" parent="XROrigin3D/Left/Keyboard/Text" index="1"]
+[node name="Screen" parent="CharacterBody3D/XROrigin3D/Left/Keyboard/Text" index="1"]
 mesh = SubResource("QuadMesh_4qjll")
-surface_material_override/0 = SubResource("StandardMaterial3D_hg5ic")
+surface_material_override/0 = SubResource("StandardMaterial3D_ud3la")
 
-[node name="StaticBody3D" parent="XROrigin3D/Left/Keyboard/Text" index="2"]
+[node name="StaticBody3D" parent="CharacterBody3D/XROrigin3D/Left/Keyboard/Text" index="2"]
 collision_layer = 2097154
 screen_size = Vector2(0.5, 0.1)
 viewport_size = Vector2(500, 125)
 
-[node name="CollisionShape3D" parent="XROrigin3D/Left/Keyboard/Text/StaticBody3D" index="0"]
+[node name="CollisionShape3D" parent="CharacterBody3D/XROrigin3D/Left/Keyboard/Text/StaticBody3D" index="0"]
 shape = SubResource("BoxShape3D_ucoqh")
 
-[connection signal="button_pressed" from="XROrigin3D/Right" to="." method="_on_right_button_pressed"]
-[connection signal="input_vector2_changed" from="XROrigin3D/Right" to="." method="_on_right_input_vector_2_changed"]
-[connection signal="button_pressed" from="XROrigin3D/Left" to="." method="_on_left_button_pressed"]
+[node name="XRCamera3D" type="XRCamera3D" parent="CharacterBody3D/XROrigin3D"]
 
-[editable path="XROrigin3D/Left/Keyboard/Text"]
+[connection signal="button_pressed" from="CharacterBody3D/XROrigin3D/Right" to="." method="_on_right_button_pressed"]
+[connection signal="input_vector2_changed" from="CharacterBody3D/XROrigin3D/Right" to="." method="_on_right_input_vector_2_changed"]
+[connection signal="button_pressed" from="CharacterBody3D/XROrigin3D/Left" to="." method="_on_left_button_pressed"]
+[connection signal="button_pressed" from="CharacterBody3D/XROrigin3D/Left" to="CharacterBody3D" method="_on_left_button_pressed"]
+[connection signal="button_released" from="CharacterBody3D/XROrigin3D/Left" to="CharacterBody3D" method="_on_left_button_released"]
+[connection signal="input_vector2_changed" from="CharacterBody3D/XROrigin3D/Left" to="CharacterBody3D" method="_on_left_input_vector_2_changed"]
+
+[editable path="CharacterBody3D/XROrigin3D/Left/Keyboard/Text"]
