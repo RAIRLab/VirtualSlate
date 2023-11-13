@@ -2,6 +2,7 @@ name: Build VirtualSlate
 on:
   push: {}
   pull_request: {}
+# This job works perfectly, you are able to manually download artifact and export game(second step)
 jobs:
   Build-Extension:
     runs-on: ubuntu-latest
@@ -23,8 +24,9 @@ jobs:
        with:
           name: VirtualSlateBuildFiles
           path: ./
+
   Build-Game:
-    runs-on: windows-2019
+    runs-on: windows-latest
     needs: Build-Extension
     steps:
       - name: Retreive Build
