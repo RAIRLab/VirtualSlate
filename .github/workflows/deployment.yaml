@@ -36,12 +36,12 @@ jobs:
       - name: Unizp Enginer
         run: Expand-Archive godotbuilder.zip -DestinationPath ./
       - name: Make Game
-        run: ./Godot_v4.1.2-stable_win64.exe --path project --headless --export-debug "Windows Desktop"
+        run: ./Godot_v4.1.2-stable_win64_console.exe --path project --headless --export-debug "Windows Desktop"
       - name: Looking for game
         run: cd project; ls
       - name: Upload .exe
         uses: actions/upload-artifact@v3
         with:
           name: VirtualSlate-x64
-          path: project/project.exe
+          path: project/Project.exe
 
