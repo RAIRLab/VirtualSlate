@@ -43,9 +43,11 @@ var distanceToNode
 var blockPOS
 var offsetPosition
 var changeDistance = 0
+@export var moveFlag = false
+var rotdir = 0
 
 #Input variables
-var inputFlag = false
+@export var inputFlag = false
 
 func rayTraceSelect():
 	if selectionCount >= selectGate:
@@ -123,6 +125,7 @@ func _physics_process(_delta):
 				offsetPosition = rightHand.global_position - (distanceToNode)*lookDirection
 				selectArray[0].global_position = offsetPosition
 				pointerPG.updateEdges(selectArray[0])
+				selectArray[0].rotate_y(rotdir*TURN_SPEED)
 		modeTypes.INPUT_DATA:
 			if inputFlag == true:
 				keyboard.show()
@@ -152,6 +155,9 @@ func _on_right_button_pressed(rname):
 				if selectionCount == 1:
 					blockPOS = selectArray[0].global_position
 					distanceToNode = (blockPOS - rightHand.global_position).length()
+					moveFlag = true
+				else: 
+					moveFlag = false
 			modeTypes.INPUT_DATA:
 				if selectionCount == 1:
 					inputFlag = true
@@ -192,6 +198,7 @@ func _on_right_button_pressed(rname):
 func _on_left_button_pressed(lname):
 	if lname == "trigger_click" and inputFlag == false:
 		inputFlag = false
+		moveFlag = false
 		if playerMode < 5:
 			playerMode = playerMode+1
 		else:
@@ -226,6 +233,7 @@ func _on_right_input_vector_2_changed(rjname, value):
 			modeTypes.MOVE_NODE:
 				if selectionCount == 1:
 					changeDistance = value[1]
+					rotdir = -value[0]
 			modeTypes.INPUT_DATA:
 				pass
 		

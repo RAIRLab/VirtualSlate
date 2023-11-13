@@ -18,12 +18,14 @@ bottom_radius = 0.01
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_1wq6r"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h2bms"]
-albedo_color = Color(0.0352941, 0.54902, 0.698039, 1)
+transparency = 1
+albedo_color = Color(0.0352941, 0.54902, 0.698039, 0.592157)
 albedo_texture = SubResource("NoiseTexture2D_1wq6r")
 emission_enabled = true
 emission = Color(0, 0.901961, 0.952941, 1)
-emission_energy_multiplier = 2.0
-emission_operator = 1
+emission_energy_multiplier = 3.0
+emission_on_uv2 = true
+backlight = Color(1, 1, 1, 1)
 
 [sub_resource type="SphereMesh" id="SphereMesh_pe45r"]
 
@@ -69,7 +71,7 @@ transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
 mesh = SubResource("SphereMesh_xc2q5")
 
 [node name="RayCast3D" type="RayCast3D" parent="CharacterBody3D/XROrigin3D/Right/rHand"]
-transform = Transform3D(10, 0, 0, 0, -3.27835e-05, -10, 0, 750, -4.37114e-07, 0, 0, -0.262443)
+transform = Transform3D(1, 0, 0, 0, -3.27835e-05, -1, 0, 750, -4.37114e-08, 0, 0, -0.262443)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D/XROrigin3D/Right/rHand/RayCast3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 1.54099e-13)
@@ -125,6 +127,7 @@ shape = SubResource("BoxShape3D_ucoqh")
 
 [connection signal="button_pressed" from="CharacterBody3D/XROrigin3D/Right" to="." method="_on_right_button_pressed"]
 [connection signal="input_vector2_changed" from="CharacterBody3D/XROrigin3D/Right" to="." method="_on_right_input_vector_2_changed"]
+[connection signal="input_vector2_changed" from="CharacterBody3D/XROrigin3D/Right" to="CharacterBody3D" method="_on_right_input_vector_2_changed"]
 [connection signal="button_pressed" from="CharacterBody3D/XROrigin3D/Left" to="." method="_on_left_button_pressed"]
 [connection signal="button_pressed" from="CharacterBody3D/XROrigin3D/Left" to="CharacterBody3D" method="_on_left_button_pressed"]
 [connection signal="button_released" from="CharacterBody3D/XROrigin3D/Left" to="CharacterBody3D" method="_on_left_button_released"]
