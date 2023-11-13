@@ -24,7 +24,7 @@ jobs:
           name: VirtualSlateBuildFiles
           path: ./
   Build-Game:
-    runs-on: windows-latest
+    runs-on: windows-2019
     needs: Build-Extension
     steps:
       - name: Retreive Build
