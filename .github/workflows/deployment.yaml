@@ -38,10 +38,10 @@ jobs:
       - name: Unzip Engine
         run: Expand-Archive godotbuilder.zip -DestinationPath ./
       - name: Make Game
-        run: ls; ./Godot_v4.1.2-stable_win64_console.exe --headless --path project --export-debug "Windows Desktop"
-      - name: Looking for game
+        run: ls; ./Godot_v4.1.2-stable_win64_console.exe --no-window --headless --path project --export-debug "Windows Desktop"
+      - name: DEBUG Looking for game
         run: cd project; ls
-      - name: Upload .exe
+      - name: Upload exe
         uses: actions/upload-artifact@v3
         with:
           name: VirtualSlate-x64
