@@ -40,7 +40,7 @@ jobs:
       - name: Download Export Templates
         run: Invoke-WebRequest https://downloads.tuxfamily.org/godotengine/4.1.2/godot-lib.4.1.2.stable.template_release.aar -OutFile export_templates.zip
       - name: Unzip Export Templates
-        run: Expand-Archive export_templates.zip -DestinationPath C:/Users/runneradmin/AppData/Roaming/Godot/export_templates/
+        run: Expand-Archive export_templates.zip -DestinationPath C:/Users/runneradmin/AppData/Roaming/Godot/export_templates/4.1.2stable
       - name: Verify Export Templates
         run: ls C:/Users/runneradmin/AppData/Roaming/Godot/export_templates/4.1.2.stable
       - name: Make Game
