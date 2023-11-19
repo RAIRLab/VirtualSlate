@@ -2,6 +2,8 @@ name: Build VirtualSlate
 on:
   push: {}
   pull_request: {}
+# This job works perfectly, you are able to manually download artifact and export game(second step)
+jobs:
   Build-Extension:
     runs-on: ubuntu-latest
     steps:
@@ -48,4 +50,3 @@ on:
         with:
           name: VirtualSlate-x64
           path: project/Project.exe
-
