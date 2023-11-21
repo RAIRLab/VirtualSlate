@@ -131,14 +131,18 @@ void LogNode::setJustification(String code, String symbol){
 }
 
 bool LogNode::findParentless(LogNode* targetNode, HashSet<int> found){
+    // If a node has no parents it is not part of a cycle
     if(targetNode->logParents.is_empty()){
         return 0;
     }
-    found.insert(targetNode->getID());
+
+    // If the node is revisited, we are in a cycle
     if (found.find(targetNode->getID()) != found.end()){
         return 1;
     }
+    found.insert(targetNode->getID());
     bool cycleFlag = 0;
+    // Recursive DFS through parents to check for cycles
     for (LogNode* parent : targetNode->logParents){
         cycleFlag = findParentless(parent, found);
         if (cycleFlag == 1){
@@ -237,10 +241,10 @@ void ProofGraph::addNode(Vector3 position){
 }
 
 void ProofGraph::edgeSetter(LogNode* start, LogNode* end, MeshInstance3D* workingEdge){
-    Vector3 topBoxOffset = Vector3(0,.125,0);
+    Vector3 topBoxOffset = Vector3(0,.475,0);
     Vector3 bottomBoxOffset = Vector3(0,.25,0);
     Vector3 sPos = start->get_global_position();
-    Vector3 ePos = end->get_global_position() + Vector3(0,.375,0);
+    Vector3 ePos = end->get_global_position();
     Vector3 startOffset = Vector3(0,0,0);
     Vector3 endOffset = Vector3(0,0,0);
     if (sPos.y > ePos.y){
@@ -248,8 +252,8 @@ void ProofGraph::edgeSetter(LogNode* start, LogNode* end, MeshInstance3D* workin
         endOffset = ePos + topBoxOffset;
     }
     else{
-        startOffset = sPos - topBoxOffset;
-        endOffset = ePos + bottomBoxOffset;
+        startOffset = sPos + topBoxOffset;
+        endOffset = ePos - bottomBoxOffset;
     }
 
     Vector3 location = (startOffset+endOffset)/2;

@@ -49,6 +49,33 @@ var rotdir = 0
 #Input variables
 @export var inputFlag = false
 
+func arrowAddHack():
+	pointerPG.addEdge(selectArray[0], selectArray[1])
+
+	var edgeLocation = "../ProofGraph/"+str(selectArray[0].getID())+"/"+str(selectArray[0].getID())+str(selectArray[1].getID())
+	var edge = get_node_or_null(edgeLocation)
+	
+	if edge != null:
+		var cone = MeshInstance3D.new()
+		var coneMesh = load("res://Meshes/cone.obj")
+		var skin = StandardMaterial3D.new()
+		cone.mesh = coneMesh
+		edge.add_child(cone)
+		cone.set_scale(Vector3(5,5,0.05))
+		
+		skin.emission_enabled = true
+		skin.emission_energy_multiplier = 2
+		skin.emission = Color(1, 1, 1, 1)
+		skin.albedo_color = Color(.75, 1, 1, 1)
+		cone.set_surface_override_material(0, skin)
+		
+		if selectArray[0].global_position.y > selectArray[1].global_position.y:
+			cone.look_at(selectArray[1].global_position + Vector3(0,.445,0), Vector3(0,1,0))
+		else :
+			cone.look_at(selectArray[1].global_position - Vector3(0,.025,0), Vector3(0,1,0))
+	pass
+
+
 func rayTraceSelect():
 	if selectionCount >= selectGate:
 		return	
@@ -171,7 +198,8 @@ func _on_right_button_pressed(rname):
 		match playerMode:
 			modeTypes.CONNECT:
 				if selectionCount == 2:
-					pointerPG.addEdge(selectArray[0], selectArray[1])
+					#pointerPG.addEdge(selectArray[0], selectArray[1])
+					arrowAddHack()
 					unselectAll()
 			modeTypes.DELETE_NODE:
 				if selectionCount == 1:
