@@ -130,6 +130,38 @@ void LogNode::setJustification(String code, String symbol){
     oldBox->set_scale(Vector3((symbol.length()*.115)+.1,.225,.2));
 }
 
+bool LogNode::findParentless(LogNode* targetNode){
+    if(targetNode->logParents.is_empty()){
+        HashSet<int> found;
+        bool cycleFlag = dfsCheck(targetNode, &found);
+        return cycleFlag;
+    }
+    bool cycleFlag = 0;
+    for(LogNode* parent : targetNode->logParents){
+        cycleFlag = findParentless(parent);
+        if (cycleFlag == 1){
+            return cycleFlag;
+        }
+    }
+    return cycleFlag;
+}
+bool LogNode::dfsCheck(LogNode* targetNode, HashSet<int>* found){
+    if(found->find(targetNode->getID())){
+        return 1;
+    }
+    if (targetNode->logChildren.is_empty()){
+        return 0;
+    }
+    found->insert(targetNode->getID());
+    bool cycleFlag = 0;
+    for(LogNode* child : targetNode->logChildren){
+        cycleFlag =  dfsCheck(child, found);
+        if (cycleFlag == 1){
+            return cycleFlag;
+        }
+    }
+    return cycleFlag;
+}
 
 void LogNode::_bind_methods(){
     ClassDB::bind_method(D_METHOD("setID", "ID"), &LogNode::setID);
