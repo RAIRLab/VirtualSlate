@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3 uid="uid://b0ftmi45onhon"]
+
+[ext_resource type="Script" path="res://Scripts/UnitTests.gd" id="1_mt4rc"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1l7ou"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_l0fr7"]
+sky_material = SubResource("ProceduralSkyMaterial_1l7ou")
+
+[sub_resource type="Environment" id="Environment_p8p7a"]
+background_mode = 2
+sky = SubResource("Sky_l0fr7")
+tonemap_mode = 2
+glow_enabled = true
+
+[node name="Node" type="Node"]
+script = ExtResource("1_mt4rc")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866024, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.75, -0.43301, -13.9155, 54.9712, -9.33852)
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 43.5729, -13.5055, 222.4)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_p8p7a")
