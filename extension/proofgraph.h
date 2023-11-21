@@ -36,8 +36,8 @@ class LogNode : public Node3D{
         String getParentRep();
         void setParentRep();
         void setJustification(String code, String symbol);
-        bool findParentless(LogNode* targetNode);
-        bool dfsCheck(LogNode* targetNode, HashSet<int>* found);
+        bool findParentless(LogNode* targetNode, HashSet<int> found);
+        bool dfsCheck();
 
     
     protected:

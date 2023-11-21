@@ -130,38 +130,30 @@ void LogNode::setJustification(String code, String symbol){
     oldBox->set_scale(Vector3((symbol.length()*.115)+.1,.225,.2));
 }
 
-bool LogNode::findParentless(LogNode* targetNode){
+bool LogNode::findParentless(LogNode* targetNode, HashSet<int> found){
     if(targetNode->logParents.is_empty()){
-        HashSet<int> found;
-        bool cycleFlag = dfsCheck(targetNode, &found);
-        return cycleFlag;
-    }
-    bool cycleFlag = 0;
-    for(LogNode* parent : targetNode->logParents){
-        cycleFlag = findParentless(parent);
-        if (cycleFlag == 1){
-            return cycleFlag;
-        }
-    }
-    return cycleFlag;
-}
-bool LogNode::dfsCheck(LogNode* targetNode, HashSet<int>* found){
-    if(found->find(targetNode->getID())){
-        return 1;
-    }
-    if (targetNode->logChildren.is_empty()){
         return 0;
     }
-    found->insert(targetNode->getID());
+    found.insert(targetNode->getID());
+    if (found.find(targetNode->getID()) != found.end()){
+        return 1;
+    }
     bool cycleFlag = 0;
-    for(LogNode* child : targetNode->logChildren){
-        cycleFlag =  dfsCheck(child, found);
+    for (LogNode* parent : targetNode->logParents){
+        cycleFlag = findParentless(parent, found);
         if (cycleFlag == 1){
             return cycleFlag;
         }
     }
     return cycleFlag;
 }
+bool LogNode::dfsCheck(){
+    bool cycleFlag = 0;
+    HashSet<int> found;
+    cycleFlag = findParentless(this, found);
+    return cycleFlag;
+    }
+
 
 void LogNode::_bind_methods(){
     ClassDB::bind_method(D_METHOD("setID", "ID"), &LogNode::setID);
@@ -276,19 +268,26 @@ void ProofGraph::addEdge(LogNode* start, LogNode* end){
     }
     else {
     //Logic
-    nodeMap[start->getID()]->logChildren.insert(nodeMap[end->getID()]);
-    nodeMap[end->getID()]->logParents.insert(nodeMap[start->getID()]);
+        nodeMap[start->getID()]->logChildren.insert(nodeMap[end->getID()]);
+        nodeMap[end->getID()]->logParents.insert(nodeMap[start->getID()]);
 
-    //Meshes
-    MeshInstance3D* lineMesh = memnew(MeshInstance3D);
-    BoxMesh* shape = memnew(BoxMesh);
-    lineMesh->set_mesh(shape);
-    lineMesh->set_name(String::num_int64(start->getID())+ String::num_int64(end->getID()));
+        if (start->dfsCheck()){
+            nodeMap[start->getID()]->logChildren.erase(nodeMap[end->getID()]);
+            nodeMap[end->getID()]->logParents.erase(nodeMap[start->getID()]); 
+        }
 
-    start->add_child(lineMesh);
+        else{
+            //Meshes
+            MeshInstance3D* lineMesh = memnew(MeshInstance3D);
+            BoxMesh* shape = memnew(BoxMesh);
+            lineMesh->set_mesh(shape);
+            lineMesh->set_name(String::num_int64(start->getID())+ String::num_int64(end->getID()));
 
-    edgeSetter(start, end, lineMesh);
-    end->setParentRep();
+            start->add_child(lineMesh);
+
+            edgeSetter(start, end, lineMesh);
+            end->setParentRep();
+        }
     }
 }
 
