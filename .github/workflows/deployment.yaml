@@ -46,8 +46,14 @@ jobs:
         run: mkdir project/build; cp project/Project.exe project/build/Project.exe; cp project/Project.pck project/build/Project.pck;  
       - name: Move Files Part 2
         run: cp project/libproofgraph.windows.template_debug.x86_64.dll project/build/libproofgraph.windows.template_debug.x86_64.dll
-      - name: Upload exe
-        uses: actions/upload-artifact@v3
+      - name: Zip release
+        run: zip -r VirtualSlate.zip project/build 
+      - name: Publish
+        uses: svenstaro/upload-release-action@v2
         with:
-          name: VirtualSlate-x64
-          path: project/build/
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: VirtualSlate.zip 
+          asset_name: VRSlate
+          tag: ${{ github.ref }}
+          overwrite: true
+          body: "Windows-x64"
