@@ -76,6 +76,7 @@ bool LogNode::isChild(LogNode* potentialChild){
     }
 }
 
+// Old version, not used
 String LogNode::getParentRep(){
     String value = "(";
     for(LogNode* i : logParents){
@@ -92,6 +93,7 @@ String LogNode::getParentRep(){
     return value;
 }
 
+//Old version, not used
 void LogNode::setParentRep(){
     Node* oldText = get_node_or_null("Parents");
     if(oldText != NULL){
@@ -108,6 +110,9 @@ void LogNode::setParentRep(){
     newText->set_position(Vector3(0,-.15,0));
 }
 
+// Set used to avoid duplicates
+// Finds all ancestor node IDs
+// Cycle check should keep it from running infinitely
 void LogNode::assumeFind(LogNode* currentNode, HashSet<int>* tempAssume){
     for (LogNode* parent : currentNode->logParents){
         if (parent->justification == "assume"){
@@ -117,6 +122,7 @@ void LogNode::assumeFind(LogNode* currentNode, HashSet<int>* tempAssume){
     }
 }
 
+// Converts the set to a string for mesh representation
 String LogNode::assumeString(HashSet<int>* assume){
     String value = "(";
     for(int i : *(assume)){
@@ -426,13 +432,6 @@ void ProofGraph::updateEdges(LogNode* updateNode){
     }
 }
 
-void ProofGraph::boxLookAtPlayer(){
-    Node3D* playerNode = (Node3D*) get_parent()->get_node_or_null("PlayerCharacter/CharacterBody3D/Neck/Camera3D");
-    for (KeyValue<int, LogNode*> i : nodeMap){
-        i.value->look_at(playerNode->get_global_position(), Vector3(0,-1,0));
-    }
-}
-
 void ProofGraph::_bind_methods(){
     ClassDB::bind_method(D_METHOD("addNode", "newNode"), &ProofGraph::addNode);
     ClassDB::bind_method(D_METHOD("addEdge", "start", "end"), &ProofGraph::addEdge);
@@ -441,5 +440,4 @@ void ProofGraph::_bind_methods(){
     ClassDB::bind_method(D_METHOD("getNodeCount"), &ProofGraph::getNodeCount);
     ClassDB::bind_method(D_METHOD("getData", "nodeID"), &ProofGraph::getNodeData);
     ClassDB::bind_method(D_METHOD("updateEdges"), &ProofGraph::updateEdges);
-    ClassDB::bind_method(D_METHOD("boxLookAtPlayer"), &ProofGraph::boxLookAtPlayer);
 }

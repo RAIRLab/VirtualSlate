@@ -1,7 +1,5 @@
 extends Node3D
 
-#@onready var line_edit = $"../LineEdit"
-#@onready var virtual_keyboard_2d = $"../CanvasLayer/VirtualKeyboard2D"
 @onready var ray = $"CharacterBody3D/XROrigin3D/Right/rHand/RayCast3D"
 @onready var rightHand = $"CharacterBody3D/XROrigin3D/Right"
 @onready var head = $"../"
@@ -75,7 +73,6 @@ func arrowAddHack():
 			cone.look_at(selectArray[1].global_position - Vector3(0,.025,0), Vector3(0,1,0))
 	pass
 
-
 func rayTraceSelect():
 	if selectionCount >= selectGate:
 		return	
@@ -100,7 +97,7 @@ func unselectAll():
 	selectArray.clear()
 	selectionCount = 0
 	inputFlag = false
-	
+
 func newNodeLocationMesh():
 	var lookDirection = rightHand.get_global_transform().basis.z
 	head = get_node("/root/main")
@@ -128,11 +125,8 @@ func _ready():
 	keyboard.hide()
 	keyRay.enabled = false
 
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(_delta):
-	
-
 	match playerMode:
 		modeTypes.CONNECT:
 			pass
@@ -187,13 +181,14 @@ func _on_right_button_pressed(rname):
 					moveFlag = false
 			modeTypes.INPUT_DATA:
 				if selectionCount == 1:
+					lineEdit.text = selectArray[0].getData()
 					inputFlag = true
 			modeTypes.DELETE_EDGE:
 				pass
-		
+
 	if rname == "by_button":
 		unselectAll()
-		
+
 	if rname == "ax_button":
 		match playerMode:
 			modeTypes.CONNECT:
@@ -248,7 +243,7 @@ func _on_left_button_pressed(lname):
 				selectGate = 2
 		$"CharacterBody3D/XROrigin3D/Left/lHand/ModeText".mesh.text = modeTypes.keys()[playerMode]
 		unselectAll()
-	
+
 func _on_right_input_vector_2_changed(rjname, value):
 	if rjname == "primary" and inputFlag == false:
 		match playerMode:
@@ -264,4 +259,3 @@ func _on_right_input_vector_2_changed(rjname, value):
 					rotdir = -value[0]
 			modeTypes.INPUT_DATA:
 				pass
-		

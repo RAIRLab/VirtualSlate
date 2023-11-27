@@ -11,3 +11,6 @@ theme_override_colors/caret_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 45
 placeholder_text = "formula"
 alignment = 1
+clear_button_enabled = true
+caret_blink = true
+caret_force_displayed = true

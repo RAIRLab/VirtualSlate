@@ -33,8 +33,8 @@ func _ready():
 	if interface and interface.is_initialized():
 		get_viewport().use_xr = true
 	
-	var mainMenu = load("res://Scenes/vr_player.tscn").instantiate()
-	self.add_child(mainMenu)
+	var vrStart = load("res://Scenes/vr_player.tscn").instantiate()
+	self.add_child(vrStart)
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(_delta):
