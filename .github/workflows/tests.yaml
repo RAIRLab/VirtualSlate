@@ -2,11 +2,11 @@ name: Test VirtualSlate
 on: 
   push: {}
 jobs:
-  LintC++:
+  LintCPP:
     runs-on: ubuntu-latest
     permissions: 
       contents: read
-      contents: write
+      packages: write
       statuses: write
     steps: 
       - name: Checkout
