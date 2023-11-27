@@ -1,7 +1,8 @@
+---
 name: Test VirtualSlate
 on: 
-  push: {}
-  pull_request: {}
+  push: { }
+  pull_request: { }
 jobs:
   LintCPP:
     runs-on: ubuntu-latest
