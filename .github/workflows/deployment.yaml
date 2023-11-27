@@ -1,6 +1,5 @@
 name: Build VirtualSlate
 on:
-  push: {}
   pull_request: {}
 jobs:
   Build-Extension:
