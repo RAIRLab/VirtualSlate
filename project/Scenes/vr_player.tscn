@@ -36,14 +36,14 @@ text = "Test"
 resource_local_to_scene = true
 size = Vector2(0.5, 0.1)
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_47yps"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_imo86"]
 viewport_path = NodePath("Viewport")
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cbwax"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a1vdj"]
 transparency = 1
 cull_mode = 2
 shading_mode = 0
-albedo_texture = SubResource("ViewportTexture_47yps")
+albedo_texture = SubResource("ViewportTexture_imo86")
 texture_filter = 1
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ucoqh"]
@@ -113,7 +113,7 @@ size = Vector2i(500, 125)
 
 [node name="Screen" parent="CharacterBody3D/XROrigin3D/Left/Keyboard/Text" index="1"]
 mesh = SubResource("QuadMesh_4qjll")
-surface_material_override/0 = SubResource("StandardMaterial3D_cbwax")
+surface_material_override/0 = SubResource("StandardMaterial3D_a1vdj")
 
 [node name="StaticBody3D" parent="CharacterBody3D/XROrigin3D/Left/Keyboard/Text" index="2"]
 collision_layer = 2097154

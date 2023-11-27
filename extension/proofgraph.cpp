@@ -108,6 +108,59 @@ void LogNode::setParentRep(){
     newText->set_position(Vector3(0,-.15,0));
 }
 
+void LogNode::assumeFind(LogNode* currentNode, HashSet<int>* tempAssume){
+    for (LogNode* parent : currentNode->logParents){
+        if (parent->justification == "assume"){
+            tempAssume->insert(parent->getID());
+        }
+        assumeFind(parent, tempAssume);
+    }
+}
+
+String LogNode::assumeString(HashSet<int>* assume){
+    String value = "(";
+    for(int i : *(assume)){
+        value = value + String::num_uint64(i);
+        value = value + ",";
+    }
+    if (value.length() > 1){
+        value = value.left(value.length() - 1);
+        value = value + ")";
+    }
+    else {
+        value = "";
+    }
+    return value;
+}
+
+void LogNode::setAssumeRep(){
+    HashSet<int> tempAssume; 
+
+    assumeFind(this, &tempAssume);
+    String words = assumeString(&tempAssume);
+    
+    Node* oldText = get_node_or_null("Parents");
+    if(oldText != NULL){
+        remove_child(oldText);
+        oldText->queue_free();
+    }
+    MeshInstance3D* newText = memnew(MeshInstance3D);
+    newText->set_name("Parents");
+    add_child(newText);
+    TextMesh* letters = memnew(TextMesh);
+    newText->set_mesh(letters);
+    letters->TextMesh::set_text(words);
+    newText->global_scale(Vector3(.8,.8,.5));
+    newText->set_position(Vector3(0,-.15,0));
+}
+
+void LogNode::assumeCascade(){
+    for (LogNode* child : this->logChildren){
+        child->setAssumeRep();
+        child->assumeCascade();
+    }
+}
+
 void LogNode::setJustification(String code, String symbol){
     this->justification = code;
 
@@ -128,6 +181,8 @@ void LogNode::setJustification(String code, String symbol){
 
     MeshInstance3D* oldBox = (MeshInstance3D*) get_node_or_null("justBox");
     oldBox->set_scale(Vector3((symbol.length()*.115)+.1,.225,.2));
+
+    this->assumeCascade();
 }
 
 bool LogNode::findParentless(LogNode* targetNode, HashSet<int> found){
@@ -135,7 +190,6 @@ bool LogNode::findParentless(LogNode* targetNode, HashSet<int> found){
     if(targetNode->logParents.is_empty()){
         return 0;
     }
-
     // If the node is revisited, we are in a cycle
     if (found.find(targetNode->getID()) != found.end()){
         return 1;
@@ -151,6 +205,7 @@ bool LogNode::findParentless(LogNode* targetNode, HashSet<int> found){
     }
     return cycleFlag;
 }
+
 bool LogNode::dfsCheck(){
     bool cycleFlag = 0;
     HashSet<int> found;
@@ -264,7 +319,6 @@ void ProofGraph::edgeSetter(LogNode* start, LogNode* end, MeshInstance3D* workin
     workingEdge->look_at_from_position(location, endOffset, Vector3(0,1,0), true);
 }
 
-
 void ProofGraph::addEdge(LogNode* start, LogNode* end){
 
     if (nodeMap[start->getID()]->logChildren.find(nodeMap[end->getID()]) != nodeMap[start->getID()]->logChildren.end() 
@@ -290,7 +344,8 @@ void ProofGraph::addEdge(LogNode* start, LogNode* end){
             start->add_child(lineMesh);
 
             edgeSetter(start, end, lineMesh);
-            end->setParentRep();
+            end->setAssumeRep();
+            end->assumeCascade();
         }
     }
 }
@@ -306,7 +361,8 @@ void ProofGraph::removeEdge(LogNode* start, LogNode* end){
         Node* badEdge = get_node_internal(String::num_int64(start->getID()) + "/" +String::num_int64(start->getID())+String::num_int64(end->getID()));
         start->remove_child(badEdge);
         badEdge->queue_free();
-        end->setParentRep();
+        end->setAssumeRep();
+        end->assumeCascade();
     }
 }
 
@@ -322,10 +378,12 @@ void ProofGraph::removeNode(LogNode* badNode){
         badEdge->queue_free();
     }
 
+    badNode->assumeCascade();
+
     // Logic remove pointers of children to badNode, updates parent rep
     for (LogNode* i : badNode->logChildren){
         i->logParents.erase(badNode);
-        i->setParentRep();
+        i->setAssumeRep();
     }
 
     nodeMap.erase(badNode->getID());
