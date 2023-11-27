@@ -19,7 +19,7 @@ jobs:
         env:
           VALIDATE_ALL_CODEBASE: false
           VALIDATE_CLANG_FORMAT: false
-          GITHUB_ACTIONS_CONFIG_FILE: false
+          VALIDATE_GITHUB_ACTIONS: false
           DEFAULT_BRANCH: master
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   LintGDScript:
