@@ -5,17 +5,6 @@ func test_addNode():
 	var graph = ProofGraph.new()
 	graph.set_name("ProofGraph")
 	self.add_child(graph)
-#	var nodeInfo = {"location": [1, 2, 3], "node_id": 0}
-#	graph.addNode(nodeInfo)
-#
-#	var currGraph = graph.get_node_map()
-#	for i in range(50, 0, -1):
-#		var curr = currGraph[i]
-#		assert(curr.node_id == i)
-#		assert(curr.location[0] == i)
-#		assert(curr.location[1] == i+1)
-#		assert(curr.location[2] == i+2)
-#	assert(graph.getNodeCount() == 50)
 	
 	#test addNode at positive locations
 	graph.addNode(Vector3(30, 30, 0))
@@ -85,19 +74,6 @@ func test_addEdge():
 	var graph = ProofGraph.new()
 	graph.set_name("ProofGraph")
 	self.add_child(graph)
-#	var nodeInfo = {"location": [1, 2, 3], "node_id": 1}
-#	graph.addNode(nodeInfo)
-#	for i in range(0, 50, 1):
-#		if i == 12:
-#			continue
-#		graph.addEdge(get_node("ProofGraph/12"), get_node("ProofGraph/i"))
-#	var graphNodes = graph.get_node_map()
-#	var twelve = graphNodes[12]
-#	for curr in graphNodes:
-#		if curr.second == twelve:
-#			assert(curr.second.neighbors.size() == 49)
-#		else:
-#			assert(curr.second.neighbors.size() == 1)
 	
 	#test addEdge at positive locations
 	graph.addNode(Vector3(60, 60, 0))
@@ -202,17 +178,6 @@ func test_removeNode():
 	var graph = ProofGraph.new()
 	graph.set_name("ProofGraph")
 	self.add_child(graph)
-#	var answer = ProofGraph.new()
-#	var nodeInfo = {"location": [1, 2, 3], "node_id": 2}
-#	answer.addNode(nodeInfo) 
-#	graph.addNode(nodeInfo)
-#	for i in range(0, 50, 1):
-#		if i == 12:
-#			continue
-#		graph.addEdge(get_node("ProofGraph/12"), get_node("ProofGraph/i"))
-#	graph.removeNode(get_node("ProofGraph/12"))
-#	answer.removeNode(get_node("ProofGraph/12"))
-#	assert(graph.representation, answer.representation)
 	
 	#test removeNode at positive locations
 	graph.addNode(Vector3(25, 25, 0))
@@ -369,37 +334,6 @@ func test_removeNodeWithoutEdges():
 	var graph = ProofGraph.new()
 	graph.set_name("ProofGraph")
 	self.add_child(graph)
-#	var answer = ProofGraph.new()
-#	graph.removeNode(get_node("ProofGraph/0"))
-#	assert(graph.getNodeMap().size() == 0)
-#	var nodeInfo = {"location": [0, 0, 0], "node_id": 0}
-#	graph.addNode(nodeInfo)
-#	assert(graph.getNodeMap().size() == 0)
-#	graph = ProofGraph.new()
-#
-#	for i in range(0, 50 ,1):
-#		answer.addNode(nodeInfo)
-#		graph.addNode(nodeInfo)
-#
-#	for i in range(0, 50, 1):
-#		if i%2 != 0:
-#			graph.removeNode(get_node("ProofGraph/i"))
-#
-#	var graphNodes = graph.getNodeMap()
-#	var answerNodes = answer.getNodeMap()
-#
-#	for i in range(0, 50, 1):
-#		if i%2 == 0:
-#			assert(graphNodes.find(i) == graphNodes.end() == false)
-#			answer = answerNodes[i]
-#			var graphNode = graphNodes[i]
-#			assert(answer.location[0] == graphNode.location[0])
-#			assert(answer.location[1] == graphNode.location[1])
-#			assert(answer.location[2] == graphNode.location[2])
-#
-#		else:
-#			assert(graphNodes.find(i) == graphNodes.end() == true)
-#		assert(graphNodes.size() == 25)
 	
 	#test removeNodeWithoutEdges at positive locations
 	graph.addNode(Vector3(40, 50, 0))
@@ -437,16 +371,16 @@ func test_removeNodeWithoutEdges():
 	graph.addNode(Vector3(-30, -30, 0))
 	get_node("ProofGraph/7").setData("¬w")
 	assert(graph.getNodeCount() == 7)
-	
+
 	graph.addEdge(get_node("ProofGraph/4"), get_node("ProofGraph/5"))
 	assert(get_node("ProofGraph/4").isChild(get_node("ProofGraph/5")))
 	graph.addEdge(get_node("ProofGraph/5"), get_node("ProofGraph/7"))
 	assert(get_node("ProofGraph/5").isChild(get_node("ProofGraph/7")))
-	
+
 	if not get_node("ProofGraph/6").isChild(get_node("ProofGraph/5")):
 		graph.removeNode(get_node("ProofGraph/6"))
 		assert(graph.getNodeCount() == 6)
-	
+
 	#test removeNodeWithoutEdges at floating point locations
 	graph.addNode(Vector3(20.5, 40.5, 0))
 	get_node("ProofGraph/8").setData("g")
@@ -460,16 +394,16 @@ func test_removeNodeWithoutEdges():
 	graph.addNode(Vector3(-5.5, -1.5, 0))
 	get_node("ProofGraph/11").setData("j")
 	assert(graph.getNodeCount() == 10)
-	
+
 	graph.addEdge(get_node("ProofGraph/8"), get_node("ProofGraph/9"))
 	assert(get_node("ProofGraph/8").isChild(get_node("ProofGraph/9")))
 	graph.addEdge(get_node("ProofGraph/8"), get_node("ProofGraph/10"))
 	assert(get_node("ProofGraph/8").isChild(get_node("ProofGraph/10")))
-	
+
 	if not get_node("ProofGraph/11").isChild(get_node("ProofGraph/8")):
 		graph.removeNode(get_node("ProofGraph/11"))
 		assert(graph.getNodeCount() == 9)
-		
+
 	#test removeNodeWithoutEdges at massive locations
 	graph.addNode(Vector3(410.5, 410.5, 0))
 	get_node("ProofGraph/12").setData("¬g")
@@ -483,16 +417,16 @@ func test_removeNodeWithoutEdges():
 	graph.addNode(Vector3(390, 390, 0))
 	get_node("ProofGraph/15").setData("¬j")
 	assert(graph.getNodeCount() == 13)
-	
+
 	graph.addEdge(get_node("ProofGraph/12"), get_node("ProofGraph/13"))
 	assert(get_node("ProofGraph/12").isChild(get_node("ProofGraph/13")))
 	graph.addEdge(get_node("ProofGraph/12"), get_node("ProofGraph/15"))
 	assert(get_node("ProofGraph/12").isChild(get_node("ProofGraph/15")))
-	
+
 	if not get_node("ProofGraph/14").isChild(get_node("ProofGraph/12")):
 		graph.removeNode(get_node("ProofGraph/14"))
 		assert(graph.getNodeCount() == 12)
-	
+
 	graph.addNode(Vector3(-410, -370, 0))
 	get_node("ProofGraph/16").setData("¬l")
 	assert(graph.getNodeCount() == 13)
@@ -505,12 +439,12 @@ func test_removeNodeWithoutEdges():
 	graph.addNode(Vector3(-370.5, -430.5, 0))
 	get_node("ProofGraph/19").setData("¬o")
 	assert(graph.getNodeCount() == 16)
-	
+
 	graph.addEdge(get_node("ProofGraph/16"), get_node("ProofGraph/17"))
 	assert(get_node("ProofGraph/16").isChild(get_node("ProofGraph/17")))
 	graph.addEdge(get_node("ProofGraph/17"), get_node("ProofGraph/18"))
 	assert(get_node("ProofGraph/17").isChild(get_node("ProofGraph/18")))
-	
+
 	if not get_node("ProofGraph/19").isChild(get_node("ProofGraph/18")):
 		graph.removeNode(get_node("ProofGraph/19"))
 		assert(graph.getNodeCount() == 15)
