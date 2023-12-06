@@ -1,6 +1,6 @@
 #include "register_types.h"
 
-#include "proofgraph.h"
+#include "vrproofgraph.h"
 
 #include <gdextension_interface.h>
 #include <godot_cpp/core/defs.hpp>
@@ -15,7 +15,7 @@ void initialize_proofgraph_module(ModuleInitializationLevel p_level) {
 	}
 
 	ClassDB::register_class<LogNode>();
-    ClassDB::register_class<ProofGraph>();
+    ClassDB::register_class<VRProofGraph>();
 }
 
 void uninitialize_proofgraph_module(ModuleInitializationLevel p_level) {
