@@ -35,18 +35,14 @@ jobs:
         run: Invoke-WebRequest https://downloads.tuxfamily.org/godotengine/4.1.2/Godot_v4.1.2-stable_win64.exe.zip -OutFile godotbuilder.zip
       - name: Unzip Engine
         run: Expand-Archive godotbuilder.zip -DestinationPath ./
-      - name: Download Export Templates
-        run: Invoke-WebRequest https://downloads.tuxfamily.org/godotengine/4.1.2/godot-lib.4.1.2.stable.template_release.aar -OutFile export_templates.zip
-      - name: Unzip Export Templates
-        run: Expand-Archive export_templates.zip -DestinationPath ./
       - name: Make Game
-        run: ls; ./Godot_v4.1.2-stable_win64_console.exe --headless --path project --export-debug "Windows Desktop"
+        run: ./Godot_v4.1.2-stable_win64_console.exe --headless --path project --export-debug "Windows Desktop"
       - name: Move Files
         run: mkdir project/build; cp project/Project.exe project/build/Project.exe; cp project/Project.pck project/build/Project.pck;  
       - name: Move Files Part 2
         run: cp project/libproofgraph.windows.template_debug.x86_64.dll project/build/libproofgraph.windows.template_debug.x86_64.dll
       - name: Zip release
-        run: zip -r VirtualSlate.zip project/build 
+        run: Compress-Archive -Path project/build/* -Destination VirtualSlate.zip
       - name: Publish
         uses: svenstaro/upload-release-action@v2
         with:
