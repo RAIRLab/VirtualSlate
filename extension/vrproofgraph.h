@@ -1,6 +1,5 @@
-#ifndef PROOFGRAPH_H
-#define PROOFGRPAH_H
-
+#ifndef VRPROOFGRAPH_H
+#define VRPROOFGRAPH_H
 
 //#include "godot_cpp/classes/ref_counted.hpp"
 #include "godot_cpp/variant/vector3.hpp"
@@ -42,34 +41,33 @@ class LogNode : public Node3D{
         static void _bind_methods();
 };
 
-class ProofGraph : public Node{
-    GDCLASS(ProofGraph, Node)
+    class VRProofGraph : public Node{
+        GDCLASS(VRProofGraph, Node)
 
-    private:
-        int nodeCount;
-        int nodeIDCount;
-        HashMap<int, LogNode*> nodeMap;
-    public:
-        
-        // Constructor, creates empty proof graph
-        ProofGraph(); 
-        ~ProofGraph();
+        private:
+            int nodeCount;
+            int nodeIDCount;
+            HashMap<int, LogNode*> nodeMap;
+        public:
+            
+            // Constructor, creates empty proof graph
+            VRProofGraph(); 
+            ~VRProofGraph();
 
-        //void addNode(Vector3 location, int data);
-        void addNode(Vector3 position);
-        void addEdge(LogNode* start, LogNode* end);
-        void removeEdge(LogNode* start, LogNode* end);
-        void removeNode(LogNode* badNode);
-        int getNodeCount();
-        String getNodeData(int targetNodeID);
-        void updateEdges(LogNode* updateNode);
-        void edgeSetter(LogNode* start, LogNode* end, MeshInstance3D* workingEdge);
-        void boxLookAtPlayer();
+            //void addNode(Vector3 location, int data);
+            void addNode(Vector3 position);
+            void addEdge(LogNode* start, LogNode* end);
+            void removeEdge(LogNode* start, LogNode* end);
+            void removeNode(LogNode* badNode);
+            int getNodeCount();
+            String getNodeData(int targetNodeID);
+            void updateEdges(LogNode* updateNode);
+            void edgeSetter(LogNode* start, LogNode* end, MeshInstance3D* workingEdge);
+            void boxLookAtPlayer();
 
-    protected:
-        static void _bind_methods();
-};
-
+        protected:
+            static void _bind_methods();
+    };
 }
 
 #endif
