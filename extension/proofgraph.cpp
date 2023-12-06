@@ -217,7 +217,7 @@ bool LogNode::dfsCheck(){
     HashSet<int> found;
     cycleFlag = findParentless(this, found);
     return cycleFlag;
-    }
+}
 
 
 void LogNode::_bind_methods(){

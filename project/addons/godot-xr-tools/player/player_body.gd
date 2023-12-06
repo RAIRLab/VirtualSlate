@@ -73,9 +73,6 @@ const NEAR_GROUND_DISTANCE := 1.0
 @export var ground_control : GroundControl = GroundControl.ON_GROUND
 
 
-## Player 3D Velocity - modified by [XRToolsMovementProvider] nodes
-#var velocity : Vector3 = Vector3.ZERO
-
 ## Current player gravity
 var gravity : Vector3 = Vector3.ZERO
 
@@ -250,16 +247,6 @@ func _physics_process(delta: float):
 		if p.enabled:
 			p.physics_pre_movement(delta, self)
 
-	# Determine the gravity "up" direction and plane
-	#if gravity.is_equal_approx(Vector3.ZERO):
-		# Gravity too weak - use player
-	#	up_gravity_vector = up_player_vector
-	#	up_gravity_plane = up_player_plane
-	#else:
-		# Use gravity direction
-	#	up_gravity_vector = -gravity.normalized()
-	#	up_gravity_plane = Plane(up_gravity_vector, 0.0)
-
 	# Update the ground information
 	_update_ground_information(delta)
 
@@ -281,23 +268,11 @@ func _physics_process(delta: float):
 			if p.physics_movement(delta, self, exclusive):
 				exclusive = true
 
-	# If no controller has performed an exclusive-update then apply gravity and
-	# perform any ground-control
-	#if !exclusive:
-	#	if on_ground and ground_physics.stop_on_slope and ground_angle < ground_physics.move_max_slope:
-			# Apply gravity towards slope to prevent sliding
-	#		velocity += -ground_vector * gravity.length() * delta
-	#	else:
-			# Apply gravity
-	#		velocity += gravity * delta
-	#	_apply_velocity_and_control(delta)
 
 	# Apply the player-body movement to the XR origin
 	var movement := global_transform.origin - position_before_movement
 	origin_node.global_transform.origin += movement
 
-	# Orient the player towards (potentially modified) gravity
-	#slew_up(-gravity.normalized(), 5.0 * delta)
 
 
 ## Request a jump
@@ -584,11 +559,6 @@ func _apply_velocity_and_control(delta: float):
 			local_velocity += 2 * collision.normal * magnitude * bounciness
 			velocity = local_velocity + ground_velocity
 			emit_signal("player_bounced", collision_node, magnitude)
-
-	# Hack to ensure feet stick to ground (if not jumping)
-	# TODO: FIX
-	#if abs(velocity.y) < 0.001:
-	#	velocity.y = ground_velocity.y
 
 # Test if the player can apply ground control given the settings and the ground state.
 func _can_apply_ground_control() -> bool:
