@@ -2,7 +2,7 @@ extends Node
 
 #Test addNode
 func test_addNode():
-	var graph = ProofGraph.new()
+	var graph = VRProofGraph.new()
 	var nodeInfo = {"location": [1, 2, 3], "node_id": 0}
 	graph.addNode(nodeInfo)
 	
