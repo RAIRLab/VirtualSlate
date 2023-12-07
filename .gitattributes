@@ -1,0 +1,2 @@
+project/addons/** linguist-vendored
+project/addons/godot-xr-tools/objects/keyboard/virtual_keyboard_2d.tscn linguist-vendored=false
