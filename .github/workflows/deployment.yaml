@@ -4,7 +4,7 @@ jobs:
   Build-Extension:
     runs-on: ubuntu-latest
     steps:
-     - name: Updates Packages
+     - name: Update Packages
        run: sudo apt-get update
      - name: Install Scons
        run: sudo apt-get -y install scons gcc-mingw-w64
