@@ -1,6 +1,5 @@
 name: Build VirtualSlate
-on:
-  pull_request: {}
+on: push
 jobs:
   Build-Extension:
     runs-on: ubuntu-latest
