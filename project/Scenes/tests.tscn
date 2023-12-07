@@ -22,7 +22,7 @@ script = ExtResource("1_mt4rc")
 transform = Transform3D(-0.866024, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.75, -0.43301, -13.9155, 54.9712, -9.33852)
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 10, 60)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 10, 100)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_p8p7a")
