@@ -1,5 +1,8 @@
 name: Build VirtualSlate
-on: push
+on:
+  push:
+    branches:
+      - master
 jobs:
   Build-Extension:
     runs-on: ubuntu-latest
