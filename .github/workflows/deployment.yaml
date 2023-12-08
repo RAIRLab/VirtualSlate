@@ -1,0 +1,56 @@
+name: Build VirtualSlate
+on:
+  push:
+    branches:
+      - master
+jobs:
+  Build-Extension:
+    runs-on: ubuntu-latest
+    steps:
+     - name: Update Packages
+       run: sudo apt-get update
+     - name: Install Scons
+       run: sudo apt-get -y install scons gcc-mingw-w64
+     - name: Install Compiler
+       run: yes | sudo apt-get install g++-mingw-w64-x86-64
+     - name: Get Repo
+       uses: actions/checkout@v4
+       with:
+         submodules: recursive
+     - name: Build Extension
+       run: scons platform=windows
+     - name: Upload Artifact
+       uses: actions/upload-artifact@v3
+       with:
+          name: VirtualSlateBuildFiles
+          path: ./
+
+  Build-Game:
+    runs-on: windows-latest
+    needs: Build-Extension
+    steps:
+      - name: Retrieve Build
+        uses: actions/download-artifact@v3
+        with:
+          name: VirtualSlateBuildFiles
+      - name: Download Engine
+        run: Invoke-WebRequest https://downloads.tuxfamily.org/godotengine/4.1.2/Godot_v4.1.2-stable_win64.exe.zip -OutFile godotbuilder.zip
+      - name: Unzip Engine
+        run: Expand-Archive godotbuilder.zip -DestinationPath ./
+      - name: Make Game
+        run: ./Godot_v4.1.2-stable_win64_console.exe --headless --path project --export-debug "Windows Desktop"
+      - name: Move Files
+        run: mkdir project/build; cp project/Project.exe project/build/Project.exe; cp project/Project.pck project/build/Project.pck;  
+      - name: Move Files Part 2
+        run: cp project/libproofgraph.windows.template_debug.x86_64.dll project/build/libproofgraph.windows.template_debug.x86_64.dll
+      - name: Zip release
+        run: Compress-Archive -Path project/build/* -Destination VirtualSlate.zip
+      - name: Publish
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: VirtualSlate.zip 
+          asset_name: VRSlate
+          tag: ${{ github.ref }}
+          overwrite: true
+          body: "Windows-x64"

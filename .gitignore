@@ -1,4 +1,4 @@
-*.exe
+#*.exe Readd once workflow is complete
 *.obj
 *.dblite
 *.os
