@@ -13,9 +13,9 @@ env = SConscript("godot-cpp/SConstruct")
 # - LINKFLAGS are for linking flags
 
 # tweak this if you want to use different folders, or more folders, to store your source code in.
-env.Append(CPPPATH=["extension/"])
+env.Append(CPPPATH=["extension/", "SlateCore/include", "SlateCore/lib/rapidjson/include"])
 sources = Glob("extension/*.cpp")
-
+sources += Glob("SlateCore/src/*.cpp")
 library = env.SharedLibrary(
     "project/bin/libproofgraph{}{}".format(env["suffix"], env["SHLIBSUFFIX"]),
     source=sources,

@@ -3,8 +3,8 @@
 #include <string>
 #include <list>
 
-#include "VRproofgraph.h"
-
+#include "vrproofgraph.h"
+#include "verify.hpp"
 #include "godot_cpp/classes/mesh.hpp"
 #include "godot_cpp/classes/box_mesh.hpp"
 #include "godot_cpp/classes/text_mesh.hpp"

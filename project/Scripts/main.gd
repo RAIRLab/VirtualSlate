@@ -1,10 +1,9 @@
 extends Node
 
-@export var pg: ProofGraph
-var interface : XRInterface
+@export var pg:VRProofGraph
 
 func initializeProofGraph():
-	pg = ProofGraph.new()
+	pg = VRProofGraph.new()
 	pg.set_name("ProofGraph")
 	self.add_child(pg)
 	return pg

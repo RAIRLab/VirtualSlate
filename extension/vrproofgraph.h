@@ -1,6 +1,5 @@
-#ifndef PROOFGRAPH_H
-#define PROOFGRPAH_H
-
+#ifndef VRPROOFGRAPH_H
+#define VRPROOFGRAPH_H
 
 //#include "godot_cpp/classes/ref_counted.hpp"
 #include "godot_cpp/variant/vector3.hpp"
@@ -61,21 +60,20 @@ class VRProofGraph : public Node{
         VRProofGraph(); 
         ~VRProofGraph();
 
-        //void addNode(Vector3 location, int data);
-        void addNode(Vector3 position);
-        void addEdge(LogNode* start, LogNode* end);
-        void removeEdge(LogNode* start, LogNode* end);
-        void removeNode(LogNode* badNode);
-        int getNodeCount();
-        String getNodeData(int targetNodeID);
-        void updateEdges(LogNode* updateNode);
-        void edgeSetter(LogNode* start, LogNode* end, MeshInstance3D* workingEdge);
-        void boxLookAtPlayer();
+            //void addNode(Vector3 location, int data);
+            void addNode(Vector3 position);
+            void addEdge(LogNode* start, LogNode* end);
+            void removeEdge(LogNode* start, LogNode* end);
+            void removeNode(LogNode* badNode);
+            int getNodeCount();
+            String getNodeData(int targetNodeID);
+            void updateEdges(LogNode* updateNode);
+            void edgeSetter(LogNode* start, LogNode* end, MeshInstance3D* workingEdge);
+            void boxLookAtPlayer();
 
-    protected:
-        static void _bind_methods();
-};
-
+        protected:
+            static void _bind_methods();
+    };
 }
 
 #endif
