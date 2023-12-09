@@ -3,7 +3,7 @@
 #include <string>
 #include <list>
 
-#include "proofgraph.h"
+#include "VRproofgraph.h"
 
 #include "godot_cpp/classes/mesh.hpp"
 #include "godot_cpp/classes/box_mesh.hpp"
@@ -230,19 +230,19 @@ void LogNode::_bind_methods(){
     ClassDB::bind_method(D_METHOD("setJustification", "consise", "verbose"), &LogNode::setJustification);
 }
 
-ProofGraph::ProofGraph(){
+VRProofGraph::VRProofGraph(){
     nodeCount = 0;
     nodeIDCount = 0;
     HashMap<int, LogNode*> nodeMap;
 }
 
-ProofGraph::~ProofGraph(){
+VRProofGraph::~VRProofGraph(){
     for(auto& i : nodeMap){
         nodeMap.erase(i.key);
     }
 }
 
-void ProofGraph::addNode(Vector3 position){
+void VRProofGraph::addNode(Vector3 position){
     // Godot specific method of allocating memory to objects
     LogNode* newNode = memnew(LogNode);
     newNode->setID(nodeIDCount);
@@ -301,7 +301,7 @@ void ProofGraph::addNode(Vector3 position){
     justBox->set_position(Vector3(0,.375,.0));
 }
 
-void ProofGraph::edgeSetter(LogNode* start, LogNode* end, MeshInstance3D* workingEdge){
+void VRProofGraph::edgeSetter(LogNode* start, LogNode* end, MeshInstance3D* workingEdge){
     Vector3 topBoxOffset = Vector3(0,.475,0);
     Vector3 bottomBoxOffset = Vector3(0,.25,0);
     Vector3 sPos = start->get_global_position();
@@ -325,7 +325,7 @@ void ProofGraph::edgeSetter(LogNode* start, LogNode* end, MeshInstance3D* workin
     workingEdge->look_at_from_position(location, endOffset, Vector3(0,1,0), true);
 }
 
-void ProofGraph::addEdge(LogNode* start, LogNode* end){
+void VRProofGraph::addEdge(LogNode* start, LogNode* end){
 
     if (nodeMap[start->getID()]->logChildren.find(nodeMap[end->getID()]) != nodeMap[start->getID()]->logChildren.end() 
         || nodeMap[end->getID()]->logParents.find(nodeMap[start->getID()]) != nodeMap[end->getID()]->logParents.end()){
@@ -356,7 +356,7 @@ void ProofGraph::addEdge(LogNode* start, LogNode* end){
     }
 }
 
-void ProofGraph::removeEdge(LogNode* start, LogNode* end){
+void VRProofGraph::removeEdge(LogNode* start, LogNode* end){
 
     if (nodeMap[start->getID()]->logChildren.find(nodeMap[end->getID()]) != nodeMap[start->getID()]->logChildren.end() ){
         //Logic
@@ -373,7 +373,7 @@ void ProofGraph::removeEdge(LogNode* start, LogNode* end){
 }
 
 // Needs checks for node validity
-void ProofGraph::removeNode(LogNode* badNode){
+void VRProofGraph::removeNode(LogNode* badNode){
     // Logic remove pointers of parents to badNode
     for(LogNode* i : badNode->logParents){
             i->logChildren.erase(badNode);
@@ -403,15 +403,15 @@ void ProofGraph::removeNode(LogNode* badNode){
     badNode->queue_free();
 }
 
-int ProofGraph::getNodeCount(){
+int VRProofGraph::getNodeCount(){
     return nodeCount;
 }
 
-String ProofGraph::getNodeData(int targetNodeID){
+String VRProofGraph::getNodeData(int targetNodeID){
     return nodeMap[targetNodeID]->data;
 }
 
-void ProofGraph::updateEdges(LogNode* updateNode){
+void VRProofGraph::updateEdges(LogNode* updateNode){
     for(LogNode* i : updateNode->logParents){
         // Meshes
         Node* currentEdge = get_node_or_null(String::num_int64(i->getID()) + "/" + String::num_int64(i->getID()) + String::num_int64(updateNode->getID()));
@@ -432,12 +432,12 @@ void ProofGraph::updateEdges(LogNode* updateNode){
     }
 }
 
-void ProofGraph::_bind_methods(){
-    ClassDB::bind_method(D_METHOD("addNode", "newNode"), &ProofGraph::addNode);
-    ClassDB::bind_method(D_METHOD("addEdge", "start", "end"), &ProofGraph::addEdge);
-    ClassDB::bind_method(D_METHOD("removeEdge", "start", "end"), &ProofGraph::removeEdge);
-    ClassDB::bind_method(D_METHOD("removeNode", "node_pointer"), &ProofGraph::removeNode);
-    ClassDB::bind_method(D_METHOD("getNodeCount"), &ProofGraph::getNodeCount);
-    ClassDB::bind_method(D_METHOD("getData", "nodeID"), &ProofGraph::getNodeData);
-    ClassDB::bind_method(D_METHOD("updateEdges"), &ProofGraph::updateEdges);
+void VRProofGraph::_bind_methods(){
+    ClassDB::bind_method(D_METHOD("addNode", "newNode"), &VRProofGraph::addNode);
+    ClassDB::bind_method(D_METHOD("addEdge", "start", "end"), &VRProofGraph::addEdge);
+    ClassDB::bind_method(D_METHOD("removeEdge", "start", "end"), &VRProofGraph::removeEdge);
+    ClassDB::bind_method(D_METHOD("removeNode", "node_pointer"), &VRProofGraph::removeNode);
+    ClassDB::bind_method(D_METHOD("getNodeCount"), &VRProofGraph::getNodeCount);
+    ClassDB::bind_method(D_METHOD("getData", "nodeID"), &VRProofGraph::getNodeData);
+    ClassDB::bind_method(D_METHOD("updateEdges"), &VRProofGraph::updateEdges);
 }

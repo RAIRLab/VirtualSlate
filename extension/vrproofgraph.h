@@ -48,8 +48,8 @@ class LogNode : public Node3D{
         static void _bind_methods();
 };
 
-class ProofGraph : public Node{
-    GDCLASS(ProofGraph, Node)
+class VRProofGraph : public Node{
+    GDCLASS(VRProofGraph, Node)
 
     private:
         int nodeCount;
@@ -58,8 +58,8 @@ class ProofGraph : public Node{
     public:
         
         // Constructor, creates empty proof graph
-        ProofGraph(); 
-        ~ProofGraph();
+        VRProofGraph(); 
+        ~VRProofGraph();
 
         //void addNode(Vector3 location, int data);
         void addNode(Vector3 position);

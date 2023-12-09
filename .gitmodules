@@ -2,3 +2,6 @@
 	path = godot-cpp
 	url = https://github.com/godotengine/godot-cpp
 	branch = 4.1
+[submodule "SlateCore"]
+	path = SlateCore
+	url = https://github.com/James-Oswald/SlateCore.git
