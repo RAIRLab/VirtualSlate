@@ -2,7 +2,7 @@ extends Node
 
 #Test addNode
 func test_addNode():
-	var graph = ProofGraph.new()
+	var graph = VRProofGraph.new()
 	graph.set_name("ProofGraphAN")
 	self.add_child(graph)
 	
@@ -71,7 +71,7 @@ func test_addNode():
 
 #Test addEdge
 func test_addEdge():
-	var graph = ProofGraph.new()
+	var graph = VRProofGraph.new()
 	graph.set_name("ProofGraphAE")
 	self.add_child(graph)
 	
@@ -175,7 +175,7 @@ func test_addEdge():
 
 #Test removeNode
 func test_removeNode():
-	var graph = ProofGraph.new()
+	var graph = VRProofGraph.new()
 	graph.set_name("ProofGraphNode")
 	self.add_child(graph)
 	
@@ -241,7 +241,7 @@ func test_removeNode():
 
 #Test removeEdge
 func test_removeEdge():
-	var graph = ProofGraph.new()
+	var graph = VRProofGraph.new()
 	graph.set_name("ProofGraph")
 	self.add_child(graph)
 	
@@ -331,7 +331,7 @@ func test_removeEdge():
 
 #Test removeNodeWithoutEdges
 func test_removeNodeWithoutEdges():
-	var graph = ProofGraph.new()
+	var graph = VRProofGraph.new()
 	graph.set_name("ProofGraphNWE")
 	self.add_child(graph)
 	

@@ -16,57 +16,57 @@ func _process(_delta):
 
 func _on_assumption_pressed():
 	if selectionCount == 1:
-		selectArray[0].setJustification("assume", "Assume")
+		selectArray[0].setJustification("Assumption", "Assume")
 
 
 func _on_negation_introduction_pressed():
 	if selectionCount == 1:
-		selectArray[0].setJustification("notI", "¬I")
+		selectArray[0].setJustification("NotIntro", "¬I")
 
 
 func _on_negation_elimination_pressed():
 	if selectionCount == 1:
-		selectArray[0].setJustification("notE", "¬E")
+		selectArray[0].setJustification("NotElim", "¬E")
 
 
 func _on_conjunction_introduction_pressed():
 	if selectionCount == 1:
-		selectArray[0].setJustification("andI", "∧I")
+		selectArray[0].setJustification("AndIntro", "∧I")
 
 
 func _on_conjunction_elimination_pressed():
 	if selectionCount == 1:
-		selectArray[0].setJustification("andE", "∧E")
+		selectArray[0].setJustification("AndElim", "∧E")
 
 
 func _on_disjunction_introduction_pressed():
 	if selectionCount == 1:
-		selectArray[0].setJustification("orI", "∨I")
+		selectArray[0].setJustification("OrIntro", "∨I")
 
 
 func _on_disjunction_elimination_pressed():
 	if selectionCount == 1:
-		selectArray[0].setJustification("orE", "∨E")
+		selectArray[0].setJustification("OrElim", "∨E")
 
 
 func _on_conditional_introductionon_pressed():
 	if selectionCount == 1:
-		selectArray[0].setJustification("ifI", "→I")
+		selectArray[0].setJustification("IfIntro", "→I")
 
 
 func _on_conditional_elimination_pressed():
 	if selectionCount == 1:
-		selectArray[0].setJustification("ifE", "→E")
+		selectArray[0].setJustification("IfElim", "→E")
 
 
 func _on_biconditional_introduction_pressed():
 	if selectionCount == 1:
-		selectArray[0].setJustification("iffI", "↔I")
+		selectArray[0].setJustification("IffIntro", "↔I")
 
 
 func _on_biconditional_elimination_pressed():
 	if selectionCount == 1:
-		selectArray[0].setJustification("iffE", "↔E")
+		selectArray[0].setJustification("IffElim", "↔E")
 
 
 func _on_universal_introduction_pressed():

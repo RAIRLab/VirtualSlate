@@ -4,7 +4,7 @@
 #include <list>
 
 #include "vrproofgraph.h"
-#include "verify.hpp"
+
 #include "godot_cpp/classes/mesh.hpp"
 #include "godot_cpp/classes/box_mesh.hpp"
 #include "godot_cpp/classes/text_mesh.hpp"
@@ -23,7 +23,6 @@ LogNode::LogNode(){
     justification = "";
     HashSet<LogNode*> logParents;
     HashSet<LogNode*> logChildren;
-    
 }
 
 void LogNode::setID(int nodeID){
@@ -39,7 +38,7 @@ String LogNode::getData(){
 }
 
 void LogNode::setData(String newData){
-    this->data = newData;
+   this->data = newData;
     // Removal of old text mesh if it exists
     Node* oldText = get_node_or_null("Data");
     if(oldText != NULL){
@@ -132,7 +131,6 @@ void LogNode::setJustification(String code, String symbol){
     MeshInstance3D* oldBox = (MeshInstance3D*) get_node_or_null("justBox");
     oldBox->set_scale(Vector3(symbol.length()*1.15+1,2.25,2));
 }
-
 
 void LogNode::_bind_methods(){
     ClassDB::bind_method(D_METHOD("setID", "ID"), &LogNode::setID);

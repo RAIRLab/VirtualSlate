@@ -1,7 +1,6 @@
 #ifndef VRPROOFGRAPH_H
 #define VRPROOFGRAPH_H
 
-//#include "godot_cpp/classes/ref_counted.hpp"
 #include "godot_cpp/variant/vector3.hpp"
 #include "godot_cpp/classes/object.hpp"
 #include "godot_cpp/classes/node3d.hpp"
@@ -26,7 +25,6 @@ class LogNode : public Node3D{
         // Godot does not play nicely with parameterized constructors
         // Constructor requires default constructor then setID method
         LogNode();
-
         void setID(int nodeID);
         int getID();
         String getData();

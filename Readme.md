@@ -32,3 +32,21 @@ After building the extension binary to `/project/bin`, you may now open the proj
 in the WSL filesystem. The project will identify the extension and automatically load it, letting you use objects from the extension in GDScript etc. 
 
 NOTE: different versions of windows have different paths for WSL files. On windows 11 with WSL 2 paths to the WSL filesystem from windows look like: `\\wsl.localhost\Ubuntu\........\project`.
+
+#### 3D Game Controls
+| Control            | Keybind     |
+|--------------------|-------------| 
+| Interact           | Left Mouse  |     
+| Left               | A           |
+| Right              | D           |
+| Up                 | Space       |
+| Down               | Shift       |
+| Forward            | W           |
+| Backwards          | S           |
+| Cancel             | Right Mouse |
+| Change Mode        | Q           |
+| Confirm            | E           |
+| Move Object Back   | Scroll      |
+| Bring Object Close | Scroll      |
+| Rotate             | T, R        |
+| Sprint             | Ctrl        |
