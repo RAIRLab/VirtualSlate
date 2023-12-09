@@ -11,9 +11,21 @@ config_version=5
 [application]
 
 config/name="Project"
-run/main_scene="res://main.tscn"
+run/main_scene="res://Scenes/main.tscn"
 config/features=PackedStringArray("4.1", "Forward Plus")
 config/icon="res://icon.svg"
+
+[autoload]
+
+XRToolsUserSettings="*res://addons/godot-xr-tools/user_settings/user_settings.gd"
+
+[display]
+
+window/stretch/mode="canvas_items"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/godot-xr-tools/plugin.cfg")
 
 [input]
 
@@ -110,5 +122,6 @@ Sprint={
 
 [xr]
 
-openxr/form_factor=1
+openxr/enabled=true
+openxr/form_factor=0
 shaders/enabled=true

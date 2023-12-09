@@ -1,10 +1,10 @@
 [gd_scene load_steps=6 format=3 uid="uid://bg6v0qeatg5pu"]
 
-[ext_resource type="Script" path="res://Scripts/main.gd" id="1_geprs"]
-[ext_resource type="Texture2D" uid="uid://j7g6v181jnum" path="res://Textures/skybox.jpg" id="2_fe00h"]
+[ext_resource type="Script" path="res://Scripts/main.gd" id="1_8s8eo"]
+[ext_resource type="Texture2D" uid="uid://j7g6v181jnum" path="res://Textures/skybox.jpg" id="2_x8dg1"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_k2hox"]
-panorama = ExtResource("2_fe00h")
+panorama = ExtResource("2_x8dg1")
 
 [sub_resource type="Sky" id="Sky_nthfv"]
 sky_material = SubResource("PanoramaSkyMaterial_k2hox")
@@ -16,6 +16,7 @@ sky_custom_fov = 90.0
 sky_rotation = Vector3(-0.349066, 2.61799, 0)
 ambient_light_source = 3
 ambient_light_color = Color(1, 1, 1, 1)
+ambient_light_energy = 3.0
 tonemap_mode = 1
 ssao_enabled = true
 fog_sky_affect = 0.0
@@ -25,10 +26,10 @@ volumetric_fog_gi_inject = 0.34
 volumetric_fog_anisotropy = 0.9
 
 [node name="main" type="Node"]
-script = ExtResource("1_geprs")
+script = ExtResource("1_8s8eo")
 
 [node name="ForwardLight" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.360501, 0.932759, 0, -0.932759, 0.360501, -262.079, 504.49, 0)
+transform = Transform3D(1, 0, 0, 0, 0.360501, 0.932759, 0, -0.932759, 0.360501, -262.079, 500, 0)
 light_energy = 4.0
 light_indirect_energy = 4.0
 sky_mode = 1

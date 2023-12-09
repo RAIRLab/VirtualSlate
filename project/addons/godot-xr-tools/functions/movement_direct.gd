@@ -19,7 +19,7 @@ extends XRToolsMovementProvider
 @export var max_speed : float = 10.0
 
 ## If true, the player can strafe
-@export var strafe : bool = false
+@export var strafe : bool = true
 
 ## Input action for movement direction
 @export var input_action : String = "primary"

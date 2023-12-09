@@ -34,25 +34,31 @@ class LogNode : public Node3D{
         bool isChild(LogNode* potentialChild);
         String getParentRep();
         void setParentRep();
+        void assumeFind(LogNode* currentNode, HashSet<int>* tempAssume);
+        String assumeString(HashSet<int>* assume);
+        void setAssumeRep();
+        void assumeCascade();
         void setJustification(String code, String symbol);
+        bool findParentless(LogNode* targetNode, HashSet<int> found);
+        bool dfsCheck();
 
     
     protected:
         static void _bind_methods();
 };
 
-    class VRProofGraph : public Node{
-        GDCLASS(VRProofGraph, Node)
+class VRProofGraph : public Node{
+    GDCLASS(VRProofGraph, Node)
 
-        private:
-            int nodeCount;
-            int nodeIDCount;
-            HashMap<int, LogNode*> nodeMap;
-        public:
-            
-            // Constructor, creates empty proof graph
-            VRProofGraph(); 
-            ~VRProofGraph();
+    private:
+        int nodeCount;
+        int nodeIDCount;
+        HashMap<int, LogNode*> nodeMap;
+    public:
+        
+        // Constructor, creates empty proof graph
+        VRProofGraph(); 
+        ~VRProofGraph();
 
             //void addNode(Vector3 location, int data);
             void addNode(Vector3 position);

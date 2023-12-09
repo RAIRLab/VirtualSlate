@@ -11,7 +11,6 @@ var SPEED = 15.0
 var JUMP_VELOCITY = 15.0
 const TURN_SPEED = 0.03
 
-
 #Selection variables
 @export var selectionCount = 0
 @export var selectArray: Array[LogNode]
@@ -36,6 +35,7 @@ const offsetMin = 10
 
 #Move node vars
 var distanceToNode
+var moveFlag = false
 
 #Input variables
 var inputFlag = false

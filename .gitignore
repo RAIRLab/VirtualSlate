@@ -4,6 +4,7 @@
 *.os
 project/bin/*
 !project/bin/ProofGraphs.gdextension
+!project/Meshes/cone.obj
 venv
 # Godot 4+ specific ignores
 .godot/
